@@ -4,6 +4,7 @@ import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Media;
 import airbnb.model.repositories.MediaRepository;
+import airbnb.model.repositories.PropertyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -25,10 +26,12 @@ public class MediaServiceImpl implements MediaService{
     @Value("${file.path}")
     private String filePath;
     private MediaRepository mediaRepository;
+    private PropertyRepository propertyRepository;
 
     @Autowired
-    public MediaServiceImpl(MediaRepository mediaRepository) {
+    public MediaServiceImpl(MediaRepository mediaRepository, PropertyRepository propertyRepository) {
         this.mediaRepository = mediaRepository;
+        this.propertyRepository = propertyRepository;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class MediaServiceImpl implements MediaService{
             os.write(file.getBytes());
             Media media = new Media();
             media.setUrl(f.getAbsolutePath());
-            media.setPropertyId(id);
+            media.setProperty(propertyRepository.findById(id).get());
             media.setMimeType(file.getContentType());
             mediaRepository.save(media);
             os.close();

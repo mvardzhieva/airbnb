@@ -2,6 +2,7 @@ package airbnb.model.pojo;
 
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Component
@@ -31,9 +33,13 @@ public class Property {
     private Double rating;
     private Boolean isFree;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "property")
+    private Set<Media> media;
+
     @ManyToOne
     @JoinColumn(name="host_id")
-//    @JsonBackReference
+    @JsonBackReference
     private User host;
 
     public Property(AddRequestPropertyDTO propertyDTO) {

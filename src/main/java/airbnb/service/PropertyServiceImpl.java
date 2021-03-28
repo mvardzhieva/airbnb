@@ -24,7 +24,6 @@ import java.util.stream.StreamSupport;
 public class PropertyServiceImpl implements PropertyService {
 
     private PropertyRepository propertyRepository;
-    private MediaRepository mediaRepository;
     private MediaService mediaService;
     private UserRepository userRepository;
 
@@ -34,7 +33,6 @@ public class PropertyServiceImpl implements PropertyService {
                                MediaService mediaService,
                                UserRepository userRepository) {
         this.propertyRepository = propertyRepository;
-        this.mediaRepository = mediaRepository;
         this.mediaService = mediaService;
         this.userRepository = userRepository;
     }
