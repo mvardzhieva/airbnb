@@ -1,9 +1,7 @@
 package airbnb.model.pojo;
 
-import airbnb.model.dto.user.EditUserDTO;
 import airbnb.model.dto.user.RegisterRequestUserDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +21,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String firstName;
     private String lastName;
     private String email;
@@ -34,7 +31,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
     private String governmentId;
     private LocalDateTime createdAt;
 

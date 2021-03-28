@@ -1,5 +1,6 @@
 package airbnb.controller;
 
+import airbnb.exceptions.BadRequestException;
 import airbnb.model.dto.user.*;
 import airbnb.model.pojo.User;
 import airbnb.service.UserService;
@@ -26,14 +27,14 @@ public class UserController extends AbstractController {
         return responseUserDTO;
     }
 
-    @PostMapping("/users/login")
+    @PostMapping("/users")
     public UserProfileDTO login(@RequestBody LoginUserDTO loginUserDTO, HttpSession session) {
         UserProfileDTO userProfileDTO = userService.login(loginUserDTO);
         sessionManager.loginUser(session, userProfileDTO.getId());
         return userProfileDTO;
     }
 
-    @PostMapping("/users/logout")
+    @PostMapping("/logout")
     public void logout(HttpSession session) {
         sessionManager.logoutUser(session);
     }
@@ -45,16 +46,15 @@ public class UserController extends AbstractController {
 
     @PostMapping("/users/{id}")
     public UserProfileDTO edit(@PathVariable int id, @RequestBody EditUserDTO editUserDTO, HttpSession session) {
-        //TODO
         User user = sessionManager.getLoggedUser(session);
         if(user.getId() != id){
-//            throw new BadRequestException("You cannot edit another user's profile.");
+            throw new BadRequestException("You cannot edit another user's profile.");
         }
         return userService.edit(user, editUserDTO);
     }
 
     @DeleteMapping("/users/{id}")
     public void delete(@PathVariable int id) {
-        //TODO
+        userService.delete(id);
     }
 }

@@ -45,7 +45,7 @@ public abstract class AbstractController {
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionDTO handleIO(BadRequestException e) {
+    public ExceptionDTO handleBadRequest(BadRequestException e) {
         return new ExceptionDTO(e.getMessage());
     }
 

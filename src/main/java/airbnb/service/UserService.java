@@ -63,6 +63,11 @@ public class UserService {
         return new UserProfileDTO(user);
     }
 
+    public void delete(int userId) {
+        //TODO
+        userRepository.deleteById(userId);
+    }
+
     private void validateRegisterUserData(RegisterRequestUserDTO requestUserDTO) {
         //TODO check if email, phone, names and date of birth are valid
         if (userRepository.findByEmail(requestUserDTO.getEmail()) != null) {
