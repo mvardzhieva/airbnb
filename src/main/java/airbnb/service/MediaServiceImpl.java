@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -59,8 +61,15 @@ public class MediaServiceImpl implements MediaService{
     @Override
     public void delete(Long id) {
         //TODO validate
+        
+        Optional<Media> optionalMedia = mediaRepository.findById(id);
+        if (optionalMedia.isEmpty()) {
+            throw new BadRequestException("Can't find media!");
+        }
 
         try {
+            Media media = optionalMedia.get();
+            Files.delete(Paths.get(media.getUrl()));
             mediaRepository.deleteById(id);
         }
         catch (Exception e) {
