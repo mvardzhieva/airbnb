@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @RestController
-public class UserController extends Controller {
+public class UserController extends AbstractController {
     private UserService userService;
     private SessionManager sessionManager;
 
