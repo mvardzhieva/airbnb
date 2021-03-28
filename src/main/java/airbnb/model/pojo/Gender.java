@@ -1,5 +1,10 @@
 package airbnb.model.pojo;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public enum Gender {
-    //TODO
+    MALE,
+    FEMALE,
+    OTHER
 }

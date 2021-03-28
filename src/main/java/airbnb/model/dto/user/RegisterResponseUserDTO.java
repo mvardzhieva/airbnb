@@ -1,4 +1,4 @@
-package airbnb.model.dto;
+package airbnb.model.dto.user;
 
 import airbnb.model.pojo.User;
 import lombok.Getter;
