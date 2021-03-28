@@ -1,5 +1,6 @@
-package airbnb.model.dto;
+package airbnb.model.dto.user;
 
+import airbnb.model.pojo.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,12 +12,14 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @Component
-public class RegisterRequestUserDTO {
+public class EditUserDTO {
     private String firstName;
     private String lastName;
-    private String email;
-    private String password;
-    private String confirmedPassword;
+//    private String email;
+//    private String password;
     private String phoneNumber;
     private LocalDate dateOfBirth;
+    private String address;
+    private Gender gender;
+    private String governmentId;
 }

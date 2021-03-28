@@ -1,6 +1,7 @@
 package airbnb.model.pojo;
 
-import airbnb.model.dto.RegisterRequestUserDTO;
+import airbnb.model.dto.user.EditUserDTO;
+import airbnb.model.dto.user.RegisterRequestUserDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +27,10 @@ public class User {
     private String phoneNumber;
     private LocalDate dateOfBirth;
     private String address;
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
+
     private String governmentId;
     private LocalDateTime createdAt;
 
@@ -45,4 +49,5 @@ public class User {
 //        this.properties = new ArrayList<>();
         this.createdAt = LocalDateTime.now();
     }
+
 }
