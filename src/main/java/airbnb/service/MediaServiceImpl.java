@@ -1,9 +1,9 @@
 package airbnb.service;
 
 import airbnb.exceptions.BadRequestException;
+import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Media;
 import airbnb.model.repositories.MediaRepository;
-import airbnb.model.repositories.PropertyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -14,6 +14,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -24,7 +25,6 @@ public class MediaServiceImpl implements MediaService{
     @Value("${file.path}")
     private String filePath;
     private MediaRepository mediaRepository;
-    private PropertyRepository propertyRepository;
 
     @Autowired
     public MediaServiceImpl(MediaRepository mediaRepository) {
@@ -42,8 +42,8 @@ public class MediaServiceImpl implements MediaService{
             os.write(file.getBytes());
             Media media = new Media();
             media.setUrl(f.getAbsolutePath());
-            media.setProperty_id(id);
-            media.setMime_type(file.getContentType());
+            media.setPropertyId(id);
+            media.setMimeType(file.getContentType());
             mediaRepository.save(media);
             os.close();
             Optional<Media> mediaOptional = mediaRepository.findById(media.getId());
@@ -54,12 +54,22 @@ public class MediaServiceImpl implements MediaService{
     }
 
     @Override
+    public Set<Media> getAllByPropertyId(Long id) {
+        Set<Media> media = mediaRepository.getAllByPropertyId(id);
+        if (media.isEmpty()) {
+            throw new NotFoundException("No media for this property!");
+        }
+
+        return media;
+    }
+
+    @Override
     public void filter() {
 
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         //TODO validate
         
         Optional<Media> optionalMedia = mediaRepository.findById(id);
@@ -76,4 +86,17 @@ public class MediaServiceImpl implements MediaService{
             throw new BadRequestException("Can't delete media!");
         }
     }
+
+    @Override
+    public void deleteByPropertyId(Long id) {
+        //TODO
+        Set<Media> media = mediaRepository.getAllByPropertyId(id);
+        for (Media m : media) {
+            deleteById(m.getId());
+        }
+    }
+
+
+
+
 }

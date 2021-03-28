@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.io.IOException;
-
 public abstract class AbstractController {
 
     @ExceptionHandler(EmailAlreadyRegisteredException.class)
@@ -26,7 +24,7 @@ public abstract class AbstractController {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionDTO handleNotFound(NotFoundException e) {
         return new ExceptionDTO(e.getMessage());
     }

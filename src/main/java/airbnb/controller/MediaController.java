@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
 
 @RestController
 public class MediaController extends AbstractController {
@@ -16,6 +18,11 @@ public class MediaController extends AbstractController {
     @Autowired
     public MediaController(MediaService mediaService) {
         this.mediaService = mediaService;
+    }
+
+    @GetMapping("/properties/{id}/media")
+    public Set<Media> getAllByPropertyId(@PathVariable Long id) {
+        return mediaService.getAllByPropertyId(id);
     }
 
     @PutMapping("/properties/{id}/media")
@@ -31,6 +38,6 @@ public class MediaController extends AbstractController {
     @DeleteMapping("/properties/media/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        mediaService.delete(id);
+        mediaService.deleteById(id);
     }
 }

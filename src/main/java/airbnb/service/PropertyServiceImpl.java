@@ -2,30 +2,56 @@ package airbnb.service;
 
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
-import airbnb.model.dto.property.DeleteRequestPropertyDTO;
 import airbnb.model.dto.property.EditRequestPropertyDTO;
 import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
+import airbnb.model.repositories.MediaRepository;
 import airbnb.model.repositories.PropertyRepository;
-import com.sun.source.tree.TryTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @Primary
 public class PropertyServiceImpl implements PropertyService {
 
     private PropertyRepository propertyRepository;
+    private MediaRepository mediaRepository;
+    private MediaService mediaService;
 
     @Autowired
-    public PropertyServiceImpl(PropertyRepository propertyRepository) {
+    public PropertyServiceImpl(PropertyRepository propertyRepository,
+                               MediaRepository mediaRepository,
+                               MediaService mediaService) {
         this.propertyRepository = propertyRepository;
+        this.mediaRepository = mediaRepository;
+        this.mediaService = mediaService;
     }
+
+    @Override
+    public Property getById(Long id) {
+        Optional<Property> property = propertyRepository.findById(id);
+        if (property.isEmpty()) {
+            throw new BadRequestException("Property not found!");
+        }
+        return property.get();
+    }
+
+    @Override
+    public Set<Property> getAll() {
+        Iterable<Property> properties =  propertyRepository.findAll();
+        if (!properties.iterator().hasNext()) {
+            throw new BadRequestException("No properties found!");
+        }
+        return StreamSupport.stream(properties.spliterator(), false).collect(Collectors.toSet());
+    }
+
 
 
     @Override
@@ -67,16 +93,35 @@ public class PropertyServiceImpl implements PropertyService {
         return null;
     }
 
+    @Transactional
     @Override
-    public void delete(Long id)  {
+    public void deleteById(Long id)  {
         //TODO validate
         try {
+            mediaService.deleteByPropertyId(id);
             propertyRepository.deleteById(id);
         }
         catch (Exception e) {
-            throw new BadRequestException("Problem deleting property");
+            throw new BadRequestException("Problem deleting property!");
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deleteAll() {
+        try {
+            Iterable<Property> properties = propertyRepository.findAll();
+            for (Property property: properties) {
+                mediaService.deleteByPropertyId(property.getId());
+            }
+            propertyRepository.deleteAll();
+
+        }
+        catch (Exception e) {
+            throw new BadRequestException("Problem deleting properties!");
         }
 
-
     }
+
+
 }

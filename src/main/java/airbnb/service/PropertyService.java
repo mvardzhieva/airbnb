@@ -16,5 +16,11 @@ public interface PropertyService {
 
     Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO);
 
-    void delete(Long id);
+    void deleteById(Long id);
+
+    Property getById(Long id);
+
+    Set<Property> getAll();
+
+    void deleteAll();
 }

@@ -1,7 +1,5 @@
 package airbnb.controller;
 
-import airbnb.exceptions.NotFoundException;
-import airbnb.model.dto.property.DeleteRequestPropertyDTO;
 import airbnb.model.dto.property.EditRequestPropertyDTO;
 import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
@@ -10,8 +8,7 @@ import airbnb.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.http.HttpResponse;
+import java.util.Set;
 
 @RestController
 public class PropertyController extends AbstractController {
@@ -21,6 +18,19 @@ public class PropertyController extends AbstractController {
     @Autowired
     public PropertyController(PropertyService PropertyService) {
         this.propertyService = PropertyService;
+    }
+
+
+    //TODO RESPONSE STATUSES
+
+    @GetMapping("/properties/{id}")
+    public Property getById(@PathVariable Long id) {
+        return propertyService.getById(id);
+    }
+
+    @GetMapping("/properties")
+    public Set<Property> getAll() {
+        return propertyService.getAll();
     }
 
     @PutMapping("/properties")
@@ -33,7 +43,7 @@ public class PropertyController extends AbstractController {
         return propertyService.edit(id, editRequestPropertyDTO);
     }
 
-    @GetMapping("/properties")
+    @PostMapping("/properties")
     public String filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
         //TODO
         propertyService.filter(filterRequestPropertyDTO);
@@ -42,9 +52,15 @@ public class PropertyController extends AbstractController {
 
     @DeleteMapping("/properties/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id){
-        propertyService.delete(id);
+    public void deleteById(@PathVariable Long id){
+        propertyService.deleteById(id);
 
+    }
+
+    @DeleteMapping("/properties")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void deleteAll(){
+        propertyService.deleteAll();
     }
 
 
