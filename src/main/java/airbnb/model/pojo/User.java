@@ -2,6 +2,8 @@ package airbnb.model.pojo;
 
 import airbnb.model.dto.user.EditUserDTO;
 import airbnb.model.dto.user.RegisterRequestUserDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +11,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,10 +38,10 @@ public class User {
     private String governmentId;
     private LocalDateTime createdAt;
 
-    //TODO mappedBy
-//    @OneToMany(mappedBy = "")
+    @OneToMany(mappedBy = "host")
 //    @JsonManagedReference
-//    private List<Property> properties;
+    @JsonIgnore
+    private List<Property> properties;
 
     public User(RegisterRequestUserDTO requestUserDTO) {
         this.firstName = requestUserDTO.getFirstName();
@@ -46,7 +50,7 @@ public class User {
         this.password = requestUserDTO.getPassword();
         this.phoneNumber = requestUserDTO.getPhoneNumber();
         this.dateOfBirth = requestUserDTO.getDateOfBirth();
-//        this.properties = new ArrayList<>();
+        this.properties = new ArrayList<>();
         this.createdAt = LocalDateTime.now();
     }
 

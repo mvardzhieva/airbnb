@@ -1,6 +1,7 @@
 package airbnb.model.pojo;
 
 import airbnb.model.dto.property.AddRequestPropertyDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +23,6 @@ public class Property {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long typeId;
-    private Long hostId;
     private Long locationId;
     private String name;
     private String description;
@@ -31,9 +31,13 @@ public class Property {
     private Double rating;
     private Boolean isFree;
 
+    @ManyToOne
+    @JoinColumn(name="host_id")
+//    @JsonBackReference
+    private User host;
+
     public Property(AddRequestPropertyDTO propertyDTO) {
         this.typeId = propertyDTO.getType_id();
-        this.hostId = propertyDTO.getHost_id();
         this.locationId = propertyDTO.getLocation_id();
         this.name = propertyDTO.getName();
         this.description = propertyDTO.getDescription();
@@ -61,7 +65,6 @@ public class Property {
         return "Property{" +
                 "id=" + id +
                 ", type_id=" + typeId +
-                ", host_id=" + hostId +
                 ", location_id=" + locationId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

@@ -6,8 +6,10 @@ import airbnb.model.dto.property.EditRequestPropertyDTO;
 import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
+import airbnb.model.pojo.User;
 import airbnb.model.repositories.MediaRepository;
 import airbnb.model.repositories.PropertyRepository;
+import airbnb.model.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -24,14 +26,17 @@ public class PropertyServiceImpl implements PropertyService {
     private PropertyRepository propertyRepository;
     private MediaRepository mediaRepository;
     private MediaService mediaService;
+    private UserRepository userRepository;
 
     @Autowired
     public PropertyServiceImpl(PropertyRepository propertyRepository,
                                MediaRepository mediaRepository,
-                               MediaService mediaService) {
+                               MediaService mediaService,
+                               UserRepository userRepository) {
         this.propertyRepository = propertyRepository;
         this.mediaRepository = mediaRepository;
         this.mediaService = mediaService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -57,7 +62,11 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public Property add(AddRequestPropertyDTO addRequestPropertyDTO){
         //TODO validate
-        Property property = propertyRepository.save(new Property(addRequestPropertyDTO));
+        Optional<User> host = userRepository.findById( addRequestPropertyDTO.getHost_id().intValue());
+        Property property = new Property(addRequestPropertyDTO);
+        property.setHost(host.get());
+        propertyRepository.save(property);
+
         Optional<Property> x = propertyRepository.findById(property.getId());
         if (x.isPresent()) {
             return x.get();
