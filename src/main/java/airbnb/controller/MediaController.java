@@ -1,14 +1,15 @@
 package airbnb.controller;
 
+import airbnb.model.pojo.Media;
 import airbnb.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @RestController
-public class MediaController {
+public class MediaController extends AbstractController {
 
     private MediaService mediaService;
 
@@ -17,18 +18,19 @@ public class MediaController {
         this.mediaService = mediaService;
     }
 
-    @PutMapping("/Airbnb/media/add")
-    public void add() {
-        mediaService.add();
+    @PutMapping("/properties/{id}/media")
+    public Media add(@PathVariable Long id, @RequestPart MultipartFile file) {
+        return mediaService.add(id, file);
     }
 
-    @PostMapping("/Airbnb/media/filter")
+    @PostMapping("/properties/media/filter")
     public void filter() {
         mediaService.filter();
     }
 
-    @DeleteMapping("/Airbnb/media/delete")
-    public void delete() {
-        mediaService.delete();
+    @DeleteMapping("/properties/media/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        mediaService.delete(id);
     }
 }

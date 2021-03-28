@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class EditRequestPropertyDTO {
 
     private String name;

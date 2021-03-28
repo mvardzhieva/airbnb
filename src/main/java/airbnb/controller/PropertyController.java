@@ -8,7 +8,10 @@ import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
 import airbnb.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.http.HttpResponse;
 
 @RestController
 public class PropertyController extends AbstractController {
@@ -20,31 +23,28 @@ public class PropertyController extends AbstractController {
         this.propertyService = PropertyService;
     }
 
-    @PutMapping("/Airbnb/properties/add")
-    public Property add(@RequestBody AddRequestPropertyDTO addRequestPropertyDTO) throws NotFoundException {
-        //TODO validation
+    @PutMapping("/properties")
+    public Property add(@RequestBody AddRequestPropertyDTO addRequestPropertyDTO)  {
         return propertyService.add(addRequestPropertyDTO);
     }
 
-    @PostMapping("/Airbnb/properties/edit")
-    public String edit(EditRequestPropertyDTO editRequestPropertyDTO) {
-        //TODO validation
-        propertyService.edit(editRequestPropertyDTO);
-        return null;
+    @PostMapping("/properties/{id}")
+    public Property edit(@PathVariable Long id, @RequestBody EditRequestPropertyDTO editRequestPropertyDTO) {
+        return propertyService.edit(id, editRequestPropertyDTO);
     }
 
-    @GetMapping("/Airbnb/properties/filter")
-    public String filter(FilterRequestPropertyDTO filterRequestPropertyDTO) {
+    @GetMapping("/properties")
+    public String filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
         //TODO
         propertyService.filter(filterRequestPropertyDTO);
         return "Hello!";
     }
 
-    @DeleteMapping("Airbnb/properties/delete")
-    public Boolean delete(DeleteRequestPropertyDTO deleteRequestPropertyDTO){
-        //TODO
-        propertyService.delete(deleteRequestPropertyDTO);
-        return true;
+    @DeleteMapping("/properties/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id){
+        propertyService.delete(id);
+
     }
 
 

@@ -23,7 +23,6 @@ public class Media {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long property_id;
-    private String name;
     private String url;
     private String mime_type;
 }

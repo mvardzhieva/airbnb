@@ -6,13 +6,15 @@ import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
 
+import java.util.Set;
+
 public interface PropertyService {
 
     Property add(AddRequestPropertyDTO addRequestPropertyDTO);
 
-    void edit(EditRequestPropertyDTO editRequestPropertyDTO);
+    Property edit(Long id, EditRequestPropertyDTO editRequestPropertyDTO);
 
-    void filter(FilterRequestPropertyDTO filterRequestPropertyDTO);
+    Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO);
 
-    void delete(DeleteRequestPropertyDTO deleteRequestPropertyDTO);
+    void delete(Long id);
 }

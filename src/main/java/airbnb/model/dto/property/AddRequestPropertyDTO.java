@@ -21,15 +21,4 @@ public class AddRequestPropertyDTO {
     private String description;
     private Double price;
 
-    @Override
-    public String toString() {
-        return "AddRequestPropertyDTO{" +
-                "type_id=" + type_id +
-                ", host_id=" + host_id +
-                ", location_id=" + location_id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                '}';
-    }
 }
