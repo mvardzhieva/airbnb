@@ -5,6 +5,7 @@ import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Media;
 import airbnb.model.repositories.MediaRepository;
 import airbnb.model.repositories.PropertyRepository;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -38,22 +39,32 @@ public class MediaServiceImpl implements MediaService{
     public Media add(Long id, MultipartFile file)  {
         //TODO validate
 
-        try {
-            String filename = UUID.randomUUID().toString();
-            File f = new File(filePath + File.separator + filename + ".png");
-            OutputStream os = new FileOutputStream(f);
-            os.write(file.getBytes());
+        String filename = UUID.randomUUID().toString();
+        File dir = new File(filePath);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        File f = new File(filePath + File.separator + filename + ".png");
+
+        try  {
+            f.createNewFile();
             Media media = new Media();
             media.setUrl(f.getAbsolutePath());
-            media.setProperty(propertyRepository.findById(id).get());
             media.setMimeType(file.getContentType());
+            media.setProperty(propertyRepository.findById(id).get());
             mediaRepository.save(media);
-            os.close();
             Optional<Media> mediaOptional = mediaRepository.findById(media.getId());
+            if (mediaOptional.isEmpty()) {
+                throw new FileNotFoundException();
+            }
+            file.transferTo(Paths.get(f.getAbsolutePath()));
             return mediaOptional.get();
+
         } catch (Exception e) {
+            f.delete();
             throw new BadRequestException("Problem uploading file!");
         }
+
     }
 
     @Override

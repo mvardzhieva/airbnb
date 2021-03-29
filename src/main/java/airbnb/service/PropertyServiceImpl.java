@@ -122,7 +122,7 @@ public class PropertyServiceImpl implements PropertyService {
                 mediaService.deleteByPropertyId(property.getId());
             }
             propertyRepository.deleteAll();
-
+            
         }
         catch (Exception e) {
             throw new BadRequestException("Problem deleting properties!");
