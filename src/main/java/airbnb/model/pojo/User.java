@@ -36,7 +36,7 @@ public class User {
 
     @OneToMany(mappedBy = "host")
 //    @JsonManagedReference
-    @JsonIgnore
+//    @JsonIgnore
     private List<Property> properties;
 
     public User(RegisterRequestUserDTO requestUserDTO) {
