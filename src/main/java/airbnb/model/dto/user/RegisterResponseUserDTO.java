@@ -1,5 +1,6 @@
 package airbnb.model.dto.user;
 
+import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +23,7 @@ public class RegisterResponseUserDTO {
     private String phoneNumber;
     private LocalDate dateOfBirth;
     private LocalDateTime createdAt;
+    private List<Property> properties;
 
     public RegisterResponseUserDTO(User user) {
         this.id = user.getId();
@@ -30,5 +33,6 @@ public class RegisterResponseUserDTO {
         this.phoneNumber = user.getPhoneNumber();
         this.dateOfBirth = user.getDateOfBirth();
         this.createdAt = user.getCreatedAt();
+        this.properties = user.getProperties();
     }
 }
