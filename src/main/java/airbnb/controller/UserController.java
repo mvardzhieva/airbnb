@@ -47,14 +47,18 @@ public class UserController extends AbstractController {
     @PostMapping("/users/{id}")
     public UserProfileDTO edit(@PathVariable int id, @RequestBody EditUserDTO editUserDTO, HttpSession session) {
         User user = sessionManager.getLoggedUser(session);
-        if(user.getId() != id){
+        if (user.getId() != id) {
             throw new BadRequestException("You cannot edit another user's profile.");
         }
         return userService.edit(user, editUserDTO);
     }
 
     @DeleteMapping("/users/{id}")
-    public void delete(@PathVariable int id) {
-        userService.delete(id);
+    public UserProfileDTO delete(@PathVariable int id, HttpSession session) {
+        User user = sessionManager.getLoggedUser(session);
+        if (user.getId() != id) {
+            throw new BadRequestException("You cannot delete another user's profile.");
+        }
+        return userService.delete(user);
     }
 }

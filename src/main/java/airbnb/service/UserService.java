@@ -4,6 +4,7 @@ import airbnb.exceptions.user.EmailAlreadyRegisteredException;
 import airbnb.exceptions.user.NotMatchingPasswordsException;
 import airbnb.exceptions.user.UserNotFoundException;
 import airbnb.model.dto.user.*;
+import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
 import airbnb.util.Validator;
@@ -11,18 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 public class UserService {
     private UserRepository userRepository;
+    private PropertyServiceImpl propertyService;
     private PasswordEncoder encoder;
     private Validator validator;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PropertyServiceImpl propertyService) {
         this.userRepository = userRepository;
+        this.propertyService = propertyService;
         this.encoder = new BCryptPasswordEncoder();
         this.validator = new Validator();
     }
@@ -70,9 +74,15 @@ public class UserService {
         return new UserProfileDTO(user);
     }
 
-    public void delete(int userId) {
-        //TODO
-        userRepository.deleteById(userId);
+    @Transactional
+    public UserProfileDTO delete(User user) {
+        UserProfileDTO deletedUserProfile = new UserProfileDTO(user);
+        for (Property property : deletedUserProfile.getProperties()) {
+            System.out.println(property.getId());
+            propertyService.deleteById(property.getId());
+        }
+        userRepository.deleteById(user.getId());
+        return deletedUserProfile;
     }
 
     private void validateRegisterUserData(RegisterRequestUserDTO requestUserDTO) {
@@ -84,7 +94,7 @@ public class UserService {
         }
     }
 
-    private void checkIfEmailExists(String email){
+    private void checkIfEmailExists(String email) {
         if (userRepository.findByEmail(email) != null) {
             throw new EmailAlreadyRegisteredException("This email is already registered.");
         }
