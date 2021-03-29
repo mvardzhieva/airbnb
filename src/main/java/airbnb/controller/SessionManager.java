@@ -1,10 +1,8 @@
 package airbnb.controller;
 
-import airbnb.exceptions.UserNotFoundException;
-import airbnb.exceptions.UserNotLoggedException;
+import airbnb.exceptions.user.UserNotLoggedException;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
-import ch.qos.logback.core.pattern.parser.OptionTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

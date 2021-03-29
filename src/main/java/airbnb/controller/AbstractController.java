@@ -1,11 +1,11 @@
 package airbnb.controller;
 
 import airbnb.exceptions.BadRequestException;
-import airbnb.exceptions.EmailAlreadyRegisteredException;
+import airbnb.exceptions.user.EmailAlreadyRegisteredException;
 import airbnb.exceptions.NotFoundException;
-import airbnb.exceptions.NotMatchingPasswordsException;
-import airbnb.exceptions.UserNotFoundException;
-import airbnb.exceptions.UserNotLoggedException;
+import airbnb.exceptions.user.NotMatchingPasswordsException;
+import airbnb.exceptions.user.UserNotFoundException;
+import airbnb.exceptions.user.UserNotLoggedException;
 import airbnb.model.dto.ExceptionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

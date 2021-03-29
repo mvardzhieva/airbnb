@@ -1,4 +1,4 @@
-package airbnb.exceptions;
+package airbnb.exceptions.user;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {

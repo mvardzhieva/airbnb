@@ -1,8 +1,8 @@
 package airbnb.service;
 
-import airbnb.exceptions.EmailAlreadyRegisteredException;
-import airbnb.exceptions.NotMatchingPasswordsException;
-import airbnb.exceptions.UserNotFoundException;
+import airbnb.exceptions.user.EmailAlreadyRegisteredException;
+import airbnb.exceptions.user.NotMatchingPasswordsException;
+import airbnb.exceptions.user.UserNotFoundException;
 import airbnb.model.dto.user.*;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
