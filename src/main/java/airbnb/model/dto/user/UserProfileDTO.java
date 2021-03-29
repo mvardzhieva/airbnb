@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -30,7 +29,6 @@ public class UserProfileDTO {
     private LocalDateTime createdAt;
     private List<Property> properties;
 
-
     public UserProfileDTO(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
@@ -43,6 +41,5 @@ public class UserProfileDTO {
         this.governmentId = user.getGovernmentId();
         this.createdAt = user.getCreatedAt();
         this.properties = user.getProperties();
-
     }
 }

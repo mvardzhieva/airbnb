@@ -6,6 +6,7 @@ import airbnb.exceptions.user.UserNotFoundException;
 import airbnb.model.dto.user.*;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
+import airbnb.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,11 +18,13 @@ import java.util.Optional;
 public class UserService {
     private UserRepository userRepository;
     private PasswordEncoder encoder;
+    private Validator validator;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
         this.encoder = new BCryptPasswordEncoder();
+        this.validator = new Validator();
     }
 
     public RegisterResponseUserDTO register(RegisterRequestUserDTO requestUserDTO) {
@@ -49,14 +52,18 @@ public class UserService {
     }
 
     public UserProfileDTO edit(User user, EditUserDTO editUserDTO) {
-        //TODO validations
+        validator.validateUserInput(editUserDTO.getFirstName(), editUserDTO.getLastName(),
+                user.getEmail(), editUserDTO.getPhoneNumber());
+        if (!user.getEmail().equals(editUserDTO.getEmail())) {
+            checkIfEmailExists(editUserDTO.getEmail());
+            user.setEmail(editUserDTO.getEmail());
+        }
         user.setFirstName(editUserDTO.getFirstName());
         user.setLastName(editUserDTO.getLastName());
+        user.setPassword(encoder.encode(editUserDTO.getPassword()));
         user.setPhoneNumber(editUserDTO.getPhoneNumber());
         user.setDateOfBirth(editUserDTO.getDateOfBirth());
         user.setAddress(editUserDTO.getAddress());
-        //TODO save gender to db as text
-
         user.setGender(editUserDTO.getGender());
         user.setGovernmentId(editUserDTO.getGovernmentId());
         userRepository.save(user);
@@ -69,12 +76,17 @@ public class UserService {
     }
 
     private void validateRegisterUserData(RegisterRequestUserDTO requestUserDTO) {
-        //TODO check if email, phone, names and date of birth are valid
-        if (userRepository.findByEmail(requestUserDTO.getEmail()) != null) {
-            throw new EmailAlreadyRegisteredException("This email is already registered.");
-        }
+        validator.validateUserInput(requestUserDTO.getFirstName(), requestUserDTO.getLastName(),
+                requestUserDTO.getEmail(), requestUserDTO.getPhoneNumber());
+        checkIfEmailExists(requestUserDTO.getEmail());
         if (!requestUserDTO.getPassword().equals(requestUserDTO.getConfirmedPassword())) {
             throw new NotMatchingPasswordsException("Password and confirmed password do not match.");
+        }
+    }
+
+    private void checkIfEmailExists(String email){
+        if (userRepository.findByEmail(email) != null) {
+            throw new EmailAlreadyRegisteredException("This email is already registered.");
         }
     }
 

@@ -1,11 +1,8 @@
 package airbnb.controller;
 
 import airbnb.exceptions.BadRequestException;
-import airbnb.exceptions.user.EmailAlreadyRegisteredException;
+import airbnb.exceptions.user.*;
 import airbnb.exceptions.NotFoundException;
-import airbnb.exceptions.user.NotMatchingPasswordsException;
-import airbnb.exceptions.user.UserNotFoundException;
-import airbnb.exceptions.user.UserNotLoggedException;
 import airbnb.model.dto.ExceptionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,6 +43,12 @@ public abstract class AbstractController {
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionDTO handleBadRequest(BadRequestException e) {
+        return new ExceptionDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidUserInputException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDTO handleInvalidUserInput(InvalidUserInputException e) {
         return new ExceptionDTO(e.getMessage());
     }
 
