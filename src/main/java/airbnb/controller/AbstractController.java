@@ -1,6 +1,7 @@
 package airbnb.controller;
 
 import airbnb.exceptions.BadRequestException;
+import airbnb.exceptions.PropertyNotAvailableException;
 import airbnb.exceptions.user.*;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.dto.ExceptionDTO;
@@ -52,4 +53,9 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
+    @ExceptionHandler(PropertyNotAvailableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDTO handleBookedProperty(PropertyNotAvailableException e) {
+        return new ExceptionDTO(e.getMessage());
+    }
 }

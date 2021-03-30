@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -38,9 +39,13 @@ public class Property {
     private Set<Media> media;
 
     @ManyToOne
-    @JoinColumn(name="host_id")
+    @JoinColumn(name = "host_id")
     @JsonBackReference
     private User host;
+
+    @OneToMany(mappedBy = "property")
+    @JsonManagedReference
+    private List<Booking> bookings;
 
     public Property(AddRequestPropertyDTO propertyDTO) {
         this.typeId = propertyDTO.getType_id();
