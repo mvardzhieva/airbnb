@@ -3,7 +3,7 @@ package airbnb.controller;
 import airbnb.exceptions.BadRequestException;
 import airbnb.model.dto.user.*;
 import airbnb.model.pojo.User;
-import airbnb.service.UserService;
+import airbnb.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -11,12 +11,16 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class FilterRequestPropertyDTO {
 
-    private Long type_id;
-    private Long host_id;
-    private Long location_id;
+    private Long typeId;
+    private Long cityId;
+    private Long countryId;
+    private Double latitude;
+    private Double longitude;
     private String name;
     private String description;
     private Double price;
     private Double rating;
-    private Boolean is_free;
+    private Boolean isFree;
+
+    //Todo Hashcode and Equals
 }

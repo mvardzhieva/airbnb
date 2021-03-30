@@ -4,7 +4,7 @@ import airbnb.model.dto.property.EditRequestPropertyDTO;
 import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
-import airbnb.service.PropertyService;
+import airbnb.services.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +23,9 @@ public class PropertyController extends AbstractController {
 
     //TODO RESPONSE STATUSES
 
-    @GetMapping("/properties/{id}")
-    public Property getById(@PathVariable Long id) {
-        return propertyService.getById(id);
+    @PutMapping("/properties")
+    public Property add(@RequestBody AddRequestPropertyDTO addRequestPropertyDTO)  {
+        return propertyService.add(addRequestPropertyDTO);
     }
 
     @GetMapping("/properties")
@@ -33,9 +33,9 @@ public class PropertyController extends AbstractController {
         return propertyService.getAll();
     }
 
-    @PutMapping("/properties")
-    public Property add(@RequestBody AddRequestPropertyDTO addRequestPropertyDTO)  {
-        return propertyService.add(addRequestPropertyDTO);
+    @GetMapping("/properties/{id}")
+    public Property getById(@PathVariable Long id) {
+        return propertyService.getById(id);
     }
 
     @PostMapping("/properties/{id}")
@@ -43,11 +43,10 @@ public class PropertyController extends AbstractController {
         return propertyService.edit(id, editRequestPropertyDTO);
     }
 
+    //TODO proper method
     @PostMapping("/properties")
-    public String filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
-        //TODO
-        propertyService.filter(filterRequestPropertyDTO);
-        return "Hello!";
+    public Set<Property> filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
+        return propertyService.filter(filterRequestPropertyDTO);
     }
 
     @DeleteMapping("/properties/{id}")
@@ -62,8 +61,5 @@ public class PropertyController extends AbstractController {
     public void deleteAll(){
         propertyService.deleteAll();
     }
-
-
-
 
 }

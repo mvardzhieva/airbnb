@@ -1,0 +1,28 @@
+package airbnb.model.pojo;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
+
+import javax.persistence.*;
+
+@Entity
+@Component
+@Getter
+@Setter
+@NoArgsConstructor
+@Table(name = "ratings")
+public class Rating {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Integer cleanliness;
+    private Integer communication;
+    private Integer check_in;
+    private Integer accuracy;
+    private Integer location;
+    private Integer value;
+
+}

@@ -1,6 +1,8 @@
 package airbnb.model.dto.property;
 
 
+import airbnb.model.pojo.City;
+import airbnb.model.pojo.Country;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +16,12 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class AddRequestPropertyDTO {
 
-    private Long type_id;
-    private Long host_id;
-    private Long location_id;
+    private Long hostId;
+    private Long typeId;
+    private City city;
+    private Country country;
+    private Double latitude;
+    private Double longitude;
     private String name;
     private String description;
     private Double price;

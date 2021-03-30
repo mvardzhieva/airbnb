@@ -4,12 +4,14 @@ import airbnb.exceptions.user.UserNotLoggedException;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Component
+//@Scope(scopeName = "session")
 public class SessionManager {
     private static final String LOGGED_USER_ID = "LOGGED_USER_ID";
 

@@ -4,6 +4,7 @@ import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.user.*;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.dto.ExceptionDTO;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -50,6 +51,12 @@ public abstract class AbstractController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionDTO handleInvalidUserInput(InvalidUserInputException e) {
         return new ExceptionDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(DataAccessException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ExceptionDTO handleDataAccess(DataAccessException e) {
+        return new ExceptionDTO("Error!");
     }
 
 }

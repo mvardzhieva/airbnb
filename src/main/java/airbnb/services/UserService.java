@@ -1,4 +1,4 @@
-package airbnb.service;
+package airbnb.services;
 
 import airbnb.exceptions.user.EmailAlreadyRegisteredException;
 import airbnb.exceptions.user.NotMatchingPasswordsException;

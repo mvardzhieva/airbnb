@@ -3,11 +3,9 @@ package airbnb.model.repositories;
 import airbnb.model.pojo.Media;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Set;
+import java.util.List;
 
 public interface MediaRepository extends JpaRepository<Media, Long> {
 
-
-    Set<Media> getAllByPropertyId(Long id);
-    void deleteAllByPropertyId(Long id);
+    List<Media> getAllByPropertyId(Long id);
 }
