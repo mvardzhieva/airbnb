@@ -4,6 +4,8 @@ import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Media;
 import airbnb.model.repositories.MediaRepository;
+import airbnb.services.interfaces.MediaService;
+import airbnb.services.interfaces.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -35,6 +37,7 @@ public class MediaServiceImpl implements MediaService {
         this.propertyService = propertyService;
     }
 
+    //TODO  REFACTOR
     @Override
     public Media upload(Long id, MultipartFile file)  {
 
@@ -43,7 +46,7 @@ public class MediaServiceImpl implements MediaService {
         if (!dir.exists()) {
             dir.mkdir();
         }
-        File f = new File(filePath + File.separator + filename + ".png");
+        File f = new File(dir.getAbsolutePath() + File.separator + filename + ".png");
 
         try  {
             f.createNewFile();
@@ -99,8 +102,11 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public void deleteAllByPropertyId(Long id) {
-        for (Media media :mediaRepository.getAllByPropertyId(id)) {
-            deleteFromFileSystem(media);
+        var x = mediaRepository.getAllByPropertyId(id);
+        if (!x.isEmpty()) {
+            for (Media media : x) {
+                deleteFromFileSystem(media);
+            }
         }
     }
 
@@ -111,6 +117,7 @@ public class MediaServiceImpl implements MediaService {
             mediaRepository.deleteById(media.getId());
         }
         catch (Exception e) {
+            System.out.println(e.toString());
             throw new BadRequestException("Can't delete media!");
         }
     }

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "statuses")
-public class Status {
+public class BookingStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

@@ -15,7 +15,7 @@ public class RatingDTO {
     private Long id;
     private Integer cleanliness;
     private Integer communication;
-    private Integer check_in;
+    private Integer checkIn;
     private Integer accuracy;
     private Integer location;
     private Integer value;

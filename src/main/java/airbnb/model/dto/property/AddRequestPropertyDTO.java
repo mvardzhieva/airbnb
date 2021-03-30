@@ -3,6 +3,7 @@ package airbnb.model.dto.property;
 
 import airbnb.model.pojo.City;
 import airbnb.model.pojo.Country;
+import airbnb.model.pojo.PropertyType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class AddRequestPropertyDTO {
 
     private Long hostId;
-    private Long typeId;
+    private PropertyType type;
     private City city;
     private Country country;
     private Double latitude;
@@ -26,4 +27,18 @@ public class AddRequestPropertyDTO {
     private String description;
     private Double price;
 
+    @Override
+    public String toString() {
+        return "AddRequestPropertyDTO{" +
+                "hostId=" + hostId +
+                ", type=" + type +
+                ", city=" + city +
+                ", country=" + country +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }

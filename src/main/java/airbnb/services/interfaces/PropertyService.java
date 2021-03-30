@@ -1,4 +1,4 @@
-package airbnb.services;
+package airbnb.services.interfaces;
 
 import airbnb.model.dto.property.EditRequestPropertyDTO;
 import airbnb.model.dto.property.FilterRequestPropertyDTO;
@@ -15,11 +15,9 @@ public interface PropertyService {
 
     Property getById(Long id);
 
-    Property edit(Long id, EditRequestPropertyDTO editRequestPropertyDTO);
+    Property edit(EditRequestPropertyDTO editRequestPropertyDTO);
 
     Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO);
 
     void deleteById(Long id);
-
-    void deleteAll();
 }

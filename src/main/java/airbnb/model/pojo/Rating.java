@@ -1,5 +1,6 @@
 package airbnb.model.pojo;
 
+import airbnb.model.dto.RatingDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,9 +21,17 @@ public class Rating {
     private Long id;
     private Integer cleanliness;
     private Integer communication;
-    private Integer check_in;
+    private Integer checkIn;
     private Integer accuracy;
     private Integer location;
     private Integer value;
 
+    public Rating(RatingDTO ratingDTO) {
+        this.cleanliness = ratingDTO.getCleanliness();
+        this.communication = ratingDTO.getCommunication();
+        this.checkIn = ratingDTO.getCheckIn();
+        this.accuracy = ratingDTO.getAccuracy();
+        this.location = ratingDTO.getLocation();
+        this.value = ratingDTO.getLocation();
+    }
 }

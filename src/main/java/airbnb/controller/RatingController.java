@@ -1,19 +1,31 @@
 package airbnb.controller;
 
 import airbnb.model.dto.RatingDTO;
-import airbnb.model.pojo.Rating;
-import airbnb.services.RatingService;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import airbnb.services.interfaces.RatingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class RatingController {
 
     private RatingService ratingService;
 
-    @PutMapping("/rating")
+    @Autowired
+    public RatingController(RatingService ratingService) {
+        this.ratingService = ratingService;
+    }
+
+    @GetMapping("/rating")
     public RatingDTO add(@RequestBody RatingDTO ratingDTO) {
         return ratingService.add(ratingDTO);
+    }
+    @PutMapping("/rating")
+    public RatingDTO edit(@RequestBody RatingDTO ratingDTO) {
+        return ratingService.edit(ratingDTO);
+    }
+
+    @DeleteMapping("/rating/{id}")
+    public void delete(@PathVariable Long id) {
+        ratingService.delete(id);
     }
 }

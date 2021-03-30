@@ -1,4 +1,4 @@
-package airbnb.services;
+package airbnb.services.interfaces;
 
 import airbnb.model.dto.RatingDTO;
 

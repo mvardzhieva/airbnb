@@ -5,16 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Component
 @Entity
 @Setter
 @Getter
 @NoArgsConstructor
+@Table(name = "property_types")
 public class PropertyType {
 
     @Id
@@ -22,4 +20,11 @@ public class PropertyType {
     private Long id;
     private String name;
 
+    @Override
+    public String toString() {
+        return "PropertyType{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

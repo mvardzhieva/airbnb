@@ -31,17 +31,17 @@ public class Property {
     @JsonBackReference
     private User host;
 
-//    @OneToOne
-//    @JoinColumn(name = "property_types", referencedColumnName = "id")
-    private Long typeId;
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private PropertyType type;
 
-    @OneToOne
-    @JoinColumn(name = "cities", referencedColumnName = "id")
-    private City cityId;
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
 
-    @OneToOne
-    @JoinColumn(name = "countries", referencedColumnName = "id")
-    private Country countryId;
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "property")
@@ -62,9 +62,9 @@ public class Property {
     private List<Booking> bookings;
 
     public Property(AddRequestPropertyDTO propertyDTO) {
-        this.typeId = propertyDTO.getTypeId();
-        this.cityId = propertyDTO.getCity();
-        this.countryId = propertyDTO.getCountry();
+        this.type = propertyDTO.getType();
+        this.city = propertyDTO.getCity();
+        this.country = propertyDTO.getCountry();
         this.latitude = propertyDTO.getLatitude();
         this.longitude = propertyDTO.getLongitude();
         this.name = propertyDTO.getName();
@@ -92,9 +92,11 @@ public class Property {
     public String toString() {
         return "Property{" +
                 "id=" + id +
-                ", typeId=" + typeId +
-                ", cityId=" + cityId +
-                ", countryId=" + countryId +
+                ", host=" + host +
+                ", type=" + type +
+                ", city=" + city +
+                ", country=" + country +
+                ", media=" + media +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", name='" + name + '\'' +
@@ -103,8 +105,7 @@ public class Property {
                 ", createdAt=" + createdAt +
                 ", rating=" + rating +
                 ", isFree=" + isFree +
-                ", media=" + media +
-                ", host=" + host +
+                ", bookings=" + bookings +
                 '}';
     }
 }
