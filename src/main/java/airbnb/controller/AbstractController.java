@@ -54,18 +54,17 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
-<<<<<<< HEAD
+
     @ExceptionHandler(DataAccessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionDTO handleDataAccess(DataAccessException e) {
         return new ExceptionDTO("Error!");
     }
 
-=======
+
     @ExceptionHandler(PropertyNotAvailableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionDTO handleBookedProperty(PropertyNotAvailableException e) {
         return new ExceptionDTO(e.getMessage());
     }
->>>>>>> 039bcae90c6399557951e354a894ab4f9582ad4e
 }

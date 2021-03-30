@@ -57,17 +57,6 @@ public class Property {
     private Double rating;
     private Boolean isFree;
 
-
-<<<<<<< HEAD
-
-
-=======
-    @ManyToOne
-    @JoinColumn(name = "host_id")
-    @JsonBackReference
-    private User host;
->>>>>>> 039bcae90c6399557951e354a894ab4f9582ad4e
-
     @OneToMany(mappedBy = "property")
     @JsonManagedReference
     private List<Booking> bookings;
