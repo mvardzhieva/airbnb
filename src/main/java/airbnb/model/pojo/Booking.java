@@ -2,6 +2,7 @@ package airbnb.model.pojo;
 
 import airbnb.model.dto.booking.AddRequestBookingDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +32,10 @@ public class Booking {
     private int statusId;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    @OneToOne(mappedBy = "booking")
+    @JsonManagedReference
+    private Review review;
 
     public Booking(AddRequestBookingDTO requestBookingDTO) {
         this.startDate = requestBookingDTO.getStartDate();
