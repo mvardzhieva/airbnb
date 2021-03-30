@@ -1,6 +1,5 @@
 package airbnb.service;
 
-import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.PropertyNotAvailableException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.exceptions.user.InvalidUserInputException;
@@ -14,9 +13,10 @@ import airbnb.model.repositories.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
@@ -25,15 +25,18 @@ public class BookingService {
     private StatusRepository statusRepository;
 
     @Autowired
-    public BookingService(BookingRepository bookingRepository, PropertyRepository propertyRepository, StatusRepository statusRepository) {
+    public BookingService(BookingRepository bookingRepository,
+                          PropertyRepository propertyRepository,
+                          StatusRepository statusRepository) {
         this.bookingRepository = bookingRepository;
         this.propertyRepository = propertyRepository;
         this.statusRepository = statusRepository;
     }
 
     public Booking add(User user, AddRequestBookingDTO addBookingDTO) {
-        if (addBookingDTO.getEndDate().isBefore(addBookingDTO.getStartDate())) {
-            throw new InvalidUserInputException("End date must be after start date.");
+        if (addBookingDTO.getStartDate().isBefore(LocalDate.now())
+                || addBookingDTO.getEndDate().isBefore(addBookingDTO.getStartDate())) {
+            throw new InvalidUserInputException("You have entered invalid dates.");
         }
         Optional<Property> property = propertyRepository.findById(addBookingDTO.getPropertyId());
         if (property.isEmpty()) {
@@ -50,39 +53,38 @@ public class BookingService {
         return booking;
     }
 
-    public Booking getBookingById(User loggedUser, Long bookingId) {
+    public Booking getBookingById(Long bookingId) {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
-        if (booking.isEmpty()) {
-            throw new NotFoundException("Booking with this id does not exists.");
-        }
-        User guest = booking.get().getUser();
-        User host = booking.get().getProperty().getHost();
-        if (loggedUser.getId() == guest.getId() || loggedUser.getId() == host.getId()) {
+        if (booking.isPresent()) {
             return booking.get();
         }
-        throw new BadRequestException("You are neither a guest nor a host of this booking.");
+        throw new NotFoundException("Booking with this id does not exists.");
     }
 
     public List<Booking> getUpcomingBookings(User user) {
-        List<Booking> bookings = user.getBookings()
-                .stream()
-                .filter(b -> b.getStatusId() == statusRepository.findByName("upcoming").getId()
-                        || b.getStatusId() == statusRepository.findByName("current").getId())
-                .collect(Collectors.toUnmodifiableList());
+        int upcomingStatusId = statusRepository.findByName("upcoming").getId();
+        List<Booking> bookings = bookingRepository.getAllByStatusIdAndUser(upcomingStatusId, user);
         if (bookings.isEmpty()) {
             throw new NotFoundException("You have no upcoming bookings.");
         }
-        return bookings;
+        return Collections.unmodifiableList(bookings);
     }
 
-    public List<Booking> getPastBookings(User user) {
-        List<Booking> bookings = user.getBookings()
-                .stream()
-                .filter(b -> b.getStatusId() == statusRepository.findByName("finished").getId())
-                .collect(Collectors.toUnmodifiableList());
+    public List<Booking> getFinishedBookings(User user) {
+        int finishedStatusId = statusRepository.findByName("finished").getId();
+        List<Booking> bookings = bookingRepository.getAllByStatusIdAndUser(finishedStatusId, user);
         if (bookings.isEmpty()) {
             throw new NotFoundException("You have no past bookings.");
         }
-        return bookings;
+        return Collections.unmodifiableList(bookings);
+    }
+
+    public List<Booking> getCurrentBookings(User user) {
+        int currentStatusId = statusRepository.findByName("current").getId();
+        List<Booking> bookings = bookingRepository.getAllByStatusIdAndUser(currentStatusId, user);
+        if (bookings.isEmpty()) {
+            throw new NotFoundException("You have no past bookings.");
+        }
+        return Collections.unmodifiableList(bookings);
     }
 }
