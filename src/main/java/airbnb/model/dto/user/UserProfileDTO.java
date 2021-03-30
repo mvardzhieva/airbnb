@@ -1,5 +1,6 @@
 package airbnb.model.dto.user;
 
+import airbnb.model.pojo.Booking;
 import airbnb.model.pojo.Gender;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +30,7 @@ public class UserProfileDTO {
     private String governmentId;
     private LocalDateTime createdAt;
     private List<Property> properties;
+    private List<Booking> bookings;
 
     public UserProfileDTO(User user) {
         this.id = user.getId();
@@ -41,5 +44,6 @@ public class UserProfileDTO {
         this.governmentId = user.getGovernmentId();
         this.createdAt = user.getCreatedAt();
         this.properties = user.getProperties();
+        this.bookings = user.getBookings();
     }
 }

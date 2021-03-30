@@ -2,6 +2,7 @@ package airbnb.model.pojo;
 
 import airbnb.util.GenderConverter;
 import airbnb.model.dto.user.RegisterRequestUserDTO;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,9 +36,12 @@ public class User {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "host")
-//    @JsonManagedReference
-//    @JsonIgnore
+    @JsonManagedReference
     private List<Property> properties;
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Booking> bookings;
 
     public User(RegisterRequestUserDTO requestUserDTO) {
         this.firstName = requestUserDTO.getFirstName();
@@ -47,6 +51,7 @@ public class User {
         this.phoneNumber = requestUserDTO.getPhoneNumber();
         this.dateOfBirth = requestUserDTO.getDateOfBirth();
         this.properties = new ArrayList<>();
+        this.bookings = new ArrayList<>();
         this.createdAt = LocalDateTime.now();
     }
 

@@ -1,5 +1,6 @@
 package airbnb.model.dto.user;
 
+import airbnb.model.pojo.Booking;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class RegisterResponseUserDTO {
     private LocalDate dateOfBirth;
     private LocalDateTime createdAt;
     private List<Property> properties;
+    private List<Booking> bookings;
 
     public RegisterResponseUserDTO(User user) {
         this.id = user.getId();
@@ -34,5 +36,6 @@ public class RegisterResponseUserDTO {
         this.dateOfBirth = user.getDateOfBirth();
         this.createdAt = user.getCreatedAt();
         this.properties = user.getProperties();
+        this.bookings = user.getBookings();
     }
 }

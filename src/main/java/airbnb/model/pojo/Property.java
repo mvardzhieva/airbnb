@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -57,8 +58,19 @@ public class Property {
     private Boolean isFree;
 
 
+<<<<<<< HEAD
 
 
+=======
+    @ManyToOne
+    @JoinColumn(name = "host_id")
+    @JsonBackReference
+    private User host;
+>>>>>>> 039bcae90c6399557951e354a894ab4f9582ad4e
+
+    @OneToMany(mappedBy = "property")
+    @JsonManagedReference
+    private List<Booking> bookings;
 
     public Property(AddRequestPropertyDTO propertyDTO) {
         this.typeId = propertyDTO.getTypeId();
