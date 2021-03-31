@@ -24,16 +24,13 @@ import java.util.stream.StreamSupport;
 public class PropertyServiceImpl implements PropertyService {
 
     private PropertyRepository propertyRepository;
-    private UserService userService;
     private SpringJdbcConfig springJdbcConfig;
 
 
     @Autowired
     public PropertyServiceImpl(PropertyRepository propertyRepository,
-                               UserService userService,
                                SpringJdbcConfig springJdbcConfig) {
         this.propertyRepository = propertyRepository;
-        this.userService = userService;
         this.springJdbcConfig = springJdbcConfig;
     }
 

@@ -7,6 +7,7 @@ import airbnb.model.dto.user.*;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
+import airbnb.services.interfaces.PropertyService;
 import airbnb.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,12 +20,13 @@ import java.util.Optional;
 @Service
 public class UserService {
     private UserRepository userRepository;
-    private PropertyServiceImpl propertyService;
+    private PropertyService propertyService;
     private PasswordEncoder encoder;
     private Validator validator;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       PropertyService propertyService) {
         this.userRepository = userRepository;
         this.propertyService = propertyService;
         this.encoder = new BCryptPasswordEncoder();
