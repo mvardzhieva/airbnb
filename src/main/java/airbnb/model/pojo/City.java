@@ -7,13 +7,14 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
-@Component
+
 @Entity
-@Setter
+@Component
 @Getter
+@Setter
 @NoArgsConstructor
-@Table(name = "property_types")
-public class PropertyType {
+@Table(name = "cities")
+public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +23,7 @@ public class PropertyType {
 
     @Override
     public String toString() {
-        return "PropertyType{" +
+        return "City{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';

@@ -1,4 +1,4 @@
-package airbnb.service;
+package airbnb.services;
 
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
@@ -7,7 +7,6 @@ import airbnb.model.dto.review.EditReviewDTO;
 import airbnb.model.pojo.Booking;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.Review;
-import airbnb.model.pojo.User;
 import airbnb.model.repositories.BookingRepository;
 import airbnb.model.repositories.PropertyRepository;
 import airbnb.model.repositories.ReviewRepository;

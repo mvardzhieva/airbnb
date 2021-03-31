@@ -3,7 +3,7 @@ package airbnb.controller;
 import airbnb.exceptions.BadRequestException;
 import airbnb.model.dto.user.*;
 import airbnb.model.pojo.User;
-import airbnb.service.UserService;
+import airbnb.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +22,7 @@ public class UserController extends AbstractController {
 
     @PutMapping("/users")
     public RegisterResponseUserDTO register(@RequestBody RegisterRequestUserDTO requestUserDTO, HttpSession session) {
+        System.out.println(requestUserDTO);
         RegisterResponseUserDTO responseUserDTO = userService.register(requestUserDTO);
         sessionManager.loginUser(session, responseUserDTO.getId());
         return responseUserDTO;
@@ -34,6 +35,7 @@ public class UserController extends AbstractController {
         return userProfileDTO;
     }
 
+
     @PostMapping("/logout")
     public void logout(HttpSession session) {
         sessionManager.logoutUser(session);
@@ -41,6 +43,7 @@ public class UserController extends AbstractController {
 
     @GetMapping("/users/{id}")
     public UserProfileDTO getById(@PathVariable int id) {
+        System.out.println(id);
         return userService.getUserById(id);
     }
 

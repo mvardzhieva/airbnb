@@ -1,10 +1,12 @@
 package airbnb.controller;
 
+import airbnb.exceptions.AuthenticationException;
 import airbnb.exceptions.BadRequestException;
-import airbnb.exceptions.PropertyNotAvailableException;
+import airbnb.exceptions.property.PropertyNotAvailableException;
 import airbnb.exceptions.user.*;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.dto.ExceptionDTO;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -31,7 +33,7 @@ public abstract class AbstractController {
 
     @ExceptionHandler(UserNotLoggedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ExceptionDTO handleUserNotFound(UserNotLoggedException e) {
+    public ExceptionDTO handleUserNotLoggedIn(UserNotLoggedException e) {
         return new ExceptionDTO(e.getMessage());
     }
 
@@ -53,9 +55,24 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
+
+    //TODO
+    @ExceptionHandler(DataAccessException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ExceptionDTO handleDataAccess(DataAccessException e) {
+        return new ExceptionDTO("Error!");
+    }
+
+
     @ExceptionHandler(PropertyNotAvailableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionDTO handleBookedProperty(PropertyNotAvailableException e) {
         return new ExceptionDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ExceptionDTO handleAuthentication(AuthenticationException e) {
+        return new ExceptionDTO(e.getMessage()) ;
     }
 }

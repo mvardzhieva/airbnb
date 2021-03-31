@@ -27,5 +27,15 @@ public class Media {
     @ManyToOne
     @JoinColumn(name = "property_id", nullable = false)
     private Property property;
+
+    @Override
+    public String toString() {
+        return "Media{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", mimeType='" + mimeType + '\'' +
+                ", property=" + property +
+                '}';
+    }
 }
 

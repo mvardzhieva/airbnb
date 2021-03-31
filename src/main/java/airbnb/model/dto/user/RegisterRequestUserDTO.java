@@ -19,4 +19,17 @@ public class RegisterRequestUserDTO {
     private String confirmedPassword;
     private String phoneNumber;
     private LocalDate dateOfBirth;
+
+    @Override
+    public String toString() {
+        return "RegisterRequestUserDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmedPassword='" + confirmedPassword + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                '}';
+    }
 }

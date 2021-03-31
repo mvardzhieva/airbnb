@@ -1,6 +1,6 @@
-package airbnb.service;
+package airbnb.services;
 
-import airbnb.exceptions.PropertyNotAvailableException;
+import airbnb.exceptions.property.PropertyNotAvailableException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.exceptions.user.InvalidUserInputException;
 import airbnb.model.dto.booking.AddRequestBookingDTO;

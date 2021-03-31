@@ -25,8 +25,31 @@ public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long typeId;
-    private Long locationId;
+
+    @ManyToOne
+    @JoinColumn(name="host_id")
+    @JsonBackReference
+    private User host;
+
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private PropertyType type;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
+
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "property")
+//    CascadeType.All
+    private Set<Media> media;
+
+    private Double latitude;
+    private Double longitude;
     private String name;
     private String description;
     private Double price;
@@ -34,22 +57,16 @@ public class Property {
     private Double rating;
     private Boolean isFree;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "property")
-    private Set<Media> media;
-
-    @ManyToOne
-    @JoinColumn(name = "host_id")
-    @JsonBackReference
-    private User host;
-
     @OneToMany(mappedBy = "property")
     @JsonManagedReference
     private List<Booking> bookings;
 
     public Property(AddRequestPropertyDTO propertyDTO) {
-        this.typeId = propertyDTO.getType_id();
-        this.locationId = propertyDTO.getLocation_id();
+        this.type = propertyDTO.getType();
+        this.city = propertyDTO.getCity();
+        this.country = propertyDTO.getCountry();
+        this.latitude = propertyDTO.getLatitude();
+        this.longitude = propertyDTO.getLongitude();
         this.name = propertyDTO.getName();
         this.description = propertyDTO.getDescription();
         this.price = propertyDTO.getPrice();
@@ -75,14 +92,20 @@ public class Property {
     public String toString() {
         return "Property{" +
                 "id=" + id +
-                ", type_id=" + typeId +
-                ", location_id=" + locationId +
+                ", host=" + host +
+                ", type=" + type +
+                ", city=" + city +
+                ", country=" + country +
+                ", media=" + media +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
-                ", created_at=" + createdAt +
+                ", createdAt=" + createdAt +
                 ", rating=" + rating +
-                ", is_free=" + isFree +
+                ", isFree=" + isFree +
+                ", bookings=" + bookings +
                 '}';
     }
 }
