@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.awt.print.Pageable;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -66,9 +68,6 @@ public class PropertyController extends AbstractController {
         if (sessionManager.getLoggedUser(session).getId() == userId) {
             return propertyService.edit(editRequestPropertyDTO);
         }
-
-//        propertyId
-
         throw new AuthenticationException(EXCEPTION_MSG);
     }
 
@@ -77,6 +76,14 @@ public class PropertyController extends AbstractController {
     public Set<Property> filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
         return propertyService.filter(filterRequestPropertyDTO);
     }
+
+    //TODO proper method
+    @PostMapping("users/properties/s")
+    public List<Property> nearBy(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
+        return propertyService.nearBy(filterRequestPropertyDTO);
+    }
+
+
 
     @Transactional
     @DeleteMapping("users/{userId}/properties/{propertyId}")

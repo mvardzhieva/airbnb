@@ -14,13 +14,11 @@ public class FilterRequestPropertyDTO {
     private Long typeId;
     private Long cityId;
     private Long countryId;
-    private Double latitude;
-    private Double longitude;
-    private String name;
+    private Double minPrice;
+    private Double maxPrice;
+    private Integer proximity;
     private String description;
-    private Double price;
     private Double rating;
-    private Boolean isFree;
 
     //Todo Hashcode and Equals
 }
