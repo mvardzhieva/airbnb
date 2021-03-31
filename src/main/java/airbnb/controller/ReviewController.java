@@ -5,7 +5,7 @@ import airbnb.model.dto.review.AddRequestReviewDTO;
 import airbnb.model.dto.review.EditReviewDTO;
 import airbnb.model.pojo.Review;
 import airbnb.model.pojo.User;
-import airbnb.service.ReviewService;
+import airbnb.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
