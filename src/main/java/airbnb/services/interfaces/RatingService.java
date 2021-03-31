@@ -1,12 +1,13 @@
 package airbnb.services.interfaces;
 
 import airbnb.model.dto.RatingDTO;
+import airbnb.model.pojo.Rating;
 
 public interface RatingService {
 
-    RatingDTO add(RatingDTO ratingDTO);
+    Rating add(Rating rating);
 
-    RatingDTO edit(RatingDTO ratingDTO);
+    Rating edit(Rating rating);
 
     void delete(Long ratingId);
 }

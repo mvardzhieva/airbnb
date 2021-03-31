@@ -26,6 +26,8 @@ public class Rating {
     private Integer location;
     private Integer value;
 
+    // TODO CONNECT WITH BOOKINGS
+
     public Rating(RatingDTO ratingDTO) {
         this.cleanliness = ratingDTO.getCleanliness();
         this.communication = ratingDTO.getCommunication();

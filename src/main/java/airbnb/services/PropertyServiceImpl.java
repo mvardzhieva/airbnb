@@ -1,5 +1,6 @@
 package airbnb.services;
 
+import airbnb.config.SpringJdbcConfig;
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.dto.property.EditRequestPropertyDTO;
@@ -12,12 +13,8 @@ import airbnb.model.repositories.UserRepository;
 import airbnb.services.interfaces.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.management.Query;
-import javax.management.QueryExp;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -28,24 +25,25 @@ public class PropertyServiceImpl implements PropertyService {
 
     private PropertyRepository propertyRepository;
     private UserService userService;
-    private UserRepository userRepository;
+    private SpringJdbcConfig springJdbcConfig;
 
 
     @Autowired
     public PropertyServiceImpl(PropertyRepository propertyRepository,
                                UserService userService,
-                               UserRepository userRepository) {
+                               SpringJdbcConfig springJdbcConfig) {
         this.propertyRepository = propertyRepository;
         this.userService = userService;
-        this.userRepository = userRepository;
+        this.springJdbcConfig = springJdbcConfig;
     }
 
     //TODO VALIDATE DATA
     @Override
     public Property add(AddRequestPropertyDTO addRequestPropertyDTO) {
-        User user = userRepository.findById(addRequestPropertyDTO.getHostId().intValue()).get();
+//        User user = userService.getUserById(addRequestPropertyDTO.getHostId().)
+//        User user = userRepository.findById(addRequestPropertyDTO.getHostId().intValue()).get();
         Property property = new Property(addRequestPropertyDTO);
-        property.setHost(user);
+//        property.setHost(user);
         return propertyRepository.save(property);
     }
 
@@ -78,7 +76,11 @@ public class PropertyServiceImpl implements PropertyService {
     //TODO paging and filter
     @Override
     public Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
+       try {
+//           springJdbcConfig.mysqlDataSource().getConnection();
+       } catch (Exception e) {
 
+       }
 //        return propertyRepository.filterBy(filterRequestPropertyDTO.getTypeId(),
 //                filterRequestPropertyDTO.getMinPrice(),
 //                filterRequestPropertyDTO.getMaxPrice(),
@@ -100,7 +102,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<Property> nearBy(FilterRequestPropertyDTO filterRequestPropertyDTO) {
+    public List<Property> nearby(FilterRequestPropertyDTO filterRequestPropertyDTO) {
         return propertyRepository.finNearBy(filterRequestPropertyDTO.getProximity()).stream().collect(Collectors.toList());
     }
 

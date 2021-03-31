@@ -19,14 +19,14 @@ import java.util.Optional;
 @Service
 public class UserService {
     private UserRepository userRepository;
-//    private PropertyServiceImpl propertyService;
+    private PropertyServiceImpl propertyService;
     private PasswordEncoder encoder;
     private Validator validator;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-//        this.propertyService = propertyService;
+        this.propertyService = propertyService;
         this.encoder = new BCryptPasswordEncoder();
         this.validator = new Validator();
     }
@@ -79,7 +79,7 @@ public class UserService {
         UserProfileDTO deletedUserProfile = new UserProfileDTO(user);
         for (Property property : deletedUserProfile.getProperties()) {
             System.out.println(property.getId());
-//            propertyService.deleteById(property.getId());
+            propertyService.deleteById(property.getId());
         }
         userRepository.deleteById(user.getId());
         return deletedUserProfile;
