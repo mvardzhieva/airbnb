@@ -117,7 +117,6 @@ public class MediaServiceImpl implements MediaService {
             mediaRepository.deleteById(media.getId());
         }
         catch (Exception e) {
-            System.out.println(e.toString());
             throw new BadRequestException("Can't delete media!");
         }
     }

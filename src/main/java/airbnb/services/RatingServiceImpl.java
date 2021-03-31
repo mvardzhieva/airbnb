@@ -1,6 +1,7 @@
 package airbnb.services;
 
-import airbnb.model.dto.RatingDTO;
+
+import airbnb.model.pojo.Rating;
 import airbnb.model.repositories.RatingRepository;
 import airbnb.services.interfaces.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,25 +15,24 @@ public class RatingServiceImpl implements RatingService {
 
     private RatingRepository ratingRepository;
 
-    // TODO CONNECT WITH BOOKINGS
+
     @Autowired
     public RatingServiceImpl(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
     }
 
     @Override
-    public RatingDTO add(RatingDTO ratingDTO) {
-        return null;
+    public Rating add(Rating rating) {
+        return ratingRepository.save(rating);
     }
 
     @Override
-    public RatingDTO edit(RatingDTO ratingDTO) {
-
-        return null;
+    public Rating edit(Rating rating) {
+        return ratingRepository.save(rating);
     }
+
     @Override
     public void delete(Long ratingId) {
-
+        ratingRepository.deleteById(ratingId);
     }
-
 }

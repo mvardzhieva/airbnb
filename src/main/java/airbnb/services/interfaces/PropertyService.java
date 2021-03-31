@@ -22,6 +22,6 @@ public interface PropertyService {
 
     void deleteById(Long id);
 
-    List<Property> nearBy(FilterRequestPropertyDTO filterRequestPropertyDTO);
+    List<Property> nearby(FilterRequestPropertyDTO filterRequestPropertyDTO);
 
 }

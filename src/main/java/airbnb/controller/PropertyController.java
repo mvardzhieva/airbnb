@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +34,7 @@ public class PropertyController extends AbstractController {
     }
 
 
-    //TODO RESPONSE STATUSES AND URLS
+    //TODO RESPONSE STATUSES AND URLS, REFACTOR
 
     @GetMapping("users/properties")
     public Set<Property> getAll() {
@@ -54,8 +53,9 @@ public class PropertyController extends AbstractController {
         if (sessionManager.getLoggedUser(session).getId() == id) {
             return propertyService.add(addRequestPropertyDTO);
         }
-
-        throw new AuthenticationException(EXCEPTION_MSG);
+        {
+            throw new AuthenticationException(EXCEPTION_MSG);
+        }
     }
 
     @PostMapping("users/{userId}/properties/{propertyId}")
@@ -68,7 +68,9 @@ public class PropertyController extends AbstractController {
         if (sessionManager.getLoggedUser(session).getId() == userId) {
             return propertyService.edit(editRequestPropertyDTO);
         }
-        throw new AuthenticationException(EXCEPTION_MSG);
+        else {
+            throw new AuthenticationException(EXCEPTION_MSG);
+        }
     }
 
     //TODO proper method
@@ -79,8 +81,8 @@ public class PropertyController extends AbstractController {
 
     //TODO proper method
     @PostMapping("users/properties/s")
-    public List<Property> nearBy(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
-        return propertyService.nearBy(filterRequestPropertyDTO);
+    public List<Property> nearby(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
+        return propertyService.nearby(filterRequestPropertyDTO);
     }
 
 
