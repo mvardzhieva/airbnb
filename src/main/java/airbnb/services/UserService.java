@@ -19,45 +19,45 @@ import java.util.Optional;
 @Service
 public class UserService {
     private UserRepository userRepository;
-//    private PropertyServiceImpl propertyService;
+    private PropertyServiceImpl propertyService;
     private PasswordEncoder encoder;
     private Validator validator;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PropertyServiceImpl propertyService) {
         this.userRepository = userRepository;
-//        this.propertyService = propertyService;
+        this.propertyService = propertyService;
         this.encoder = new BCryptPasswordEncoder();
         this.validator = new Validator();
     }
 
-    public RegisterResponseUserDTO register(RegisterRequestUserDTO requestUserDTO) {
+    public User register(RegisterRequestUserDTO requestUserDTO) {
         validateRegisterUserData(requestUserDTO);
         requestUserDTO.setPassword(encoder.encode(requestUserDTO.getPassword()));
         User user = new User(requestUserDTO);
         user = userRepository.save(user);
-        return new RegisterResponseUserDTO(user);
+        return user;
     }
 
-    public UserProfileDTO login(LoginUserDTO loginUserDTO) {
+    public User login(LoginUserDTO loginUserDTO) {
         User user = userRepository.findByEmail(loginUserDTO.getEmail());
         if (user == null || !encoder.matches(loginUserDTO.getPassword(), user.getPassword())) {
             throw new UserNotFoundException("Invalid email/password combination.");
         }
-        return new UserProfileDTO(user);
+        return user;
     }
 
-    public UserProfileDTO getUserById(int id) {
+    public User getUserById(int id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            return new UserProfileDTO(user.get());
+            return user.get();
         }
         throw new UserNotFoundException("User with this id is not registered.");
     }
 
-    public UserProfileDTO edit(User user, EditUserDTO editUserDTO) {
+    public User edit(User user, EditUserDTO editUserDTO) {
         validator.validateUserInput(editUserDTO.getFirstName(), editUserDTO.getLastName(),
-                user.getEmail(), editUserDTO.getPhoneNumber());
+                editUserDTO.getEmail(), editUserDTO.getPhoneNumber());
         if (!user.getEmail().equals(editUserDTO.getEmail())) {
             checkIfEmailExists(editUserDTO.getEmail());
             user.setEmail(editUserDTO.getEmail());
@@ -71,18 +71,16 @@ public class UserService {
         user.setGender(editUserDTO.getGender());
         user.setGovernmentId(editUserDTO.getGovernmentId());
         userRepository.save(user);
-        return new UserProfileDTO(user);
+        return user;
     }
 
     @Transactional
-    public UserProfileDTO delete(User user) {
-        UserProfileDTO deletedUserProfile = new UserProfileDTO(user);
-        for (Property property : deletedUserProfile.getProperties()) {
-            System.out.println(property.getId());
-//            propertyService.deleteById(property.getId());
+    public User delete(User user) {
+        for (Property property : user.getProperties()) {
+            propertyService.deleteById(property.getId());
         }
         userRepository.deleteById(user.getId());
-        return deletedUserProfile;
+        return user;
     }
 
     private void validateRegisterUserData(RegisterRequestUserDTO requestUserDTO) {

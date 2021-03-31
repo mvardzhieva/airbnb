@@ -23,18 +23,17 @@ public class UserController extends AbstractController {
     @PutMapping("/users")
     public RegisterResponseUserDTO register(@RequestBody RegisterRequestUserDTO requestUserDTO, HttpSession session) {
         System.out.println(requestUserDTO);
-        RegisterResponseUserDTO responseUserDTO = userService.register(requestUserDTO);
+        RegisterResponseUserDTO responseUserDTO = new RegisterResponseUserDTO(userService.register(requestUserDTO));
         sessionManager.loginUser(session, responseUserDTO.getId());
         return responseUserDTO;
     }
 
     @PostMapping("/users")
     public UserProfileDTO login(@RequestBody LoginUserDTO loginUserDTO, HttpSession session) {
-        UserProfileDTO userProfileDTO = userService.login(loginUserDTO);
+        UserProfileDTO userProfileDTO = new UserProfileDTO(userService.login(loginUserDTO));
         sessionManager.loginUser(session, userProfileDTO.getId());
         return userProfileDTO;
     }
-
 
     @PostMapping("/logout")
     public void logout(HttpSession session) {
@@ -44,7 +43,7 @@ public class UserController extends AbstractController {
     @GetMapping("/users/{id}")
     public UserProfileDTO getById(@PathVariable int id) {
         System.out.println(id);
-        return userService.getUserById(id);
+        return new UserProfileDTO(userService.getUserById(id));
     }
 
     @PostMapping("/users/{id}")
@@ -53,7 +52,7 @@ public class UserController extends AbstractController {
         if (user.getId() != id) {
             throw new BadRequestException("You cannot edit another user's profile.");
         }
-        return userService.edit(user, editUserDTO);
+        return new UserProfileDTO(userService.edit(user, editUserDTO));
     }
 
     @DeleteMapping("/users/{id}")
@@ -62,6 +61,6 @@ public class UserController extends AbstractController {
         if (user.getId() != id) {
             throw new BadRequestException("You cannot delete another user's profile.");
         }
-        return userService.delete(user);
+        return new UserProfileDTO(userService.delete(user));
     }
 }
