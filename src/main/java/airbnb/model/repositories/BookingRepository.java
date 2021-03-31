@@ -11,5 +11,5 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> getAllByStatusIdAndUser(int id, User user);
 
-    List<Booking> getAllByStatusIdIsNotAndUser(int id, User user);
+    List<Booking> getAllByStatusIdIsNot(int id);
 }
