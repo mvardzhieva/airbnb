@@ -1,0 +1,19 @@
+package airbnb;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+<<<<<<< HEAD
+@SpringBootApplication()
+=======
+@EnableScheduling
+@SpringBootApplication
+>>>>>>> b07dddd798abb43b015b16c229b47861a31632fc
+public class AirbnbApplication {
+
+    public static void main(String[] args) {
+       SpringApplication.run(AirbnbApplication.class, args);
+    }
+
+}
