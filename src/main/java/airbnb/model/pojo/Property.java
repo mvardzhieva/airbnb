@@ -54,7 +54,9 @@ public class Property {
     private String description;
     private Double price;
     private LocalDate createdAt;
-    private Double rating;
+
+    @OneToMany(mappedBy = "property")
+    private List<Rating> ratings;
     private Boolean isFree;
 
     @OneToMany(mappedBy = "property")
@@ -71,7 +73,7 @@ public class Property {
         this.description = propertyDTO.getDescription();
         this.price = propertyDTO.getPrice();
         this.createdAt = LocalDate.now();
-        this.rating = 0.0;
+        this.ratings = null;
         this.isFree = true;
     }
 
@@ -103,7 +105,7 @@ public class Property {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", createdAt=" + createdAt +
-                ", rating=" + rating +
+                ", rating=" + ratings +
                 ", isFree=" + isFree +
                 ", bookings=" + bookings +
                 '}';

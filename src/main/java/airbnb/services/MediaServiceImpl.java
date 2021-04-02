@@ -46,7 +46,7 @@ public class MediaServiceImpl implements MediaService {
         if (!dir.exists()) {
             dir.mkdir();
         }
-        File f = new File(dir.getAbsolutePath() + File.separator + filename + ".png");
+        File f = new File(dir.getAbsolutePath() + File.separator + filename + file.getContentType());
 
         try  {
             f.createNewFile();
