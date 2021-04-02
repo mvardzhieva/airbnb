@@ -35,7 +35,7 @@ public class StatusController {
             Property property = booking.getProperty();
             if (booking.getEndDate().isEqual(LocalDate.now())) {
                 booking.setStatusId(statusRepository.findByName("finished").getId());
-                property.setIsFree(true);
+//                property.setIsFree(true);
             }
             bookingRepository.save(booking);
             propertyRepository.save(property);
@@ -46,7 +46,7 @@ public class StatusController {
             Property property = booking.getProperty();
             if (booking.getStartDate().isEqual(LocalDate.now())) {
                 booking.setStatusId(statusRepository.findByName("current").getId());
-                property.setIsFree(false);
+//                property.setIsFree(false);
             }
             bookingRepository.save(booking);
             propertyRepository.save(property);

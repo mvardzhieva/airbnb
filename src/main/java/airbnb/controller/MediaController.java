@@ -29,16 +29,15 @@ public class MediaController extends AbstractController {
         this.sessionManager = sessionManager;
     }
 
+    //TODO MEDIA DTO - VALIDATE THAT USER HAS MEDIA !!!!!!!!!!!
 
-    //TODO MEDIA DTO - VALIDATE
 
     @GetMapping(value = "users/properties/media/{id}")
     public ResponseEntity<byte[]> download(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-
-        byte[] media = mediaService.download(id);
         headers.add("Content-Type",mediaService.findById(id).getMimeType());
+        byte[] media = mediaService.download(id);
 
         return new ResponseEntity<>(media, headers, HttpStatus.OK);
     }
@@ -68,7 +67,7 @@ public class MediaController extends AbstractController {
                                    @PathVariable Long propertyId,
                                    @PathVariable Long mediaId,
                                    HttpSession session) {
-        //todo validate session
+
         sessionManager.validate(userId, session);
         mediaService.deleteOneByMediaId(propertyId, mediaId);
     }

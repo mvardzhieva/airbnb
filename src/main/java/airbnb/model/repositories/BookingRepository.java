@@ -16,5 +16,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> getAllByStatusIdIsNot(int id);
 
+    Booking findByUserAndProperty(User user, Property property);
+
 //    Booking getFirstByPropertyOrderByEndDateEndDateDesc(Property property);
 }

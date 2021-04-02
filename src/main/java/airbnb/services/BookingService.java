@@ -43,9 +43,9 @@ public class BookingService {
         if (property.isEmpty()) {
             throw new NotFoundException("Property with this id does not exists.");
         }
-        if (!property.get().getIsFree()) {
-            throw new PropertyNotAvailableException("This property is not available on these dates.");
-        }
+//        if (!property.get().getIsFree()) {
+//            throw new PropertyNotAvailableException("This property is not available on these dates.");
+//        }
         Booking booking = new Booking(addBookingDTO);
         booking.setUser(user);
         booking.setProperty(property.get());

@@ -1,9 +1,8 @@
 package airbnb.model.pojo;
 
 import airbnb.model.dto.RatingDTO;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -13,6 +12,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Table(name = "ratings")
 public class Rating {
 
@@ -27,9 +28,8 @@ public class Rating {
     private Integer value;
 
     @ManyToOne
+    @JsonBackReference
     private Property property;
-
-
 
     public Rating(RatingDTO ratingDTO) {
         this.cleanliness = ratingDTO.getCleanliness();
@@ -38,5 +38,14 @@ public class Rating {
         this.accuracy = ratingDTO.getAccuracy();
         this.location = ratingDTO.getLocation();
         this.value = ratingDTO.getLocation();
+    }
+
+    public void update(Rating rating) {
+        this.cleanliness = rating.getCleanliness();
+        this.communication = rating.getCommunication();
+        this.checkIn = rating.getCheckIn();
+        this.accuracy = rating.getAccuracy();
+        this.location = rating.getLocation();
+        this.value = rating.getLocation();
     }
 }
