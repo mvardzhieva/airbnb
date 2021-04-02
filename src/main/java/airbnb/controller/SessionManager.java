@@ -1,5 +1,6 @@
 package airbnb.controller;
 
+import airbnb.exceptions.AuthenticationException;
 import airbnb.exceptions.user.UserNotLoggedException;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
@@ -12,9 +13,10 @@ import java.util.Optional;
 
 @Component
 //@Scope(scopeName = "session")
-public class SessionManager {
-    private static final String LOGGED_USER_ID = "LOGGED_USER_ID";
+public class SessionManager extends AbstractController {
 
+    private static final String LOGGED_USER_ID = "LOGGED_USER_ID";
+    protected final String EXCEPTION_MSG = "Action Unauthorized!";
     private UserRepository userRepository;
 
     @Autowired
@@ -39,5 +41,11 @@ public class SessionManager {
 
     public void logoutUser(HttpSession session) {
         session.invalidate();
+    }
+
+    public void validate(Long id, HttpSession session) {
+        if (this.getLoggedUser(session).getId() != id) {
+            throw new AuthenticationException(EXCEPTION_MSG);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package airbnb.services;
 
+import airbnb.controller.SessionManager;
+import airbnb.exceptions.AuthenticationException;
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Media;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,16 +42,18 @@ public class MediaServiceImpl implements MediaService {
 
     //TODO  REFACTOR
     @Override
-    public Media upload(Long id, MultipartFile file)  {
+    public Media upload(Long id, MultipartFile file) {
 
         String filename = UUID.randomUUID().toString();
         File dir = new File(filePath);
         if (!dir.exists()) {
             dir.mkdir();
         }
-        File f = new File(dir.getAbsolutePath() + File.separator + filename + file.getContentType());
 
-        try  {
+        String type = file.getOriginalFilename().split("\\.")[1];
+        File f = new File(dir.getAbsolutePath() + File.separator + filename + type);
+
+        try {
             f.createNewFile();
             Media media = new Media();
             media.setUrl(f.getAbsolutePath());
@@ -56,9 +61,6 @@ public class MediaServiceImpl implements MediaService {
             media.setProperty(propertyService.getById(id));
             mediaRepository.save(media);
             Optional<Media> mediaOptional = mediaRepository.findById(media.getId());
-            if (mediaOptional.isEmpty()) {
-                throw new FileNotFoundException();
-            }
             file.transferTo(Paths.get(f.getAbsolutePath()));
             return mediaOptional.get();
 
@@ -66,17 +68,16 @@ public class MediaServiceImpl implements MediaService {
             f.delete();
             throw new BadRequestException("Problem uploading file!");
         }
-
     }
 
     @Override
     public byte[] download(Long id) {
-       try {
-           Optional<Media> optionalMedia = mediaRepository.findById(id);
-           return Files.readAllBytes(Path.of(optionalMedia.get().getUrl()));
-       } catch (Exception e) {
-           throw new NotFoundException("Media not found!");
-       }
+        try {
+            Optional<Media> optionalMedia = mediaRepository.findById(id);
+            return Files.readAllBytes(Path.of(optionalMedia.get().getUrl()));
+        } catch (Exception e) {
+            throw new NotFoundException("Media not found!");
+        }
     }
 
     @Override
@@ -86,8 +87,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public List<Media> getAllByPropertyId(Long id) {
-       return mediaRepository.getAllByPropertyId(id);
-
+        return mediaRepository.getAllByPropertyId(id);
     }
 
     @Override
@@ -110,15 +110,12 @@ public class MediaServiceImpl implements MediaService {
         }
     }
 
-
     private void deleteFromFileSystem(Media media) {
         try {
             Files.delete(Paths.get(media.getUrl()));
             mediaRepository.deleteById(media.getId());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new BadRequestException("Can't delete media!");
         }
     }
-
 }

@@ -22,7 +22,6 @@ public class PropertyController extends AbstractController {
     private PropertyService propertyService;
     private SessionManager sessionManager;
     private MediaService mediaService;
-    private final String EXCEPTION_MSG = "Action Unauthorized!";
 
     @Autowired
     public PropertyController(PropertyService PropertyService,
@@ -34,7 +33,7 @@ public class PropertyController extends AbstractController {
     }
 
 
-    //TODO RESPONSE STATUSES AND URLS, REFACTOR
+    //TODO RESPONSE STATUSES, DTO AND URLS, REFACTOR
 
     @GetMapping("users/properties")
     public Set<Property> getAll() {
@@ -42,20 +41,16 @@ public class PropertyController extends AbstractController {
     }
 
     @GetMapping("users/properties/{id}")
-    public Property getAllByPropertyId(@PathVariable Long id) {
+    public Property getByPropertyId(@PathVariable Long id) {
         return propertyService.getById(id);
     }
 
-    @PutMapping("users/{id}/properties")
+    @PutMapping("users/{userId}/properties")
     public Property add(@RequestBody AddRequestPropertyDTO addRequestPropertyDTO,
-                        HttpSession session, @PathVariable Long id)  {
-        addRequestPropertyDTO.setHostId(id);
-        if (sessionManager.getLoggedUser(session).getId() == id) {
-            return propertyService.add(addRequestPropertyDTO);
-        }
-        {
-            throw new AuthenticationException(EXCEPTION_MSG);
-        }
+                        HttpSession session, @PathVariable Long userId) {
+        sessionManager.validate(userId, session);
+        addRequestPropertyDTO.setHostId(userId);
+        return propertyService.add(addRequestPropertyDTO);
     }
 
     @PostMapping("users/{userId}/properties/{propertyId}")
@@ -63,43 +58,31 @@ public class PropertyController extends AbstractController {
                          @PathVariable Long propertyId,
                          @RequestBody EditRequestPropertyDTO editRequestPropertyDTO,
                          HttpSession session) {
-
-
-        if (sessionManager.getLoggedUser(session).getId() == userId) {
-            return propertyService.edit(propertyId, editRequestPropertyDTO);
-        }
-        else {
-            throw new AuthenticationException(EXCEPTION_MSG);
-        }
+        sessionManager.validate(userId, session);
+        return propertyService.edit(propertyId, editRequestPropertyDTO);
     }
 
     //TODO proper method
     @PostMapping("users/properties")
-    public Set<Property> filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
+    public Set<Property> filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO) {
         return propertyService.filter(filterRequestPropertyDTO);
     }
 
     //TODO proper method
     @PostMapping("users/properties/s")
-    public List<Property> nearby(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO)  {
+    public List<Property> nearby(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO) {
         return propertyService.nearby(filterRequestPropertyDTO);
     }
-
-
 
     @Transactional
     @DeleteMapping("users/{userId}/properties/{propertyId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteByPropertyId(@PathVariable Long userId,
                                    @PathVariable Long propertyId,
-                                   HttpSession session){
-        if (sessionManager.getLoggedUser(session).getId() == userId) {
-            mediaService.deleteAllByPropertyId(propertyId);
-            propertyService.deleteById(propertyId);
-        }
-        else {
-            throw new AuthenticationException(EXCEPTION_MSG);
-        }
-    }
+                                   HttpSession session) {
+        sessionManager.validate(userId, session);
+        mediaService.deleteAllByPropertyId(propertyId);
+        propertyService.deleteById(propertyId);
 
+    }
 }

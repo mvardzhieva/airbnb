@@ -1,5 +1,6 @@
 package airbnb.controller;
 
+import airbnb.exceptions.AuthenticationException;
 import airbnb.model.pojo.Media;
 import airbnb.services.interfaces.MediaService;
 import org.apache.tomcat.jni.Error;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.logging.ErrorManager;
@@ -18,14 +20,17 @@ import java.util.logging.ErrorManager;
 public class MediaController extends AbstractController {
 
     private MediaService mediaService;
+    private SessionManager sessionManager;
 
     @Autowired
-    public MediaController(MediaService mediaService) {
+    public MediaController(MediaService mediaService,
+                           SessionManager sessionManager) {
         this.mediaService = mediaService;
+        this.sessionManager = sessionManager;
     }
 
 
-    //TODO MEDIA DTO
+    //TODO MEDIA DTO - VALIDATE
 
     @GetMapping(value = "users/properties/media/{id}", produces = "image/*")
     public byte[] download(@PathVariable Long id) {
@@ -42,24 +47,35 @@ public class MediaController extends AbstractController {
         return mediaService.getAll();
     }
 
-    @PutMapping("users/properties/{id}/media")
-    public Media upload(@PathVariable Long id, @RequestPart MultipartFile file, HttpResponse httpResponse) {
+    @PutMapping("users/{userId}/properties/{propertyId}/media")
+    public Media upload(@PathVariable Long userId,
+                        @PathVariable Long propertyId,
+                        HttpSession session,
+                        @RequestPart MultipartFile file) {
+        sessionManager.validate(userId, session);
 //        httpResponse.headers().
-        return mediaService.upload(id, file);
+        return mediaService.upload(propertyId, file);
     }
 
-    @DeleteMapping("users/properties/{propertyId}/media/{mediaId}")
+    @DeleteMapping("users/{userId}/properties/{propertyId}/media/{mediaId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteOneByMediaId(@PathVariable Long propertyId, @PathVariable Long mediaId) {
+    public void deleteOneByMediaId(@PathVariable Long userId,
+                                   @PathVariable Long propertyId,
+                                   @PathVariable Long mediaId,
+                                   HttpSession session) {
         //todo validate session
+        sessionManager.validate(userId, session);
         mediaService.deleteOneByMediaId(mediaId);
     }
 
-    @DeleteMapping("users/properties/{propertyId}/media")
+    @DeleteMapping("users/{userId}/properties/{propertyId}/media")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteAllByPropertyId(@PathVariable Long propertyId) {
-        //todo validate session
+    public void deleteAllByPropertyId(@PathVariable Long userId,
+                                      @PathVariable Long propertyId,
+                                      HttpSession session) {
+        sessionManager.validate(userId, session);
         mediaService.deleteAllByPropertyId(propertyId);
     }
+
 
 }
