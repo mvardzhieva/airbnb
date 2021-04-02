@@ -75,7 +75,7 @@ public class ReviewService {
         }
         int guestId = review.get().getBooking().getUser().getId();
         int hostId = review.get().getBooking().getProperty().getHost().getId();
-        if (userId != guestId || userId != hostId) {
+        if (userId != guestId && userId != hostId) {
             throw new BadRequestException("You are neither owner of this review nor host of this property. You cannot delete this review.");
         }
         Review deletedReview = review.get();

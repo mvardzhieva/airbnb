@@ -61,7 +61,7 @@ public class BookingService {
         }
         int guestId = booking.get().getUser().getId();
         int hostId = booking.get().getProperty().getHost().getId();
-        if (userId != guestId || userId != hostId) {
+        if (userId != guestId && userId != hostId) {
             throw new BadRequestException("You are neither a guest nor a host of this booking.");
         }
         return booking.get();

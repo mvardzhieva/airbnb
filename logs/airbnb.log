@@ -1,0 +1,46 @@
+2021-04-02 20:07:17,846 INFO o.s.b.StartupInfoLogger [restartedMain] Starting AirbnbApplication using Java 15.0.1 on LAPTOP-4PFG9GOJ with PID 17276 (C:\Users\Мария Варджиева\Documents\ItTalents\ПРОЕКТ\airbnb\target\classes started by Мария Варджиева in C:\Users\Мария Варджиева\Documents\ItTalents\ПРОЕКТ\airbnb)
+2021-04-02 20:07:17,876 DEBUG o.s.b.StartupInfoLogger [restartedMain] Running with Spring Boot v2.4.4, Spring v5.3.5
+2021-04-02 20:07:17,883 INFO o.s.b.SpringApplication [restartedMain] The following profiles are active: kmarinkov
+2021-04-02 20:07:18,033 INFO o.s.b.l.DeferredLog [restartedMain] Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-04-02 20:07:18,035 INFO o.s.b.l.DeferredLog [restartedMain] For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-04-02 20:07:20,433 INFO o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-04-02 20:07:20,678 INFO o.s.d.r.c.RepositoryConfigurationDelegate [restartedMain] Finished Spring Data repository scanning in 221 ms. Found 10 JPA repository interfaces.
+2021-04-02 20:07:21,837 INFO o.s.b.w.e.t.TomcatWebServer [restartedMain] Tomcat initialized with port(s): 8888 (http)
+2021-04-02 20:07:21,858 INFO o.a.j.l.DirectJDKLog [restartedMain] Initializing ProtocolHandler ["http-nio-8888"]
+2021-04-02 20:07:21,859 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting service [Tomcat]
+2021-04-02 20:07:21,860 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting Servlet engine: [Apache Tomcat/9.0.44]
+2021-04-02 20:07:22,065 INFO o.a.j.l.DirectJDKLog [restartedMain] Initializing Spring embedded WebApplicationContext
+2021-04-02 20:07:22,066 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [restartedMain] Root WebApplicationContext: initialization completed in 4027 ms
+2021-04-02 20:07:22,338 INFO c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Starting...
+2021-04-02 20:07:22,686 INFO c.z.h.HikariDataSource [restartedMain] HikariPool-1 - Start completed.
+2021-04-02 20:07:22,774 INFO o.h.j.i.u.LogHelper [restartedMain] HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-04-02 20:07:22,864 INFO o.h.Version [restartedMain] HHH000412: Hibernate ORM core version 5.4.29.Final
+2021-04-02 20:07:23,104 INFO o.h.a.c.r.j.JavaReflectionManager [restartedMain] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-04-02 20:07:23,386 INFO o.h.d.Dialect [restartedMain] HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2021-04-02 20:07:24,872 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [restartedMain] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-04-02 20:07:24,888 INFO o.s.o.j.AbstractEntityManagerFactoryBean [restartedMain] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-04-02 20:07:26,384 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [restartedMain] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-04-02 20:07:26,739 INFO o.s.s.c.ExecutorConfigurationSupport [restartedMain] Initializing ExecutorService 'applicationTaskExecutor'
+2021-04-02 20:07:26,809 INFO o.s.b.d.a.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
+2021-04-02 20:07:27,078 INFO o.s.s.c.ExecutorConfigurationSupport [restartedMain] Initializing ExecutorService 'taskScheduler'
+2021-04-02 20:07:27,173 INFO o.a.j.l.DirectJDKLog [restartedMain] Starting ProtocolHandler ["http-nio-8888"]
+2021-04-02 20:07:27,211 INFO o.s.b.w.e.t.TomcatWebServer [restartedMain] Tomcat started on port(s): 8888 (http) with context path ''
+2021-04-02 20:07:27,232 INFO s.d.s.w.p.DocumentationPluginsBootstrapper [restartedMain] Context refreshed
+2021-04-02 20:07:27,252 INFO s.d.s.w.p.DocumentationPluginsBootstrapper [restartedMain] Found 1 custom documentation plugin(s)
+2021-04-02 20:07:27,263 INFO s.d.s.w.s.ApiListingReferenceScanner [restartedMain] Scanning for api listing references
+2021-04-02 20:07:27,752 INFO s.d.s.w.r.o.CachingOperationNameGenerator [restartedMain] Generating unique operation named: addUsingPUT_1
+2021-04-02 20:07:27,809 INFO s.d.s.w.r.o.CachingOperationNameGenerator [restartedMain] Generating unique operation named: getAllUsingGET_1
+2021-04-02 20:07:27,855 INFO s.d.s.w.r.o.CachingOperationNameGenerator [restartedMain] Generating unique operation named: addUsingPUT_2
+2021-04-02 20:07:27,863 INFO s.d.s.w.r.o.CachingOperationNameGenerator [restartedMain] Generating unique operation named: deleteUsingDELETE_1
+2021-04-02 20:07:27,871 INFO s.d.s.w.r.o.CachingOperationNameGenerator [restartedMain] Generating unique operation named: editUsingPOST_1
+2021-04-02 20:07:27,877 INFO s.d.s.w.r.o.CachingOperationNameGenerator [restartedMain] Generating unique operation named: getAllByPropertyIdUsingGET_1
+2021-04-02 20:07:27,890 INFO s.d.s.w.r.o.CachingOperationNameGenerator [restartedMain] Generating unique operation named: deleteUsingDELETE_2
+2021-04-02 20:07:27,900 INFO s.d.s.w.r.o.CachingOperationNameGenerator [restartedMain] Generating unique operation named: editUsingPOST_2
+2021-04-02 20:07:27,906 INFO s.d.s.w.r.o.CachingOperationNameGenerator [restartedMain] Generating unique operation named: getByIdUsingGET_1
+2021-04-02 20:07:27,956 INFO o.s.b.StartupInfoLogger [restartedMain] Started AirbnbApplication in 11.586 seconds (JVM running for 15.983)
+2021-04-02 20:07:47,221 INFO o.a.j.l.DirectJDKLog [http-nio-8888-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-04-02 20:07:47,222 INFO o.s.w.s.FrameworkServlet [http-nio-8888-exec-2] Initializing Servlet 'dispatcherServlet'
+2021-04-02 20:07:47,228 INFO o.s.w.s.FrameworkServlet [http-nio-8888-exec-2] Completed initialization in 5 ms
+2021-04-02 20:07:48,195 WARN o.h.e.j.s.SqlExceptionHelper [http-nio-8888-exec-2] SQL Error: 1054, SQLState: 42S22
+2021-04-02 20:07:48,196 ERROR o.h.e.j.s.SqlExceptionHelper [http-nio-8888-exec-2] Unknown column 'properties0_.is_free' in 'field list'
+2021-04-02 20:07:48,213 WARN o.s.w.s.h.AbstractHandlerExceptionResolver [http-nio-8888-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotWritableException: Could not write JSON: could not extract ResultSet; nested exception is com.fasterxml.jackson.databind.JsonMappingException: could not extract ResultSet (through reference chain: airbnb.model.dto.user.UserProfileDTO["properties"])]

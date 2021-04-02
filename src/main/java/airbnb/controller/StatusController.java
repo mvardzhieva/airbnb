@@ -26,23 +26,46 @@ public class StatusController {
         this.propertyRepository = propertyRepository;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 48 15 * * *")
     public void updateBookingsStatus() {
-        List<Booking> bookings = bookingRepository
-                .getAllByStatusIdIsNot(statusRepository.findByName("finished").getId());
-        for (Booking booking : bookings) {
-            Property property=booking.getProperty();
-            if (booking.getStartDate().isEqual(LocalDate.now())
-                    || booking.getStartDate().isBefore(LocalDate.now())) {
-                booking.setStatusId(statusRepository.findByName("current").getId());
-                property.setIsFree(false);
-            }
-            if (booking.getEndDate().isBefore(LocalDate.now())) {
+        //TODO fix later
+        List<Booking> currentBookings = bookingRepository
+                .getAllByStatusId(statusRepository.findByName("current").getId());
+        for (Booking booking : currentBookings) {
+            Property property = booking.getProperty();
+            if (booking.getEndDate().isEqual(LocalDate.now())) {
                 booking.setStatusId(statusRepository.findByName("finished").getId());
                 property.setIsFree(true);
             }
             bookingRepository.save(booking);
             propertyRepository.save(property);
         }
+        List<Booking> upcomingBookings = bookingRepository
+                .getAllByStatusId(statusRepository.findByName("upcoming").getId());
+        for (Booking booking : upcomingBookings) {
+            Property property = booking.getProperty();
+            if (booking.getStartDate().isEqual(LocalDate.now())) {
+                booking.setStatusId(statusRepository.findByName("current").getId());
+                property.setIsFree(false);
+            }
+            bookingRepository.save(booking);
+            propertyRepository.save(property);
+        }
+
+//        List<Booking> bookings = bookingRepository
+//                .getAllByStatusIdIsNot(statusRepository.findByName("finished").getId());
+//        for (Booking booking : bookings) {
+//            Property property = booking.getProperty();
+//            if (booking.getEndDate().isEqual(LocalDate.now())) {
+//                booking.setStatusId(statusRepository.findByName("finished").getId());
+//                property.setIsFree(true);
+//            }
+//            if (booking.getStartDate().isEqual(LocalDate.now())) {
+//                booking.setStatusId(statusRepository.findByName("current").getId());
+//                property.setIsFree(false);
+//            }
+//            bookingRepository.save(booking);
+//            propertyRepository.save(property);
+//        }
     }
 }

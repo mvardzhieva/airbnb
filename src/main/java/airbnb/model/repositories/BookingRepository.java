@@ -12,6 +12,8 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> getAllByStatusIdAndUser(int id, User user);
 
+    List<Booking> getAllByStatusId(int id);
+
     List<Booking> getAllByStatusIdIsNot(int id);
 
 //    Booking getFirstByPropertyOrderByEndDateEndDateDesc(Property property);
