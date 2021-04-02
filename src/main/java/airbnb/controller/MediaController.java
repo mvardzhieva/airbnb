@@ -1,19 +1,19 @@
 package airbnb.controller;
 
-import airbnb.exceptions.AuthenticationException;
 import airbnb.model.pojo.Media;
 import airbnb.services.interfaces.MediaService;
-import org.apache.tomcat.jni.Error;
-import org.hibernate.internal.util.xml.ErrorLogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpSession;
-import java.net.http.HttpResponse;
+
 import java.util.List;
-import java.util.logging.ErrorManager;
+
 
 
 @RestController
@@ -32,9 +32,15 @@ public class MediaController extends AbstractController {
 
     //TODO MEDIA DTO - VALIDATE
 
-    @GetMapping(value = "users/properties/media/{id}", produces = "image/*")
-    public byte[] download(@PathVariable Long id) {
-        return mediaService.download(id);
+    @GetMapping(value = "users/properties/media/{id}")
+    public ResponseEntity<byte[]> download(@PathVariable Long id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+
+        byte[] media = mediaService.download(id);
+        headers.add("Content-Type",mediaService.findById(id).getMimeType());
+
+        return new ResponseEntity<>(media, headers, HttpStatus.OK);
     }
 
     @GetMapping("users/properties/{id}/media")
@@ -42,7 +48,7 @@ public class MediaController extends AbstractController {
         return mediaService.getAllByPropertyId(id);
     }
 
-    @GetMapping(value = "/properties/media")
+    @GetMapping(value = "users/properties/media")
     public List<Media> getAll() {
         return mediaService.getAll();
     }
@@ -53,7 +59,6 @@ public class MediaController extends AbstractController {
                         HttpSession session,
                         @RequestPart MultipartFile file) {
         sessionManager.validate(userId, session);
-//        httpResponse.headers().
         return mediaService.upload(propertyId, file);
     }
 
@@ -65,7 +70,7 @@ public class MediaController extends AbstractController {
                                    HttpSession session) {
         //todo validate session
         sessionManager.validate(userId, session);
-        mediaService.deleteOneByMediaId(mediaId);
+        mediaService.deleteOneByMediaId(propertyId, mediaId);
     }
 
     @DeleteMapping("users/{userId}/properties/{propertyId}/media")
@@ -76,6 +81,5 @@ public class MediaController extends AbstractController {
         sessionManager.validate(userId, session);
         mediaService.deleteAllByPropertyId(propertyId);
     }
-
-
 }
+

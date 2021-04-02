@@ -91,7 +91,7 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void deleteOneByMediaId(Long mediaId) {
+    public void deleteOneByMediaId(Long propertyId, Long mediaId) {
         Media media = mediaRepository.getOne(mediaId);
         if (media == null) {
             throw new NotFoundException("Media not found!");
@@ -108,6 +108,11 @@ public class MediaServiceImpl implements MediaService {
                 deleteFromFileSystem(media);
             }
         }
+    }
+
+    @Override
+    public Media findById(Long id) {
+        return mediaRepository.getOne(id);
     }
 
     private void deleteFromFileSystem(Media media) {

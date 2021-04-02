@@ -57,7 +57,6 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
-
     //TODO
     @ExceptionHandler(DataAccessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
