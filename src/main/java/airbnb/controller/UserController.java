@@ -22,7 +22,6 @@ public class UserController extends AbstractController {
 
     @PutMapping("/users")
     public RegisterResponseUserDTO register(@RequestBody RegisterRequestUserDTO requestUserDTO, HttpSession session) {
-        System.out.println(requestUserDTO);
         RegisterResponseUserDTO responseUserDTO = new RegisterResponseUserDTO(userService.register(requestUserDTO));
         sessionManager.loginUser(session, responseUserDTO.getId());
         return responseUserDTO;
@@ -42,7 +41,6 @@ public class UserController extends AbstractController {
 
     @GetMapping("/users/{id}")
     public UserProfileDTO getById(@PathVariable int id) {
-        System.out.println(id);
         return new UserProfileDTO(userService.getUserById(id));
     }
 

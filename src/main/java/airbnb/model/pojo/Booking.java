@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
@@ -30,20 +29,17 @@ public class Booking {
     @JoinColumn(name = "property_id")
     @JsonBackReference
     private Property property;
-    private int statusId;
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    @JsonBackReference
+    private BookingStatus bookingStatus;
+
     private LocalDate startDate;
     private LocalDate endDate;
 
     @OneToOne(mappedBy = "booking")
     @JsonManagedReference
     private Review review;
-
-    @OneToMany(
-            mappedBy = "property",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Rating> rating;
 
     public Booking(AddRequestBookingDTO requestBookingDTO) {
         this.startDate = requestBookingDTO.getStartDate();

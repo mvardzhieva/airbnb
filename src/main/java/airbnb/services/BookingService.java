@@ -1,16 +1,13 @@
 package airbnb.services;
 
 import airbnb.exceptions.BadRequestException;
-import airbnb.exceptions.property.PropertyNotAvailableException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.exceptions.user.InvalidUserInputException;
 import airbnb.model.dto.booking.AddRequestBookingDTO;
-import airbnb.model.pojo.Booking;
-import airbnb.model.pojo.Property;
-import airbnb.model.pojo.User;
+import airbnb.model.pojo.*;
 import airbnb.model.repositories.BookingRepository;
 import airbnb.model.repositories.PropertyRepository;
-import airbnb.model.repositories.StatusRepository;
+import airbnb.model.repositories.BookingStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +20,15 @@ import java.util.Optional;
 public class BookingService {
     private BookingRepository bookingRepository;
     private PropertyRepository propertyRepository;
-    private StatusRepository statusRepository;
+    private BookingStatusRepository bookingStatusRepository;
 
     @Autowired
     public BookingService(BookingRepository bookingRepository,
                           PropertyRepository propertyRepository,
-                          StatusRepository statusRepository) {
+                          BookingStatusRepository bookingStatusRepository) {
         this.bookingRepository = bookingRepository;
         this.propertyRepository = propertyRepository;
-        this.statusRepository = statusRepository;
+        this.bookingStatusRepository = bookingStatusRepository;
     }
 
     public Booking add(User user, AddRequestBookingDTO addBookingDTO) {
@@ -49,7 +46,7 @@ public class BookingService {
         Booking booking = new Booking(addBookingDTO);
         booking.setUser(user);
         booking.setProperty(property.get());
-        booking.setStatusId(statusRepository.findByName("upcoming").getId());
+        booking.setBookingStatus(bookingStatusRepository.findByName(BookingStatusType.UPCOMING));
         bookingRepository.save(booking);
         return booking;
     }
@@ -68,20 +65,26 @@ public class BookingService {
     }
 
     public List<Booking> getUpcomingBookings(User user) {
-        int upcomingStatusId = statusRepository.findByName("upcoming").getId();
-        List<Booking> bookings = bookingRepository.getAllByStatusIdAndUser(upcomingStatusId, user);
+        BookingStatus upcomingStatus = bookingStatusRepository
+                .findByName(BookingStatusType.UPCOMING);
+        List<Booking> bookings = bookingRepository
+                .getAllByBookingStatusAndUser(upcomingStatus, user);
         return Collections.unmodifiableList(bookings);
     }
 
     public List<Booking> getFinishedBookings(User user) {
-        int finishedStatusId = statusRepository.findByName("finished").getId();
-        List<Booking> bookings = bookingRepository.getAllByStatusIdAndUser(finishedStatusId, user);
+        BookingStatus finishedStatus = bookingStatusRepository
+                .findByName(BookingStatusType.FINISHED);
+        List<Booking> bookings = bookingRepository
+                .getAllByBookingStatusAndUser(finishedStatus, user);
         return Collections.unmodifiableList(bookings);
     }
 
     public List<Booking> getCurrentBookings(User user) {
-        int currentStatusId = statusRepository.findByName("current").getId();
-        List<Booking> bookings = bookingRepository.getAllByStatusIdAndUser(currentStatusId, user);
+        BookingStatus currentStatus = bookingStatusRepository
+                .findByName(BookingStatusType.CURRENT);
+        List<Booking> bookings = bookingRepository
+                .getAllByBookingStatusAndUser(currentStatus, user);
         return Collections.unmodifiableList(bookings);
     }
 

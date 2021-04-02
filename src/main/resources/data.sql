@@ -1,6 +1,6 @@
-INSERT IGNORE INTO `airbnb`.`booking_statuses` (`id`, `name`) VALUES ('1', 'upcoming');
-INSERT IGNORE INTO `airbnb`.`booking_statuses` (`id`, `name`) VALUES ('2', 'current');
-INSERT IGNORE INTO `airbnb`.`booking_statuses` (`id`, `name`) VALUES ('3', 'finished');
+INSERT IGNORE INTO `airbnb`.`booking_statuses` (`id`, `name`) VALUES ('1', 'UPCOMING');
+INSERT IGNORE INTO `airbnb`.`booking_statuses` (`id`, `name`) VALUES ('2', 'CURRENT');
+INSERT IGNORE INTO `airbnb`.`booking_statuses` (`id`, `name`) VALUES ('3', 'FINISHED');
 INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('1', 'Bulgaria');
 INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('2', 'England');
 INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('3', 'Greece');

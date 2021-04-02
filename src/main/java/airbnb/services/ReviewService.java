@@ -5,12 +5,13 @@ import airbnb.exceptions.NotFoundException;
 import airbnb.model.dto.review.AddRequestReviewDTO;
 import airbnb.model.dto.review.EditReviewDTO;
 import airbnb.model.pojo.Booking;
+import airbnb.model.pojo.BookingStatusType;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.Review;
 import airbnb.model.repositories.BookingRepository;
 import airbnb.model.repositories.PropertyRepository;
 import airbnb.model.repositories.ReviewRepository;
-import airbnb.model.repositories.StatusRepository;
+import airbnb.model.repositories.BookingStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +24,12 @@ import java.util.Optional;
 public class ReviewService {
     private BookingRepository bookingRepository;
     private ReviewRepository reviewRepository;
-    private StatusRepository statusRepository;
+    private BookingStatusRepository statusRepository;
     private PropertyRepository propertyRepository;
 
     @Autowired
     public ReviewService(BookingRepository bookingRepository, ReviewRepository reviewRepository,
-                         StatusRepository statusRepository, PropertyRepository propertyRepository) {
+                         BookingStatusRepository statusRepository, PropertyRepository propertyRepository) {
         this.bookingRepository = bookingRepository;
         this.reviewRepository = reviewRepository;
         this.statusRepository = statusRepository;
@@ -44,7 +45,7 @@ public class ReviewService {
         if (userId != guestId) {
             throw new BadRequestException("You cannot add review on another user's booking.");
         }
-        if (booking.get().getStatusId() != statusRepository.findByName("finished").getId()) {
+        if (booking.get().getBookingStatus().getName() != BookingStatusType.FINISHED) {
             throw new BadRequestException("You cannot add review if your booking is not finished.");
         }
         Review review = new Review(requestReviewDTO);

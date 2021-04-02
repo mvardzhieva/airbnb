@@ -1,10 +1,9 @@
 package airbnb.controller;
 
 import airbnb.model.pojo.Booking;
-import airbnb.model.pojo.Property;
+import airbnb.model.pojo.BookingStatusType;
 import airbnb.model.repositories.BookingRepository;
-import airbnb.model.repositories.PropertyRepository;
-import airbnb.model.repositories.StatusRepository;
+import airbnb.model.repositories.BookingStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,58 +13,29 @@ import java.util.List;
 
 @RestController
 public class StatusController {
+    private static final String EVERY_DAY_AT_MIDNIGHT = "0 0 0 * * *";
+
     private BookingRepository bookingRepository;
-    private StatusRepository statusRepository;
-    private PropertyRepository propertyRepository;
+    private BookingStatusRepository bookingStatusRepository;
 
     @Autowired
-    public StatusController(BookingRepository bookingRepository, StatusRepository statusRepository,
-                            PropertyRepository propertyRepository) {
+    public StatusController(BookingRepository bookingRepository,
+                            BookingStatusRepository bookingStatusRepository) {
         this.bookingRepository = bookingRepository;
-        this.statusRepository = statusRepository;
-        this.propertyRepository = propertyRepository;
+        this.bookingStatusRepository = bookingStatusRepository;
     }
 
-    @Scheduled(cron = "0 48 15 * * *")
+    @Scheduled(cron = EVERY_DAY_AT_MIDNIGHT)
     public void updateBookingsStatus() {
-        //TODO fix later
-        List<Booking> currentBookings = bookingRepository
-                .getAllByStatusId(statusRepository.findByName("current").getId());
-        for (Booking booking : currentBookings) {
-            Property property = booking.getProperty();
-            if (booking.getEndDate().isEqual(LocalDate.now())) {
-                booking.setStatusId(statusRepository.findByName("finished").getId());
-//                property.setIsFree(true);
-            }
-            bookingRepository.save(booking);
-            propertyRepository.save(property);
-        }
-        List<Booking> upcomingBookings = bookingRepository
-                .getAllByStatusId(statusRepository.findByName("upcoming").getId());
-        for (Booking booking : upcomingBookings) {
-            Property property = booking.getProperty();
+        List<Booking> bookings = bookingRepository
+                .getAllByBookingStatusIsNot(bookingStatusRepository.findByName(BookingStatusType.FINISHED));
+        for (Booking booking : bookings) {
             if (booking.getStartDate().isEqual(LocalDate.now())) {
-                booking.setStatusId(statusRepository.findByName("current").getId());
-//                property.setIsFree(false);
+                booking.setBookingStatus(bookingStatusRepository.findByName(BookingStatusType.CURRENT));
+            } else if (booking.getEndDate().isEqual(LocalDate.now())) {
+                booking.setBookingStatus(bookingStatusRepository.findByName(BookingStatusType.FINISHED));
             }
             bookingRepository.save(booking);
-            propertyRepository.save(property);
         }
-
-//        List<Booking> bookings = bookingRepository
-//                .getAllByStatusIdIsNot(statusRepository.findByName("finished").getId());
-//        for (Booking booking : bookings) {
-//            Property property = booking.getProperty();
-//            if (booking.getEndDate().isEqual(LocalDate.now())) {
-//                booking.setStatusId(statusRepository.findByName("finished").getId());
-//                property.setIsFree(true);
-//            }
-//            if (booking.getStartDate().isEqual(LocalDate.now())) {
-//                booking.setStatusId(statusRepository.findByName("current").getId());
-//                property.setIsFree(false);
-//            }
-//            bookingRepository.save(booking);
-//            propertyRepository.save(property);
-//        }
     }
 }
