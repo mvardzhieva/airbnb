@@ -19,7 +19,7 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Files.lines(Paths.get("C:\\Users\\KM\\Desktop\\airbnb\\src\\main\\resources\\data.sql"))
+        Files.lines(Paths.get("src/main/resources/data.sql"))
                 .forEach(sql -> db.update(sql));
     }
 }
