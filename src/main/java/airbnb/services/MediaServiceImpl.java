@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -40,9 +41,16 @@ public class MediaServiceImpl implements MediaService {
         this.propertyService = propertyService;
     }
 
-    //TODO  REFACTOR
+    //TODO  REFACTOR AND VALIDATE
+
+
     @Override
     public Media upload(Long id, MultipartFile file) {
+
+        if (!file.getContentType().contains("image/") &&
+                !file.getContentType().contains("media/")) {
+            throw new BadRequestException("Media not supported!");
+        }
 
         String filename = UUID.randomUUID().toString();
         File dir = new File(filePath);
@@ -51,7 +59,7 @@ public class MediaServiceImpl implements MediaService {
         }
 
         String type = file.getOriginalFilename().split("\\.")[1];
-        File f = new File(dir.getAbsolutePath() + File.separator + filename + type);
+        File f = new File(dir.getAbsolutePath() + File.separator + filename + "." + type);
 
         try {
             f.createNewFile();
@@ -93,7 +101,7 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public void deleteOneByMediaId(Long propertyId, Long mediaId) {
         Media media = mediaRepository.getOne(mediaId);
-        if (media == null) {
+        if (media == null || media.getProperty().getId() != propertyId) {
             throw new NotFoundException("Media not found!");
         }
 
@@ -102,9 +110,9 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public void deleteAllByPropertyId(Long id) {
-        var x = mediaRepository.getAllByPropertyId(id);
-        if (!x.isEmpty()) {
-            for (Media media : x) {
+        List<Media> mediaList = mediaRepository.getAllByPropertyId(id);
+        if (!mediaList.isEmpty()) {
+            for (Media media : mediaList) {
                 deleteFromFileSystem(media);
             }
         }

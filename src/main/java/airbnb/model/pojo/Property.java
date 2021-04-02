@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Component
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @Table(name = "properties")
 public class Property {
@@ -56,8 +58,8 @@ public class Property {
     private LocalDate createdAt;
 
     @OneToMany(mappedBy = "property")
+    @JsonManagedReference
     private List<Rating> ratings;
-    private Boolean isFree;
 
     @OneToMany(mappedBy = "property")
     @JsonManagedReference
@@ -74,7 +76,6 @@ public class Property {
         this.price = propertyDTO.getPrice();
         this.createdAt = LocalDate.now();
         this.ratings = null;
-        this.isFree = true;
     }
 
     @Override
@@ -88,26 +89,5 @@ public class Property {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Property{" +
-                "id=" + id +
-                ", host=" + host +
-                ", type=" + type +
-                ", city=" + city +
-                ", country=" + country +
-                ", media=" + media +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", createdAt=" + createdAt +
-                ", rating=" + ratings +
-                ", isFree=" + isFree +
-                ", bookings=" + bookings +
-                '}';
     }
 }

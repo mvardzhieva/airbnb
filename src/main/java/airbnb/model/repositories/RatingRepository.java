@@ -10,5 +10,6 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
 
     //TODO REFACTOR TO NATIVE
-    List<Rating> findAllByProperty(Property property);
+    List<Rating> findAllByPropertyId(Long id);
+
 }

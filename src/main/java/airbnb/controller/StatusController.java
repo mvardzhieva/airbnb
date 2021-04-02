@@ -35,11 +35,11 @@ public class StatusController {
             if (booking.getStartDate().isEqual(LocalDate.now())
                     || booking.getStartDate().isBefore(LocalDate.now())) {
                 booking.setStatusId(statusRepository.findByName("current").getId());
-                property.setIsFree(false);
+//                property.setIsFree(false);
             }
             if (booking.getEndDate().isBefore(LocalDate.now())) {
                 booking.setStatusId(statusRepository.findByName("finished").getId());
-                property.setIsFree(true);
+//                property.setIsFree(true);
             }
             bookingRepository.save(booking);
             propertyRepository.save(property);

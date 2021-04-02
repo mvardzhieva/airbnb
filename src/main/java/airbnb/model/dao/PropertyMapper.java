@@ -44,7 +44,7 @@ public class PropertyMapper implements RowMapper<Property> {
         property.setDescription(rs.getString("description"));
         property.setPrice(rs.getDouble("price"));
         property.setRatings(setRatings(property));
-        property.setIsFree(setIsFree(property));
+//        property.setIsFree(setIsFree(property));
         property.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime().toLocalDate());
 
         return property;
@@ -67,13 +67,15 @@ public class PropertyMapper implements RowMapper<Property> {
     }
 
     private List<Rating> setRatings(Property property) {
-        return ratingRepository.findAllByProperty(property);
+//        return ratingRepository.findAllByProperty(property);
+        return ratingRepository.findAllByPropertyId(property.getId());
     }
 
     private Rating setRating(Property property) {
         Rating rating = new Rating();
 
-        List<Rating> ratings = ratingRepository.findAllByProperty(property);
+//        List<Rating> ratings = ratingRepository.findAllByProperty(property);
+        List<Rating> ratings = ratingRepository.findAllByPropertyId(property.getId());
         for (Rating r : ratings) {
             rating.setCleanliness(rating.getCleanliness() + r.getCleanliness());
             rating.setCommunication(rating.getCleanliness() + r.getCleanliness());

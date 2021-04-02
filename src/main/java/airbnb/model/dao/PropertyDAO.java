@@ -15,6 +15,8 @@ public class PropertyDAO {
     }
 
     public void filter() {
+
+//        db.
 //        String sql = "";
 //        try {
 //            db.
