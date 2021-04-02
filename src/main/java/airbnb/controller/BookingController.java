@@ -35,9 +35,9 @@ public class BookingController extends AbstractController {
     public Booking getById(@PathVariable(name = "user_id") int userId, @PathVariable(name = "booking_id") Long bookingId, HttpSession session) {
         User user = sessionManager.getLoggedUser(session);
         if (user.getId() != userId) {
-            throw new BadRequestException("You are neither a guest nor a host of this booking.");
+            throw new BadRequestException("You cannot access another user's booking.");
         }
-        return bookingService.getBookingById(bookingId);
+        return bookingService.getBookingById(userId, bookingId);
     }
 
     @GetMapping("/users/{id}/bookings/upcoming")
@@ -65,5 +65,14 @@ public class BookingController extends AbstractController {
             throw new BadRequestException("You cannot access another user's bookings.");
         }
         return bookingService.getFinishedBookings(user);
+    }
+
+    @DeleteMapping("/users/{user_id}/bookings/{booking_id}")
+    public Booking cancel(@PathVariable(name = "user_id") int userId, @PathVariable(name = "booking_id") Long bookingId, HttpSession session) {
+        User user = sessionManager.getLoggedUser(session);
+        if (user.getId() != userId) {
+            throw new BadRequestException("You cannot cancel another user's booking.");
+        }
+        return bookingService.cancel(userId, bookingId);
     }
 }

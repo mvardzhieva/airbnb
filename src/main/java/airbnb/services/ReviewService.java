@@ -64,6 +64,7 @@ public class ReviewService {
         }
         Review review = optionalReview.get();
         review.setText(editReviewDTO.getText());
+        reviewRepository.save(review);
         return review;
     }
 
