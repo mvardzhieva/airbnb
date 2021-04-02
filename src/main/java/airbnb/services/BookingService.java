@@ -2,7 +2,9 @@ package airbnb.services;
 
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
+import airbnb.exceptions.property.PropertyNotAvailableException;
 import airbnb.exceptions.user.InvalidUserInputException;
+import airbnb.model.dao.BookingDAO;
 import airbnb.model.dto.booking.AddRequestBookingDTO;
 import airbnb.model.pojo.*;
 import airbnb.model.repositories.BookingRepository;
@@ -21,14 +23,17 @@ public class BookingService {
     private BookingRepository bookingRepository;
     private PropertyRepository propertyRepository;
     private BookingStatusRepository bookingStatusRepository;
+    private BookingDAO bookingDAO;
 
     @Autowired
     public BookingService(BookingRepository bookingRepository,
                           PropertyRepository propertyRepository,
-                          BookingStatusRepository bookingStatusRepository) {
+                          BookingStatusRepository bookingStatusRepository,
+                          BookingDAO bookingDAO) {
         this.bookingRepository = bookingRepository;
         this.propertyRepository = propertyRepository;
         this.bookingStatusRepository = bookingStatusRepository;
+        this.bookingDAO = bookingDAO;
     }
 
     public Booking add(User user, AddRequestBookingDTO addBookingDTO) {
@@ -36,16 +41,17 @@ public class BookingService {
                 || addBookingDTO.getEndDate().isBefore(addBookingDTO.getStartDate())) {
             throw new InvalidUserInputException("You have entered invalid dates.");
         }
-        Optional<Property> property = propertyRepository.findById(addBookingDTO.getPropertyId());
-        if (property.isEmpty()) {
+        Optional<Property> optionalProperty = propertyRepository.findById(addBookingDTO.getPropertyId());
+        if (optionalProperty.isEmpty()) {
             throw new NotFoundException("Property with this id does not exists.");
         }
-//        if (!property.get().getIsFree()) {
-//            throw new PropertyNotAvailableException("This property is not available on these dates.");
-//        }
+        Property property = optionalProperty.get();
+        if (bookingDAO.isPropertyAlreadyBooked(property.getId(), addBookingDTO.getStartDate(), addBookingDTO.getEndDate())) {
+            throw new PropertyNotAvailableException("This property is not available on these dates.");
+        }
         Booking booking = new Booking(addBookingDTO);
         booking.setUser(user);
-        booking.setProperty(property.get());
+        booking.setProperty(property);
         booking.setBookingStatus(bookingStatusRepository.findByName(BookingStatusType.UPCOMING));
         bookingRepository.save(booking);
         return booking;
