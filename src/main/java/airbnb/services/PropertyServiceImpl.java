@@ -1,15 +1,14 @@
 package airbnb.services;
 
-import airbnb.config.SpringJdbcConfig;
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
+import airbnb.model.dao.PropertyDAO;
 import airbnb.model.dto.property.EditRequestPropertyDTO;
 import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.PropertyRepository;
-import airbnb.model.repositories.UserRepository;
 import airbnb.services.interfaces.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -24,23 +23,28 @@ import java.util.stream.StreamSupport;
 public class PropertyServiceImpl implements PropertyService {
 
     private PropertyRepository propertyRepository;
-    private SpringJdbcConfig springJdbcConfig;
+    private PropertyDAO propertyDAO;
+    private UserService userService;
 
 
     @Autowired
     public PropertyServiceImpl(PropertyRepository propertyRepository,
-                               SpringJdbcConfig springJdbcConfig) {
+                               PropertyDAO propertyDAO) {
         this.propertyRepository = propertyRepository;
-        this.springJdbcConfig = springJdbcConfig;
+        this.propertyDAO = propertyDAO;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     //TODO VALIDATE DATA
     @Override
     public Property add(AddRequestPropertyDTO addRequestPropertyDTO) {
-//        User user = userService.getUserById(addRequestPropertyDTO.getHostId().)
-//        User user = userRepository.findById(addRequestPropertyDTO.getHostId().intValue()).get();
+        User user = userService.getUserById(addRequestPropertyDTO.getHostId().intValue());
         Property property = new Property(addRequestPropertyDTO);
-//        property.setHost(user);
+        property.setHost(user);
         return propertyRepository.save(property);
     }
 
@@ -66,8 +70,12 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Property edit(EditRequestPropertyDTO editRequestPropertyDTO) {
-        return null;
+    public Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO) {
+        Property property = propertyRepository.findById(propertyId).get();
+        property.setName(editRequestPropertyDTO.getName());
+        property.setDescription(editRequestPropertyDTO.getDescription());
+        property.setPrice(editRequestPropertyDTO.getPrice());
+        return property;
     }
 
     //TODO paging and filter
@@ -100,7 +108,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public List<Property> nearby(FilterRequestPropertyDTO filterRequestPropertyDTO) {
-        return propertyRepository.finNearBy(filterRequestPropertyDTO.getProximity()).stream().collect(Collectors.toList());
+        return propertyRepository.findNearby(filterRequestPropertyDTO.getProximity()).stream().collect(Collectors.toList());
     }
 
 

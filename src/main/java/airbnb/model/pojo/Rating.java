@@ -26,7 +26,10 @@ public class Rating {
     private Integer location;
     private Integer value;
 
-    // TODO CONNECT WITH BOOKINGS
+    @ManyToOne
+    private Property property;
+
+
 
     public Rating(RatingDTO ratingDTO) {
         this.cleanliness = ratingDTO.getCleanliness();

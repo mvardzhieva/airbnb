@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.logging.ErrorManager;
 
@@ -41,7 +43,8 @@ public class MediaController extends AbstractController {
     }
 
     @PutMapping("users/properties/{id}/media")
-    public Media upload(@PathVariable Long id, @RequestPart MultipartFile file) {
+    public Media upload(@PathVariable Long id, @RequestPart MultipartFile file, HttpResponse httpResponse) {
+//        httpResponse.headers().
         return mediaService.upload(id, file);
     }
 

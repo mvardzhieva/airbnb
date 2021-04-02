@@ -1,0 +1,17 @@
+INSERT IGNORE INTO `airbnb`.`booking_statuses` (`id`, `name`) VALUES ('1', 'upcoming');
+INSERT IGNORE INTO `airbnb`.`booking_statuses` (`id`, `name`) VALUES ('2', 'current');
+INSERT IGNORE INTO `airbnb`.`booking_statuses` (`id`, `name`) VALUES ('3', 'finished');
+INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('1', 'Bulgaria');
+INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('2', 'England');
+INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('3', 'Greece');
+INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('4', 'Turkey');
+INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('5', 'Romania');
+INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('6', 'Serbia');
+INSERT IGNORE INTO `airbnb`.`countries` (`id`, `name`) VALUES ('7', 'Macedonia');
+INSERT IGNORE INTO `airbnb`.`property_types` (`id`, `name`) VALUES ('1', 'house');
+INSERT IGNORE INTO `airbnb`.`property_types` (`id`, `name`) VALUES ('2', 'apartment');
+INSERT IGNORE INTO `airbnb`.`property_types` (`id`, `name`) VALUES ('3', 'hotel');
+INSERT IGNORE INTO `airbnb`.`property_types` (`id`, `name`) VALUES ('4', 'bungalow');
+INSERT IGNORE  INTO `airbnb`.`cities` (`id`, `name`) VALUES ('1', 'Sofia');
+INSERT IGNORE INTO `airbnb`.`cities` (`id`, `name`) VALUES ('2', 'Belgrad');
+INSERT IGNORE INTO `airbnb`.`cities` (`id`, `name`) VALUES ('3', 'Athens');

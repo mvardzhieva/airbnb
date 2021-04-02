@@ -16,7 +16,7 @@ public interface PropertyService {
 
     Property getById(Long id);
 
-    Property edit(EditRequestPropertyDTO editRequestPropertyDTO);
+    Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO);
 
     Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO);
 

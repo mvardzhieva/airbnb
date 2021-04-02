@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -22,7 +23,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             "cos(radians(p.longitude) - " +
             "radians(-122)) + sin(radians(37)) * sin(radians(p.latitude)))) " +
             "< ?;", nativeQuery = true)
-    Collection<Property> finNearBy(Integer proximity);
+    Collection<Property> findNearby(Integer proximity);
 
 //    @Query(value = "FROM Property WHERE PropertyType.id = ?1 " +
 //            "AND price > ?2  " +

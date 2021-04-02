@@ -66,7 +66,7 @@ public class PropertyController extends AbstractController {
 
 
         if (sessionManager.getLoggedUser(session).getId() == userId) {
-            return propertyService.edit(editRequestPropertyDTO);
+            return propertyService.edit(propertyId, editRequestPropertyDTO);
         }
         else {
             throw new AuthenticationException(EXCEPTION_MSG);
