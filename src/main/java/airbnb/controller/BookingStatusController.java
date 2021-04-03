@@ -12,15 +12,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-public class StatusController {
+public class BookingStatusController {
     private static final String EVERY_DAY_AT_MIDNIGHT = "0 0 0 * * *";
 
     private BookingRepository bookingRepository;
     private BookingStatusRepository bookingStatusRepository;
 
     @Autowired
-    public StatusController(BookingRepository bookingRepository,
-                            BookingStatusRepository bookingStatusRepository) {
+    public BookingStatusController(BookingRepository bookingRepository,
+                                   BookingStatusRepository bookingStatusRepository) {
         this.bookingRepository = bookingRepository;
         this.bookingStatusRepository = bookingStatusRepository;
     }
