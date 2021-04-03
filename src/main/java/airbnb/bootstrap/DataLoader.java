@@ -1,5 +1,6 @@
 package airbnb.bootstrap;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,8 +18,9 @@ public class DataLoader implements CommandLineRunner {
         this.db = db;
     }
 
+    @SneakyThrows
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         Files.lines(Paths.get("src/main/resources/data.sql"))
                 .forEach(sql -> db.update(sql));
     }

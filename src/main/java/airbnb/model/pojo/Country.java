@@ -1,8 +1,6 @@
 package airbnb.model.pojo;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -13,6 +11,8 @@ import java.util.Set;
 @Component
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @Table(name = "countries")
 public class Country {

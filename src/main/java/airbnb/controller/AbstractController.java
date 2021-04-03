@@ -7,6 +7,7 @@ import airbnb.exceptions.property.PropertyNotAvailableException;
 import airbnb.exceptions.user.*;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.dto.ExceptionDTO;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataAccessException;
@@ -47,7 +48,7 @@ public abstract class AbstractController {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionDTO handleNotFound(NotFoundException e) {
         log(e);
         return new ExceptionDTO(e.getMessage());
@@ -67,11 +68,10 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
-    //TODO
     @ExceptionHandler(DataAccessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionDTO handleDataAccess(DataAccessException e) {
-        return new ExceptionDTO("Error!");
+        return new ExceptionDTO("Data access error!");
     }
 
     @ExceptionHandler(PropertyNotAvailableException.class)
@@ -95,8 +95,24 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
+    @ExceptionHandler(GeoIp2Exception.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionDTO handleUserLocationNotFound(GeoIp2Exception e) {
+        log(e);
+        return new ExceptionDTO(e.getMessage());
+    }
+
+    //TODO
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ExceptionDTO handleInternalServerErrors(Exception e) {
+        log(e);
+        return new ExceptionDTO("Call or fire the dev! :)");
+    }
+
     private void log(Exception e) {
         LOGGER.error(e.getMessage());
         LOGGER.trace(e.getStackTrace());
     }
+
 }

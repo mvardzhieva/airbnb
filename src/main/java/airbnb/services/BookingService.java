@@ -39,7 +39,7 @@ public class BookingService {
     }
 
     public Booking add(User user, AddRequestBookingDTO addBookingDTO) {
-        validator.validateBookingDates(addBookingDTO.getStartDate(),addBookingDTO.getEndDate());
+        validator.validateBookingDates(addBookingDTO.getStartDate(), addBookingDTO.getEndDate());
         Optional<Property> optionalProperty = propertyRepository.findById(addBookingDTO.getPropertyId());
         if (optionalProperty.isEmpty()) {
             throw new NotFoundException("Property with this id does not exists.");

@@ -13,12 +13,13 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @Component
 public class RatingDTO {
-    private Integer cleanliness;
-    private Integer communication;
-    private Integer checkIn;
-    private Integer accuracy;
-    private Integer location;
-    private Integer value;
+
+    private Float cleanliness;
+    private Float communication;
+    private Float checkIn;
+    private Float accuracy;
+    private Float location;
+    private Float value;
 
     public RatingDTO(Rating rating) {
         this.cleanliness = rating.getCleanliness();

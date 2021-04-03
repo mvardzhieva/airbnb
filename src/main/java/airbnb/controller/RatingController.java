@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+
 @RestController
 public class RatingController extends AbstractController {
 
@@ -30,7 +31,7 @@ public class RatingController extends AbstractController {
         return ratingService.findAllByPropertyId(propertyId);
     }
 
-    @PostMapping ("users/properties/{propertyId}/ratings")
+    @PostMapping("users/properties/{propertyId}/ratings")
     public Rating findAvgByPropertyId(@PathVariable Long propertyId) {
         return ratingService.findAvgByPropertyId(propertyId);
     }

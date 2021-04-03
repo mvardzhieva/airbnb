@@ -9,11 +9,18 @@ import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.PropertyRepository;
+import airbnb.services.interfaces.LocationService;
 import airbnb.services.interfaces.PropertyService;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
+import com.maxmind.geoip2.record.Location;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -25,13 +32,16 @@ public class PropertyServiceImpl implements PropertyService {
     private PropertyRepository propertyRepository;
     private PropertyDAO propertyDAO;
     private UserService userService;
+    private LocationService locationService;
 
 
     @Autowired
     public PropertyServiceImpl(PropertyRepository propertyRepository,
-                               PropertyDAO propertyDAO) {
+                               PropertyDAO propertyDAO,
+                               LocationService locationService) {
         this.propertyRepository = propertyRepository;
         this.propertyDAO = propertyDAO;
+        this.locationService = locationService;
     }
 
     @Autowired
@@ -81,18 +91,7 @@ public class PropertyServiceImpl implements PropertyService {
     //TODO paging and filter
     @Override
     public Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
-       try {
-//           springJdbcConfig.mysqlDataSource().getConnection();
-       } catch (Exception e) {
 
-       }
-//        return propertyRepository.filterBy(filterRequestPropertyDTO.getTypeId(),
-//                filterRequestPropertyDTO.getMinPrice(),
-//                filterRequestPropertyDTO.getMaxPrice(),
-//                filterRequestPropertyDTO.getCityId(),
-//                filterRequestPropertyDTO.getCountryId()
-//                filterRequestPropertyDTO.getDescription()
-//        ).stream().collect(Collectors.toSet());
         return null;
     }
 
@@ -107,8 +106,12 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<Property> nearby(FilterRequestPropertyDTO filterRequestPropertyDTO) {
-        return propertyRepository.findNearby(filterRequestPropertyDTO.getProximity()).stream().collect(Collectors.toList());
+    @SneakyThrows
+    public Set<Property> nearby(Float proximity, HttpServletRequest request) {
+        Location location = locationService.getLocation(request.getRemoteAddr());
+        return propertyRepository
+                .findNearby(location.getLatitude(), location.getLongitude(), proximity)
+                .stream().collect(Collectors.toSet());
     }
 
 

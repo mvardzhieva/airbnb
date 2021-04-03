@@ -20,12 +20,12 @@ public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer cleanliness;
-    private Integer communication;
-    private Integer checkIn;
-    private Integer accuracy;
-    private Integer location;
-    private Integer value;
+    private Float cleanliness;
+    private Float communication;
+    private Float checkIn;
+    private Float accuracy;
+    private Float location;
+    private Float value;
 
     @ManyToOne
     @JsonBackReference
