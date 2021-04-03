@@ -63,9 +63,12 @@ public class UserService {
             checkIfEmailExists(editUserDTO.getEmail());
             user.setEmail(editUserDTO.getEmail());
         }
+        if (!encoder.matches(editUserDTO.getPassword(), user.getPassword())) {
+            validator.isPasswordCompromised(editUserDTO.getPassword());
+            user.setPassword(encoder.encode(editUserDTO.getPassword()));
+        }
         user.setFirstName(editUserDTO.getFirstName());
         user.setLastName(editUserDTO.getLastName());
-        user.setPassword(encoder.encode(editUserDTO.getPassword()));
         user.setPhoneNumber(editUserDTO.getPhoneNumber());
         user.setDateOfBirth(editUserDTO.getDateOfBirth());
         user.setAddress(editUserDTO.getAddress());
@@ -88,6 +91,7 @@ public class UserService {
         validator.validateUserInput(requestUserDTO.getFirstName(), requestUserDTO.getLastName(),
                 requestUserDTO.getEmail(), requestUserDTO.getPhoneNumber());
         checkIfEmailExists(requestUserDTO.getEmail());
+        validator.isPasswordCompromised(requestUserDTO.getPassword());
         if (!requestUserDTO.getPassword().equals(requestUserDTO.getConfirmedPassword())) {
             throw new NotMatchingPasswordsException("Password and confirmed password do not match.");
         }

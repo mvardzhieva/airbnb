@@ -88,6 +88,13 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
+    @ExceptionHandler(CompromisedPasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDTO handleCompromisedPassword(CompromisedPasswordException e) {
+        log(e);
+        return new ExceptionDTO(e.getMessage());
+    }
+
     private void log(Exception e) {
         LOGGER.error(e.getMessage());
         LOGGER.trace(e.getStackTrace());
