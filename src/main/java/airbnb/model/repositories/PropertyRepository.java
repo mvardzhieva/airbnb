@@ -15,29 +15,10 @@ import java.util.Set;
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, Long> {
 
-
-
-    // TODO IMPROVE
     @Query(value = "Select p.* FROM properties p " +
-            "WHERE ( 6371 * acos(cos(radians(37)) * cos(radians(p.latitude)) * " +
+            "WHERE ( 6371 * acos(cos(radians(?1)) * cos(radians(p.latitude)) * " +
             "cos(radians(p.longitude) - " +
-            "radians(-122)) + sin(radians(37)) * sin(radians(p.latitude)))) " +
-            "< ?;", nativeQuery = true)
-    Collection<Property> findNearby(Integer proximity);
-
-//    @Query(value = "FROM Property WHERE PropertyType.id = ?1 " +
-//            "AND price > ?2  " +
-//            "AND price < ?3" +
-//            "AND City.id = ?4" +
-//            "AND Country.id = ?5" +
-//            "AND description.equals(?6)" +
-//            "AND isFree = true ")
-//    Collection<Property> filterBy(Long typeId,
-//                                  Double minPrice,
-//                                  Double maxPrice,
-//                                  Long cityId,
-//                                  Long countryId
-//                                  String description
-//                                  );
-
+            "radians(?2)) + sin(radians(?1)) * sin(radians(p.latitude)))) " +
+            "< ?3", nativeQuery = true)
+    Collection<Property> findNearby(Double latitude, Double longitude, Float proximity);
 }

@@ -1,8 +1,6 @@
 package airbnb.model.pojo;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -11,6 +9,8 @@ import javax.persistence.*;
 @Entity
 @Setter
 @Getter
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @Table(name = "property_types")
 public class PropertyType {

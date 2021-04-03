@@ -5,6 +5,7 @@ import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 
@@ -22,6 +23,6 @@ public interface PropertyService {
 
     void deleteById(Long id);
 
-    List<Property> nearby(FilterRequestPropertyDTO filterRequestPropertyDTO);
+    Set<Property> nearby(Float proximity, HttpServletRequest request);
 
 }

@@ -1,13 +1,18 @@
 package airbnb.model.dao;
 
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+@Builder
 @Repository
 public class PropertyDAO {
 
     private JdbcTemplate db;
+
+    //todo extra
+
 
     @Autowired
     public PropertyDAO(JdbcTemplate db) {

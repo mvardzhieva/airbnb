@@ -1,19 +1,21 @@
 package airbnb.controller;
 
-import airbnb.exceptions.AuthenticationException;
 import airbnb.model.dto.property.EditRequestPropertyDTO;
 import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
+import airbnb.services.LocationServiceImpl;
+import airbnb.services.interfaces.LocationService;
 import airbnb.services.interfaces.MediaService;
 import airbnb.services.interfaces.PropertyService;
+import com.maxmind.geoip2.record.Location;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -22,6 +24,7 @@ public class PropertyController extends AbstractController {
     private PropertyService propertyService;
     private SessionManager sessionManager;
     private MediaService mediaService;
+
 
     @Autowired
     public PropertyController(PropertyService PropertyService,
@@ -35,7 +38,8 @@ public class PropertyController extends AbstractController {
 
     //TODO RESPONSE STATUSES, DTO AND URLS, REFACTOR
 
-    @GetMapping("users/properties")
+    //TODO paging
+    @GetMapping("users/properties/all")
     public Set<Property> getAll() {
         return propertyService.getAll();
     }
@@ -63,15 +67,15 @@ public class PropertyController extends AbstractController {
     }
 
     //TODO proper method
-    @PostMapping("users/properties")
+    @PostMapping("users/properties/filter")
     public Set<Property> filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO) {
         return propertyService.filter(filterRequestPropertyDTO);
     }
 
-    //TODO proper method
-    @PostMapping("users/properties/s")
-    public List<Property> nearby(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO) {
-        return propertyService.nearby(filterRequestPropertyDTO);
+    @SneakyThrows
+    @GetMapping("users/properties/nearby")
+    public Set<Property> nearby(@RequestParam Float proximity, HttpServletRequest request) {
+        return propertyService.nearby(proximity, request);
     }
 
     @Transactional

@@ -3,16 +3,12 @@ package airbnb.model.pojo;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
+import java.util.List;;
 import java.util.Set;
 
 @Entity
@@ -20,6 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @Table(name = "properties")
 public class Property {
@@ -46,8 +43,7 @@ public class Property {
     private Country country;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "property")
-//    CascadeType.All
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
     private Set<Media> media;
 
     private Double latitude;
@@ -57,11 +53,11 @@ public class Property {
     private Double price;
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "property")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
     @JsonManagedReference
     private List<Rating> ratings;
 
-    @OneToMany(mappedBy = "property")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
     @JsonManagedReference
     private List<Booking> bookings;
 
@@ -78,16 +74,4 @@ public class Property {
         this.ratings = null;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Property property = (Property) o;
-        return id.equals(property.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
