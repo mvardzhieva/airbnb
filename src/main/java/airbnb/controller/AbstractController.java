@@ -102,7 +102,6 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
-    //TODO
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionDTO handleInternalServerErrors(Exception e) {

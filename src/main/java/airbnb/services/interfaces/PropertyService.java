@@ -15,7 +15,7 @@ public interface PropertyService {
 
     Set<Property> getAll();
 
-    Property getById(Long id);
+    Property getByPropertyId(Long id);
 
     Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO);
 
@@ -24,5 +24,7 @@ public interface PropertyService {
     void deleteById(Long id);
 
     Set<Property> nearby(Float proximity, HttpServletRequest request);
+
+    Set<Property> findAllByUserId(Long userId);
 
 }

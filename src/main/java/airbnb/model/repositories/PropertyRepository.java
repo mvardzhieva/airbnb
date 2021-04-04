@@ -21,4 +21,6 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             "radians(?2)) + sin(radians(?1)) * sin(radians(p.latitude)))) " +
             "< ?3", nativeQuery = true)
     Collection<Property> findNearby(Double latitude, Double longitude, Float proximity);
+
+    Set<Property> findAllByHostId(Integer userId);
 }

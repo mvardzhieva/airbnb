@@ -68,7 +68,9 @@ public class BookingController extends AbstractController {
     }
 
     @DeleteMapping("/users/{user_id}/bookings/{booking_id}")
-    public Booking cancel(@PathVariable(name = "user_id") int userId, @PathVariable(name = "booking_id") Long bookingId, HttpSession session) {
+    public Booking cancel(@PathVariable(name = "user_id") int userId,
+                          @PathVariable(name = "booking_id") Long bookingId,
+                          HttpSession session) {
         User user = sessionManager.getLoggedUser(session);
         if (user.getId() != userId) {
             throw new BadRequestException("You cannot cancel another user's booking.");

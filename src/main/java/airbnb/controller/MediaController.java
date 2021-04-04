@@ -10,10 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpSession;
 
 import java.util.List;
-
 
 
 @RestController
@@ -33,10 +33,10 @@ public class MediaController extends AbstractController {
 
 
     @GetMapping(value = "users/properties/media/{id}")
-    public ResponseEntity<byte[]> download(@PathVariable Long id) {
+    public ResponseEntity<byte[]> downloadByMediaId(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();
         headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-        headers.add("Content-Type",mediaService.findById(id).getMimeType());
+        headers.add("Content-Type", mediaService.findById(id).getMimeType());
         byte[] media = mediaService.download(id);
 
         return new ResponseEntity<>(media, headers, HttpStatus.OK);
@@ -57,8 +57,20 @@ public class MediaController extends AbstractController {
                         @PathVariable Long propertyId,
                         HttpSession session,
                         @RequestPart MultipartFile file) {
+
         sessionManager.validate(userId, session);
+
         return mediaService.upload(propertyId, file);
+    }
+
+    @DeleteMapping("users/{userId}/properties/{propertyId}/media")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void deleteAllByPropertyId(@PathVariable Long userId,
+                                      @PathVariable Long propertyId,
+                                      HttpSession session) {
+
+        sessionManager.validate(userId, session);
+        mediaService.deleteAllByPropertyId(propertyId);
     }
 
     @DeleteMapping("users/{userId}/properties/{propertyId}/media/{mediaId}")
@@ -70,15 +82,6 @@ public class MediaController extends AbstractController {
 
         sessionManager.validate(userId, session);
         mediaService.deleteOneByMediaId(propertyId, mediaId);
-    }
-
-    @DeleteMapping("users/{userId}/properties/{propertyId}/media")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteAllByPropertyId(@PathVariable Long userId,
-                                      @PathVariable Long propertyId,
-                                      HttpSession session) {
-        sessionManager.validate(userId, session);
-        mediaService.deleteAllByPropertyId(propertyId);
     }
 }
 

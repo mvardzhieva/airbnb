@@ -5,14 +5,12 @@ import airbnb.exceptions.user.UserNotLoggedException;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Component
-//@Scope(scopeName = "session")
 public class SessionManager extends AbstractController {
 
     private static final String LOGGED_USER_ID = "LOGGED_USER_ID";
@@ -35,10 +33,9 @@ public class SessionManager extends AbstractController {
         throw new UserNotLoggedException("You are not logged in.");
     }
 
-    //TODO REWORK
+    //TODO REWORK - ADD COMMENT
     public void loginUser(HttpSession session, int userId) {
         session.setAttribute(LOGGED_USER_ID, userId);
-//        session.
     }
 
     public void logoutUser(HttpSession session) {

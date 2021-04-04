@@ -38,15 +38,13 @@ public class MediaServiceImpl implements MediaService {
     }
 
     //TODO  REFACTOR AND VALIDATE
-
-
     @Override
     public Media upload(Long id, MultipartFile file) {
 
-        if (!file.getContentType().contains("image/") &&
-                !file.getContentType().contains("media/")) {
-            throw new BadRequestException("Media not supported!");
-        }
+//        if (!file.getContentType().contains("image/") &&
+//                !file.getContentType().contains("media/")) {
+//            throw new BadRequestException("Media not supported!");
+//        }
 
         String filename = UUID.randomUUID().toString();
         File dir = new File(filePath);
@@ -62,7 +60,7 @@ public class MediaServiceImpl implements MediaService {
             Media media = new Media();
             media.setUrl(f.getAbsolutePath());
             media.setMimeType(file.getContentType());
-            media.setProperty(propertyService.getById(id));
+            media.setProperty(propertyService.getByPropertyId(id));
             mediaRepository.save(media);
             Optional<Media> mediaOptional = mediaRepository.findById(media.getId());
             file.transferTo(Paths.get(f.getAbsolutePath()));
