@@ -1,4 +1,4 @@
-# airbnb
+# AIRBNB - FINAL PROJECT, IT TALENTS S12
 ![Image20210405002318](https://user-images.githubusercontent.com/77007574/113521893-294d3400-95a5-11eb-8b53-0d8dfb435060.png)
 ![Image20210405002309](https://user-images.githubusercontent.com/77007574/113521898-310cd880-95a5-11eb-8b56-3e46828791ce.png)
 ![mediaController](https://user-images.githubusercontent.com/77007574/113521907-3e29c780-95a5-11eb-8984-ad8acfed5068.png)
