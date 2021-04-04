@@ -50,7 +50,7 @@ public class RatingServiceImpl implements RatingService {
     public Rating findAvgByPropertyId(Long propertyId) {
         List<Rating> ratings = ratingRepository.findAllByPropertyId(propertyId);
         Property property = propertyService.getByPropertyId(propertyId);
-        Rating rating = new Rating(0L, 0.0f, 0f, 0f, 0f, 0f, 0f, property);
+        Rating rating = new Rating(0L, 0f, 0f, 0f, 0f, 0f, 0f, property);
 
         if (ratings.isEmpty()) {
             return rating;
@@ -66,7 +66,6 @@ public class RatingServiceImpl implements RatingService {
             rating.setValue(rating.getValue() + r.getValue());
         }
 
-//        System.out.println(rating);
         rating.setAccuracy(rating.getAccuracy() / ratings.size());
         rating.setCleanliness(rating.getCleanliness() / ratings.size());
         rating.setCommunication(rating.getCommunication() / ratings.size());
