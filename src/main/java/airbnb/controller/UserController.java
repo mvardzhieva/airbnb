@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.sql.SQLException;
 
 @RestController
 public class UserController extends AbstractController {
@@ -21,7 +23,8 @@ public class UserController extends AbstractController {
     }
 
     @PutMapping("/users")
-    public RegisterResponseUserDTO register(@RequestBody RegisterRequestUserDTO requestUserDTO, HttpSession session) {
+    public RegisterResponseUserDTO register(@RequestBody RegisterRequestUserDTO requestUserDTO, HttpSession session)
+            throws IOException, InterruptedException {
         RegisterResponseUserDTO responseUserDTO = new RegisterResponseUserDTO(userService.register(requestUserDTO));
         sessionManager.loginUser(session, responseUserDTO.getId());
         return responseUserDTO;
@@ -45,7 +48,9 @@ public class UserController extends AbstractController {
     }
 
     @PostMapping("/users/{id}")
-    public UserProfileDTO edit(@PathVariable int id, @RequestBody EditUserDTO editUserDTO, HttpSession session) {
+    public UserProfileDTO edit(@PathVariable int id,
+                               @RequestBody EditUserDTO editUserDTO,
+                               HttpSession session) throws IOException, InterruptedException {
         User user = sessionManager.getLoggedUser(session);
         if (user.getId() != id) {
             throw new BadRequestException("You cannot edit another user's profile.");
@@ -60,5 +65,15 @@ public class UserController extends AbstractController {
             throw new BadRequestException("You cannot delete another user's profile.");
         }
         return new UserProfileDTO(userService.delete(user));
+    }
+
+    @GetMapping("/users/earnedMostMoney")
+    public UserProfileDTO getUserEarnedTheMostMoney() throws SQLException {
+        return new UserProfileDTO(userService.getUserEarnedTheMostMoney());
+    }
+
+    @GetMapping("/users/mostBookings")
+    public UserProfileDTO getUserWithMostBookings() throws SQLException {
+        return new UserProfileDTO(userService.getUserWithMostBookings());
     }
 }

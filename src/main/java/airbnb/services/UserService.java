@@ -3,6 +3,7 @@ package airbnb.services;
 import airbnb.exceptions.user.EmailAlreadyRegisteredException;
 import airbnb.exceptions.user.NotMatchingPasswordsException;
 import airbnb.exceptions.user.UserNotFoundException;
+import airbnb.model.dao.UserDAO;
 import airbnb.model.dto.user.*;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
@@ -15,24 +16,30 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 @Service
 public class UserService {
     private UserRepository userRepository;
     private PropertyService propertyService;
+    private UserDAO userDAO;
     private PasswordEncoder encoder;
     private Validator validator;
 
     @Autowired
-    public UserService(UserRepository userRepository, PropertyService propertyService) {
+    public UserService(UserRepository userRepository,
+                       PropertyService propertyService,
+                       UserDAO userDAO) {
         this.userRepository = userRepository;
         this.propertyService = propertyService;
+        this.userDAO = userDAO;
         this.encoder = new BCryptPasswordEncoder();
         this.validator = new Validator();
     }
 
-    public User register(RegisterRequestUserDTO requestUserDTO) {
+    public User register(RegisterRequestUserDTO requestUserDTO) throws IOException, InterruptedException {
         validateRegisterUserData(requestUserDTO);
         requestUserDTO.setPassword(encoder.encode(requestUserDTO.getPassword()));
         User user = new User(requestUserDTO);
@@ -56,7 +63,7 @@ public class UserService {
         throw new UserNotFoundException("User with this id is not registered.");
     }
 
-    public User edit(User user, EditUserDTO editUserDTO) {
+    public User edit(User user, EditUserDTO editUserDTO) throws IOException, InterruptedException {
         validator.validateUserInput(editUserDTO.getFirstName(), editUserDTO.getLastName(),
                 editUserDTO.getEmail(), editUserDTO.getPhoneNumber());
         if (!user.getEmail().equals(editUserDTO.getEmail())) {
@@ -64,7 +71,7 @@ public class UserService {
             user.setEmail(editUserDTO.getEmail());
         }
         if (!encoder.matches(editUserDTO.getPassword(), user.getPassword())) {
-            validator.isPasswordCompromised(editUserDTO.getPassword());
+            validator.validatePassword(editUserDTO.getPassword());
             user.setPassword(encoder.encode(editUserDTO.getPassword()));
         }
         user.setFirstName(editUserDTO.getFirstName());
@@ -87,11 +94,11 @@ public class UserService {
         return user;
     }
 
-    private void validateRegisterUserData(RegisterRequestUserDTO requestUserDTO) {
+    private void validateRegisterUserData(RegisterRequestUserDTO requestUserDTO) throws IOException, InterruptedException {
         validator.validateUserInput(requestUserDTO.getFirstName(), requestUserDTO.getLastName(),
                 requestUserDTO.getEmail(), requestUserDTO.getPhoneNumber());
         checkIfEmailExists(requestUserDTO.getEmail());
-        validator.isPasswordCompromised(requestUserDTO.getPassword());
+        validator.validatePassword(requestUserDTO.getPassword());
         if (!requestUserDTO.getPassword().equals(requestUserDTO.getConfirmedPassword())) {
             throw new NotMatchingPasswordsException("Password and confirmed password do not match.");
         }
@@ -103,4 +110,11 @@ public class UserService {
         }
     }
 
+    public User getUserEarnedTheMostMoney() throws SQLException {
+        return userDAO.getUserEarnedMostMoneyFromBookingForLastYear();
+    }
+
+    public User getUserWithMostBookings() throws SQLException {
+        return userDAO.getUserEarnedMostMoneyFromBookingForLastYear();
+    }
 }

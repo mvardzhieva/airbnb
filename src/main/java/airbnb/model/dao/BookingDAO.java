@@ -19,7 +19,9 @@ public class BookingDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean isPropertyAlreadyBooked(Long propertyId, LocalDate startDate, LocalDate endDate) {
+    public boolean isPropertyAlreadyBooked(Long propertyId,
+                                           LocalDate startDate,
+                                           LocalDate endDate) throws SQLException {
         String query = "SELECT bookings.id\n" +
                 "FROM properties\n" +
                 "JOIN bookings\n" +
@@ -34,11 +36,6 @@ public class BookingDAO {
             statement.setDate(3, Date.valueOf(endDate));
             ResultSet rows = statement.executeQuery();
             return rows.next();
-        } catch (SQLException e) {
-            //TODO
-
-            LogManager.getLogger(AirbnbApplication.class).trace(e.getStackTrace());
         }
-        return false;
     }
 }

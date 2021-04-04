@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,9 @@ public class BookingController extends AbstractController {
     }
 
     @PutMapping("/users/{id}/bookings")
-    public Booking add(@PathVariable int id, @RequestBody AddRequestBookingDTO addBookingDTO, HttpSession session) {
+    public Booking add(@PathVariable int id,
+                       @RequestBody AddRequestBookingDTO addBookingDTO,
+                       HttpSession session) throws SQLException {
         User user = sessionManager.getLoggedUser(session);
         if (user.getId() != id) {
             throw new BadRequestException("You cannot add booking for another user.");
@@ -42,28 +45,19 @@ public class BookingController extends AbstractController {
 
     @GetMapping("/users/{id}/bookings/upcoming")
     public List<Booking> getUpcomingUserBookings(@PathVariable int id, HttpSession session) {
-        User user = sessionManager.getLoggedUser(session);
-        if (user.getId() != id) {
-            throw new BadRequestException("You cannot access another user's bookings.");
-        }
+        User user = getUserIfCanAccessBookings(id, session);
         return bookingService.getUpcomingBookings(user);
     }
 
     @GetMapping("/users/{id}/bookings/current")
     public List<Booking> getCurrentUserBookings(@PathVariable int id, HttpSession session) {
-        User user = sessionManager.getLoggedUser(session);
-        if (user.getId() != id) {
-            throw new BadRequestException("You cannot access another user's bookings.");
-        }
+        User user = getUserIfCanAccessBookings(id, session);
         return bookingService.getCurrentBookings(user);
     }
 
     @GetMapping("/users/{id}/bookings/finished")
     public List<Booking> getFinishedUserBookings(@PathVariable int id, HttpSession session) {
-        User user = sessionManager.getLoggedUser(session);
-        if (user.getId() != id) {
-            throw new BadRequestException("You cannot access another user's bookings.");
-        }
+        User user = getUserIfCanAccessBookings(id, session);
         return bookingService.getFinishedBookings(user);
     }
 
@@ -76,5 +70,13 @@ public class BookingController extends AbstractController {
             throw new BadRequestException("You cannot cancel another user's booking.");
         }
         return bookingService.cancel(userId, bookingId);
+    }
+
+    public User getUserIfCanAccessBookings(int userId, HttpSession session) {
+        User user = sessionManager.getLoggedUser(session);
+        if (user.getId() != userId) {
+            throw new BadRequestException("You cannot access another user's bookings.");
+        }
+        return user;
     }
 }

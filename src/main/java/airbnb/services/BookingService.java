@@ -13,6 +13,7 @@ import airbnb.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +39,7 @@ public class BookingService {
         this.validator = new Validator();
     }
 
-    public Booking add(User user, AddRequestBookingDTO addBookingDTO) {
+    public Booking add(User user, AddRequestBookingDTO addBookingDTO) throws SQLException {
         validator.validateBookingDates(addBookingDTO.getStartDate(), addBookingDTO.getEndDate());
         Optional<Property> optionalProperty = propertyRepository.findById(addBookingDTO.getPropertyId());
         if (optionalProperty.isEmpty()) {

@@ -1,10 +1,8 @@
 package airbnb.model.dao;
 
-import airbnb.AirbnbApplication;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -23,7 +21,7 @@ public class UserDAO {
         this.userRepository = userRepository;
     }
 
-    public User getUserEarnedMostMoneyFromBookingForLastYear() {
+    public User getUserEarnedMostMoneyFromBookingForLastYear() throws SQLException {
         String query = "SELECT users.id\n" +
                 "FROM users\n" +
                 "JOIN properties\n" +
@@ -43,38 +41,27 @@ public class UserDAO {
                 return userRepository.findById(rows.getInt(1)).get();
             }
             throw new NotFoundException("There are no users or bookings made in the past year.");
-        } catch (SQLException e) {
-            //TODO
-
-            LogManager.getLogger(AirbnbApplication.class).trace(e.getStackTrace());
         }
-        return null;
     }
 
-    public User getUserWithMostFinishedBookingForLastNYears(int years) {
+    public User getUserWithMostFinishedBookingForLastYear() throws SQLException {
         String query = "SELECT users.id\n" +
                 "FROM users\n" +
                 "JOIN bookings\n" +
                 "ON users.id = bookings.user_id\n" +
-                "WHERE bookings.end_date >= DATE_SUB(NOW(), INTERVAL ? YEAR)\n" +
+                "WHERE bookings.end_date >= DATE_SUB(NOW(), INTERVAL 1 YEAR)\n" +
                 "AND bookings.status_id = 3\n" +
                 "GROUP BY users.id\n" +
                 "ORDER BY COUNT(users.id) DESC\n" +
                 "LIMIT 1;";
         try (Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, years);
             ResultSet rows = statement.executeQuery();
             if (rows.next()) {
                 return userRepository.findById(rows.getInt(1)).get();
             }
-            throw new NotFoundException("There are no users or bookings made in the past " + years + "year.");
-        } catch (SQLException e) {
-            //TODO
-
-            LogManager.getLogger(AirbnbApplication.class).trace(e.getStackTrace());
+            throw new NotFoundException("There are no users or bookings made in the past year.");
         }
-        return null;
     }
 
 }

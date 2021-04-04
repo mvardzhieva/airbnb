@@ -21,7 +21,7 @@ public class Validator {
     private static final String API_KEY = System.getenv("API_KEY");
     private static final String API_SECRET = System.getenv("API_SECRET");
 
-    public void isPasswordCompromised(String password) {
+    public void validatePassword(String password) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         String url = API_URL
                 + "/passwords?sha1=" + new ShaPasswordEncoder().encodePassword(password, null)
@@ -32,14 +32,9 @@ public class Validator {
                 .uri(URI.create(url))
                 .header("authorization", "basic " + encodedKeys)
                 .build();
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == STATUS_CODE_COMPROMISED) {
-                throw new CompromisedPasswordException("This password is compromised. Choose a stronger one.");
-            }
-        } catch (InterruptedException | IOException e) {
-            //TODO
-            LogManager.getLogger(AirbnbApplication.class).trace(e.getStackTrace());
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() == STATUS_CODE_COMPROMISED) {
+            throw new CompromisedPasswordException("This password is compromised. Choose a stronger one.");
         }
     }
 
