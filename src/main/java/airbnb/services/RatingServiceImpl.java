@@ -54,7 +54,7 @@ public class RatingServiceImpl implements RatingService {
         Property property = propertyService.getById(propertyId);
 
         if (ratings.isEmpty()) {
-            new Rating(0L,0.0f,0f,0f,0f,0f,0f,property);
+            new Rating(0L, 0.0f, 0f, 0f, 0f, 0f, 0f, property);
         }
 
         for (Rating r : ratings) {

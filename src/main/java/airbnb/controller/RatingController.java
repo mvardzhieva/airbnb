@@ -31,7 +31,7 @@ public class RatingController extends AbstractController {
         return ratingService.findAllByPropertyId(propertyId);
     }
 
-    @PostMapping ("users/properties/{propertyId}/ratings")
+    @PostMapping("users/properties/{propertyId}/ratings")
     public Rating findAvgByPropertyId(@PathVariable Long propertyId) {
         return ratingService.findAvgByPropertyId(propertyId);
     }

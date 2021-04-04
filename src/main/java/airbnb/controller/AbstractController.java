@@ -88,6 +88,13 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
+    @ExceptionHandler(CompromisedPasswordException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDTO handleCompromisedPassword(CompromisedPasswordException e) {
+        log(e);
+        return new ExceptionDTO(e.getMessage());
+    }
+
     @ExceptionHandler(GeoIp2Exception.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionDTO handleUserLocationNotFound(GeoIp2Exception e) {
@@ -107,4 +114,5 @@ public abstract class AbstractController {
         LOGGER.error(e.getMessage());
         LOGGER.trace(e.getStackTrace());
     }
+
 }
