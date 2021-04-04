@@ -43,7 +43,7 @@ public class PropertyDAO {
                 .withMinPrice(propertyDTO.getMinPrice())
                 .withMaxPrice(propertyDTO.getMaxPrice());
 
-        PreparedStatementCreator sql1 = connection -> {
+        PreparedStatementCreator preparedStatement = connection -> {
             String sql = "SELECT p.* FROM properties p " +
                     "WHERE  p.type_id = ? " +
                     "AND  p.city_id = ? " +
@@ -53,22 +53,24 @@ public class PropertyDAO {
                     "AND  p.price > ? " +
                     "AND p.price < ? \n";
 
-            PreparedStatement preparedStatement = db.getDataSource()
+            PreparedStatement statement = db.getDataSource()
                     .getConnection()
                     .prepareStatement(sql);
 
-            preparedStatement.setLong(1, sqlQuery.getTypeId());
-            preparedStatement.setLong(2, sqlQuery.getCityId());
-            preparedStatement.setLong(3, sqlQuery.getCountryId());
-            preparedStatement.setString(4, sqlQuery.getName());
-            preparedStatement.setString(5, sqlQuery.getDescription());
-            preparedStatement.setDouble(6, sqlQuery.getMinPrice());
-            preparedStatement.setDouble(7, sqlQuery.getMaxPrice());
+            statement.setLong(1, sqlQuery.getTypeId());
+            statement.setLong(2, sqlQuery.getCityId());
+            statement.setLong(3, sqlQuery.getCountryId());
+            statement.setString(4, sqlQuery.getName());
+            statement.setString(5, sqlQuery.getDescription());
+            statement.setDouble(6, sqlQuery.getMinPrice());
+            statement.setDouble(7, sqlQuery.getMaxPrice());
 
-            return preparedStatement;
+            return statement;
         };
 
-        return db.query(sql1, propertyMapper).stream().collect(Collectors.toSet());
+        // TODO ADD %%
 
+        return db.query(preparedStatement, propertyMapper)
+                .stream().collect(Collectors.toSet());
     }
 }

@@ -92,8 +92,12 @@ public class ReviewService {
         Property property = optionalProperty.get();
         List<Review> reviews = new ArrayList<>();
         for (Booking booking : property.getBookings()) {
-            reviews.add(booking.getReview());
+            Review review = booking.getReview();
+            if (review != null) {
+                reviews.add(review);
+            }
         }
+
         return Collections.unmodifiableList(reviews);
     }
 }

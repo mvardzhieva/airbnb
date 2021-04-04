@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -41,7 +40,7 @@ public class RatingServiceImpl implements RatingService {
     public List<Rating> findAllByPropertyId(Long propertyId) {
         List<Rating> ratings = ratingRepository.findAllByPropertyId(propertyId);
         if (ratings.isEmpty()) {
-            throw new NotFoundException("Ratings not found!");
+            throw new NotFoundException("Rating not found!");
         }
 
         return ratings;
@@ -50,16 +49,30 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Rating findAvgByPropertyId(Long propertyId) {
         List<Rating> ratings = ratingRepository.findAllByPropertyId(propertyId);
-        Rating rating = new Rating();
-        Property property = propertyService.getById(propertyId);
+        Property property = propertyService.getByPropertyId(propertyId);
+        Rating rating = new Rating(0L, 0.0f, 0f, 0f, 0f, 0f, 0f, property);
 
         if (ratings.isEmpty()) {
-            new Rating(0L, 0.0f, 0f, 0f, 0f, 0f, 0f, property);
+            return rating;
         }
+
 
         for (Rating r : ratings) {
-
+            rating.setAccuracy(rating.getAccuracy() + r.getAccuracy());
+            rating.setCleanliness(rating.getCleanliness() + r.getCleanliness());
+            rating.setCommunication(rating.getCommunication() + r.getCommunication());
+            rating.setCheckIn(rating.getCommunication() + r.getCommunication());
+            rating.setLocation(rating.getLocation() + r.getLocation());
+            rating.setValue(rating.getValue() + r.getValue());
         }
+
+//        System.out.println(rating);
+        rating.setAccuracy(rating.getAccuracy() / ratings.size());
+        rating.setCleanliness(rating.getCleanliness() / ratings.size());
+        rating.setCommunication(rating.getCommunication() / ratings.size());
+        rating.setCheckIn(rating.getCommunication() / ratings.size());
+        rating.setLocation(rating.getLocation() / ratings.size());
+        rating.setValue(rating.getValue() / ratings.size());
 
         return rating;
     }
@@ -67,13 +80,12 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Rating add(Long userId, Long propertyId, Rating rating) {
         User user = userService.getUserById(userId.intValue());
-        Property property = propertyService.getById(propertyId);
+        Property property = propertyService.getByPropertyId(propertyId);
         List<Booking> bookings = bookingService.getFinishedBookings(user);
 
         for (Booking booking : bookings) {
             if (booking.getProperty().getId().equals(propertyId)) {
                 rating.setProperty(property);
-//                booking.set
                 return ratingRepository.save(rating);
             }
         }
@@ -88,7 +100,7 @@ public class RatingServiceImpl implements RatingService {
     public Rating edit(Long userId, Long ratingId, Long propertyId, Rating rating) {
         User user = userService.getUserById(userId.intValue());
         List<Booking> bookings = bookingService.getFinishedBookings(user);
-        Property property = propertyService.getById(propertyId);
+        Property property = propertyService.getByPropertyId(propertyId);
 
         for (Booking booking : bookings) {
             if (booking.getProperty().getId().equals(propertyId)) {

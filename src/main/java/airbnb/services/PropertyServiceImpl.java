@@ -11,7 +11,6 @@ import airbnb.model.pojo.User;
 import airbnb.model.repositories.PropertyRepository;
 import airbnb.services.interfaces.LocationService;
 import airbnb.services.interfaces.PropertyService;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.record.Location;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -58,8 +56,14 @@ public class PropertyServiceImpl implements PropertyService {
         return propertyRepository.save(property);
     }
 
+
     @Override
-    public Property getById(Long id) {
+    public Set<Property> findAllByUserId(Long userId) {
+        return propertyRepository.findAllByHostId(userId.intValue());
+    }
+
+    @Override
+    public Property getByPropertyId(Long id) {
         Optional<Property> property = propertyRepository.findById(id);
         if (property.isEmpty()) {
             throw new BadRequestException("Property not found!");
@@ -108,10 +112,10 @@ public class PropertyServiceImpl implements PropertyService {
     @SneakyThrows
     public Set<Property> nearby(Float proximity, HttpServletRequest request) {
         Location location = locationService.getLocation(request.getRemoteAddr());
+
         return propertyRepository
                 .findNearby(location.getLatitude(), location.getLongitude(), proximity)
                 .stream().collect(Collectors.toSet());
     }
-
-
 }
+

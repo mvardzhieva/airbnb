@@ -26,16 +26,18 @@ public class RatingController extends AbstractController {
         this.sessionManager = sessionManager;
     }
 
-    @GetMapping("users/properties/{propertyId}/ratings")
-    public List<Rating> findAllByPropertyId(@PathVariable Long propertyId) {
-        return ratingService.findAllByPropertyId(propertyId);
+    @GetMapping("users/properties/{id}/ratings")
+    public List<Rating> findAllByPropertyId(@PathVariable Long id) {
+        return ratingService.findAllByPropertyId(id);
     }
 
-    @PostMapping("users/properties/{propertyId}/ratings")
-    public Rating findAvgByPropertyId(@PathVariable Long propertyId) {
-        return ratingService.findAvgByPropertyId(propertyId);
+    //TODO FIX
+    @PostMapping("users/properties/{id}/ratings")
+    public Rating findAvgByPropertyId(@PathVariable Long id) {
+        return ratingService.findAvgByPropertyId(id);
     }
 
+    //TODO FIX
     @PutMapping("users/{userId}/properties/{propertyId}/ratings")
     public RatingDTO add(@PathVariable Long userId,
                          @PathVariable Long propertyId,
@@ -63,7 +65,6 @@ public class RatingController extends AbstractController {
 
         return new RatingDTO(rating);
     }
-
 
     @DeleteMapping("users/{userId}/properties/{propertyId}/ratings/{ratingId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)

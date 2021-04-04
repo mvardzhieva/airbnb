@@ -50,7 +50,7 @@ public class PropertyFilterSQLQuery {
         if (name == null || name.isEmpty()) {
             this.name = "%%";
         } else {
-            this.name = name;
+            this.name = "%" + name + "%";
         }
 
         return this;
@@ -60,7 +60,7 @@ public class PropertyFilterSQLQuery {
         if (description == null || description.isEmpty()) {
             this.description = "%%";
         } else {
-            this.description = description;
+            this.description = "%"+ description + "%";
         }
 
         return this;

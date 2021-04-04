@@ -4,11 +4,8 @@ import airbnb.model.dto.property.EditRequestPropertyDTO;
 import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
-import airbnb.services.LocationServiceImpl;
-import airbnb.services.interfaces.LocationService;
 import airbnb.services.interfaces.MediaService;
 import airbnb.services.interfaces.PropertyService;
-import com.maxmind.geoip2.record.Location;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -47,30 +45,14 @@ public class PropertyController extends AbstractController {
 
     @GetMapping("users/properties/{id}")
     public Property getByPropertyId(@PathVariable Long id) {
-        return propertyService.getById(id);
+        return propertyService.getByPropertyId(id);
     }
 
-    @PutMapping("users/{userId}/properties")
-    public Property add(@RequestBody AddRequestPropertyDTO addRequestPropertyDTO,
-                        HttpSession session, @PathVariable Long userId) {
-        sessionManager.validate(userId, session);
-        addRequestPropertyDTO.setHostId(userId);
-        return propertyService.add(addRequestPropertyDTO);
-    }
+    @GetMapping("users/{id}/properties/")
+    public Set<Property> getAllByUserId(@PathVariable Long id, HttpSession session) {
 
-    @PostMapping("users/{userId}/properties/{propertyId}")
-    public Property edit(@PathVariable Long userId,
-                         @PathVariable Long propertyId,
-                         @RequestBody EditRequestPropertyDTO editRequestPropertyDTO,
-                         HttpSession session) {
-        sessionManager.validate(userId, session);
-        return propertyService.edit(propertyId, editRequestPropertyDTO);
-    }
-
-    //TODO proper method
-    @PostMapping("users/properties/filter")
-    public Set<Property> filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO) {
-        return propertyService.filter(filterRequestPropertyDTO);
+        sessionManager.validate(id, session);
+        return propertyService.findAllByUserId(id);
     }
 
     @SneakyThrows
@@ -79,15 +61,39 @@ public class PropertyController extends AbstractController {
         return propertyService.nearby(proximity, request);
     }
 
+    @PostMapping("users/properties/filter")
+    public Set<Property> filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO) {
+        return propertyService.filter(filterRequestPropertyDTO);
+    }
+
+    @PutMapping("users/{id}/properties")
+    public Property add(@RequestBody AddRequestPropertyDTO addRequestPropertyDTO,
+                        HttpSession session, @PathVariable Long id) {
+
+        sessionManager.validate(id, session);
+        addRequestPropertyDTO.setHostId(id);
+        return propertyService.add(addRequestPropertyDTO);
+    }
+
+    @PostMapping("users/{userId}/properties/{propertyId}")
+    public Property edit(@PathVariable Long userId,
+                         @PathVariable Long propertyId,
+                         @RequestBody EditRequestPropertyDTO editRequestPropertyDTO,
+                         HttpSession session) {
+
+        sessionManager.validate(userId, session);
+        return propertyService.edit(propertyId, editRequestPropertyDTO);
+    }
+
     @Transactional
     @DeleteMapping("users/{userId}/properties/{propertyId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteByPropertyId(@PathVariable Long userId,
                                    @PathVariable Long propertyId,
                                    HttpSession session) {
+
         sessionManager.validate(userId, session);
         mediaService.deleteAllByPropertyId(propertyId);
         propertyService.deleteById(propertyId);
-
     }
 }
