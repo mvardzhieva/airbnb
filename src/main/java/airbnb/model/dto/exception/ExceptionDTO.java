@@ -1,4 +1,4 @@
-package airbnb.model.dto;
+package airbnb.model.dto.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

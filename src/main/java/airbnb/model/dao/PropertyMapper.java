@@ -4,11 +4,15 @@ import airbnb.model.pojo.*;
 import airbnb.model.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Component
 public class PropertyMapper implements RowMapper<Property> {
 
     private UserRepository userRepository;
@@ -17,6 +21,7 @@ public class PropertyMapper implements RowMapper<Property> {
     private CountryRepository countryRepository;
     private RatingRepository ratingRepository;
     private BookingRepository bookingRepository;
+    private MediaRepository mediaRepository;
 
     @Autowired
     public PropertyMapper(UserRepository userRepository,
@@ -24,18 +29,21 @@ public class PropertyMapper implements RowMapper<Property> {
                           CityRepository cityRepository,
                           CountryRepository countryRepository,
                           RatingRepository ratingRepository,
-                          BookingRepository bookingRepository) {
+                          BookingRepository bookingRepository,
+                          MediaRepository mediaRepository) {
         this.userRepository = userRepository;
         this.propertyTypeRepository = propertyTypeRepository;
         this.cityRepository = cityRepository;
         this.countryRepository = countryRepository;
         this.ratingRepository = ratingRepository;
         this.bookingRepository = bookingRepository;
+        this.mediaRepository = mediaRepository;
     }
 
     @Override
     public Property mapRow(ResultSet rs, int i) throws SQLException {
         Property property = new Property();
+        property.setId(rs.getLong("id"));
         property.setHost(setUser(rs.getLong("host_id")));
         property.setType(setPropertyType(rs.getLong("type_id")));
         property.setCity(setCity(rs.getLong("city_id")));
@@ -43,61 +51,44 @@ public class PropertyMapper implements RowMapper<Property> {
         property.setName(rs.getString("name"));
         property.setDescription(rs.getString("description"));
         property.setPrice(rs.getDouble("price"));
-        property.setRatings(setRatings(property));
-//        property.setIsFree(setIsFree(property));
-        property.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime().toLocalDate());
+        property.setLatitude(rs.getDouble("latitude"));
+        property.setLongitude(rs.getDouble("longitude"));
+        property.setCreatedAt(rs.getTimestamp("created_at")
+                .toLocalDateTime().toLocalDate());
+        property.setRatings(setRatings(rs.getLong("id")));
+        property.setMedia(setMedia(rs.getLong("id")));
+        property.setRatings(setRatings(rs.getLong("id")));
+        property.setBookings(setBookings(rs.getLong("id")));
 
         return property;
     }
 
     private User setUser(Long id) {
-        return userRepository.getOne(id.intValue());
+        return userRepository.findById(id.intValue()).get();
     }
 
     private PropertyType setPropertyType(Long id) {
-        return propertyTypeRepository.getOne(id);
+        return propertyTypeRepository.findById(id).get();
     }
 
     private City setCity(Long id) {
-        return cityRepository.getOne(id);
+        return cityRepository.findById(id).get();
     }
 
     private Country setCountry(Long id) {
-        return countryRepository.getOne(id);
+        return countryRepository.findById(id).get();
     }
 
-    private List<Rating> setRatings(Property property) {
-//        return ratingRepository.findAllByProperty(property);
-        return ratingRepository.findAllByPropertyId(property.getId());
+    private Set<Media> setMedia(Long id) {
+        return mediaRepository.findAllByPropertyId(id)
+                .stream().collect(Collectors.toSet());
     }
 
-    private Rating setRating(Property property) {
-        Rating rating = new Rating();
-
-//        List<Rating> ratings = ratingRepository.findAllByProperty(property);
-        List<Rating> ratings = ratingRepository.findAllByPropertyId(property.getId());
-        for (Rating r : ratings) {
-            rating.setCleanliness(rating.getCleanliness() + r.getCleanliness());
-            rating.setCommunication(rating.getCleanliness() + r.getCleanliness());
-            rating.setCheckIn(rating.getCheckIn() + r.getCheckIn());
-            rating.setAccuracy(rating.getAccuracy() + r.getAccuracy());
-            rating.setLocation(rating.getLocation() + r.getLocation());
-            rating.setValue(rating.getValue() + r.getValue());
-        }
-
-        rating.setCleanliness(rating.getCleanliness() / ratings.size());
-        rating.setCommunication(rating.getCleanliness() / ratings.size());
-        rating.setCheckIn(rating.getCheckIn() / ratings.size());
-        rating.setAccuracy(rating.getAccuracy() / ratings.size());
-        rating.setLocation(rating.getLocation() / ratings.size());
-        rating.setValue(rating.getValue() / ratings.size());
-        rating.setProperty(ratings.get(0).getProperty());
-
-        return rating;
+    private List<Rating> setRatings(Long id) {
+        return ratingRepository.findAllByPropertyId(id);
     }
 
-    public Boolean setIsFree(Property property) {
-//        return bookingRepository.getFirstByPropertyOrderByEndDateEndDateDesc(property).getStatusId() == 3;
-        return true;
+    private List<Booking> setBookings(Long id) {
+        return bookingRepository.findAllByPropertyId(id);
     }
 }

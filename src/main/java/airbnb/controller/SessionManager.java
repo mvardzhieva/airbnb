@@ -35,8 +35,10 @@ public class SessionManager extends AbstractController {
         throw new UserNotLoggedException("You are not logged in.");
     }
 
+    //TODO REWORK
     public void loginUser(HttpSession session, int userId) {
         session.setAttribute(LOGGED_USER_ID, userId);
+//        session.
     }
 
     public void logoutUser(HttpSession session) {

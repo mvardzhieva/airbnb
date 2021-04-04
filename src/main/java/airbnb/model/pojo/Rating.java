@@ -1,6 +1,6 @@
 package airbnb.model.pojo;
 
-import airbnb.model.dto.RatingDTO;
+import airbnb.model.dto.rating.RatingDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.springframework.stereotype.Component;

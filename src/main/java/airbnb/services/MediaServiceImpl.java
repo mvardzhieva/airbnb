@@ -1,7 +1,5 @@
 package airbnb.services;
 
-import airbnb.controller.SessionManager;
-import airbnb.exceptions.AuthenticationException;
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Media;
@@ -12,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -95,7 +91,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public List<Media> getAllByPropertyId(Long id) {
-        return mediaRepository.getAllByPropertyId(id);
+        return mediaRepository.findAllByPropertyId(id);
     }
 
     @Override
@@ -110,7 +106,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public void deleteAllByPropertyId(Long id) {
-        List<Media> mediaList = mediaRepository.getAllByPropertyId(id);
+        List<Media> mediaList = mediaRepository.findAllByPropertyId(id);
         if (!mediaList.isEmpty()) {
             for (Media media : mediaList) {
                 deleteFromFileSystem(media);

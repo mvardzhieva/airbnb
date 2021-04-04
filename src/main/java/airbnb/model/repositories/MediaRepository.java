@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface MediaRepository extends JpaRepository<Media, Long> {
 
-    List<Media> getAllByPropertyId(Long id);
+    List<Media> findAllByPropertyId(Long id);
 }

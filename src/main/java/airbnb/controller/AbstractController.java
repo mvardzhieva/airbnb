@@ -6,7 +6,7 @@ import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.property.PropertyNotAvailableException;
 import airbnb.exceptions.user.*;
 import airbnb.exceptions.NotFoundException;
-import airbnb.model.dto.ExceptionDTO;
+import airbnb.model.dto.exception.ExceptionDTO;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

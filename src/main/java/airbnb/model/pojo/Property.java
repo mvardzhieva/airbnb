@@ -42,16 +42,16 @@ public class Property {
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
-    private Set<Media> media;
-
-    private Double latitude;
-    private Double longitude;
     private String name;
     private String description;
     private Double price;
+    private Double latitude;
+    private Double longitude;
     private LocalDate createdAt;
+
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
+    private Set<Media> media;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
     @JsonManagedReference

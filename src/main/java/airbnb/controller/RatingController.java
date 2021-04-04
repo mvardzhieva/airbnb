@@ -1,6 +1,6 @@
 package airbnb.controller;
 
-import airbnb.model.dto.RatingDTO;
+import airbnb.model.dto.rating.RatingDTO;
 import airbnb.model.pojo.Rating;
 import airbnb.services.interfaces.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;

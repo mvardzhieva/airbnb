@@ -17,5 +17,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Booking findByUserAndProperty(User user, Property property);
 
-//    Booking getFirstByPropertyOrderByEndDateEndDateDesc(Property property);
+    List<Booking> findAllByPropertyId(Long id);
 }

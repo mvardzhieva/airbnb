@@ -1,4 +1,4 @@
-package airbnb.model.dto;
+package airbnb.model.dto.rating;
 
 import airbnb.model.pojo.Rating;
 import lombok.AllArgsConstructor;

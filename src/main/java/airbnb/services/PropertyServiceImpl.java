@@ -91,8 +91,7 @@ public class PropertyServiceImpl implements PropertyService {
     //TODO paging and filter
     @Override
     public Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
-
-        return null;
+        return propertyDAO.filter(filterRequestPropertyDTO);
     }
 
     @Transactional
