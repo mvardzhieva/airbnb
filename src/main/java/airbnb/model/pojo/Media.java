@@ -1,10 +1,7 @@
 package airbnb.model.pojo;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -15,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Media {
 
     @Id
@@ -28,14 +26,5 @@ public class Media {
     @JoinColumn(name = "property_id", nullable = false)
     private Property property;
 
-    @Override
-    public String toString() {
-        return "Media{" +
-                "id=" + id +
-                ", url='" + url + '\'' +
-                ", mimeType='" + mimeType + '\'' +
-                ", property=" + property +
-                '}';
-    }
 }
 

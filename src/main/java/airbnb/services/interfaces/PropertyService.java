@@ -11,7 +11,7 @@ import java.util.Set;
 
 public interface PropertyService {
 
-    Property add(AddRequestPropertyDTO addRequestPropertyDTO);
+    Property add(Long userId, AddRequestPropertyDTO addRequestPropertyDTO);
 
     Set<Property> getAll();
 

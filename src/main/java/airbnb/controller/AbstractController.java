@@ -12,8 +12,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractController {
 
@@ -92,6 +98,19 @@ public abstract class AbstractController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionDTO handleCompromisedPassword(CompromisedPasswordException e) {
         log(e);
+        return new ExceptionDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDTO handleArgumentNotValid(MethodArgumentNotValidException e) {
+        log(e);
+        return new ExceptionDTO("Invalid input!");
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDTO handleHttpMsgNotReadable(HttpMessageNotReadableException e) {
         return new ExceptionDTO(e.getMessage());
     }
 

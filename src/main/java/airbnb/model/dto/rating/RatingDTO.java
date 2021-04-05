@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.*;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,11 +16,34 @@ import org.springframework.stereotype.Component;
 @Component
 public class RatingDTO {
 
+    @NotNull
+    @DecimalMin(value = "1.0", message = "Minimum allowed value is 1.")
+    @DecimalMax(value = "5.0", message = "Maximum allowed value is 5.")
     private Float cleanliness;
+
+    @NotNull
+    @DecimalMin(value = "1.0", message = "Minimum allowed value is 1.")
+    @DecimalMax(value = "5.0", message = "Maximum allowed value is 5.")
     private Float communication;
+
+    @NotNull
+    @DecimalMin(value = "1.0", message = "Minimum allowed value is 1.")
+    @DecimalMax(value = "5.0", message = "Maximum allowed value is 5.")
     private Float checkIn;
+
+    @NotNull
+    @DecimalMin(value = "1.0", message = "Minimum allowed value is 1.")
+    @DecimalMax(value = "5.0", message = "Maximum allowed value is 5.")
     private Float accuracy;
+
+    @NotNull
+    @DecimalMin(value = "1.0", message = "Minimum allowed value is 1.")
+    @DecimalMax(value = "5.0", message = "Maximum allowed value is 5.")
     private Float location;
+
+    @NotNull
+    @DecimalMin(value = "1.0", message = "Minimum allowed value is 1.")
+    @DecimalMax(value = "5.0", message = "Maximum allowed value is 5.")
     private Float value;
 
     public RatingDTO(Rating rating) {

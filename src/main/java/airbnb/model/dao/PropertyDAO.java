@@ -20,8 +20,6 @@ public class PropertyDAO {
     private PropertyMapper propertyMapper;
     private PropertyFilterSQLQuery query;
 
-    //todo extra  - interface
-
     @Autowired
     @SneakyThrows
     public PropertyDAO(JdbcTemplate db, PropertyMapper propertyMapper,
@@ -67,8 +65,6 @@ public class PropertyDAO {
 
             return statement;
         };
-
-        // TODO ADD %%
 
         return db.query(preparedStatement, propertyMapper)
                 .stream().collect(Collectors.toSet());

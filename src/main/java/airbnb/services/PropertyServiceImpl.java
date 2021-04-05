@@ -47,15 +47,13 @@ public class PropertyServiceImpl implements PropertyService {
         this.userService = userService;
     }
 
-    //TODO VALIDATE DATA
     @Override
-    public Property add(AddRequestPropertyDTO addRequestPropertyDTO) {
-        User user = userService.getUserById(addRequestPropertyDTO.getHostId().intValue());
+    public Property add(Long userId, AddRequestPropertyDTO addRequestPropertyDTO) {
+        User user = userService.getUserById(userId.intValue());
         Property property = new Property(addRequestPropertyDTO);
         property.setHost(user);
         return propertyRepository.save(property);
     }
-
 
     @Override
     public Set<Property> findAllByUserId(Long userId) {
@@ -72,7 +70,7 @@ public class PropertyServiceImpl implements PropertyService {
         return property.get();
     }
 
-    //TODO paging and filter
+    //TODO paging
     @Override
     public Set<Property> getAll() {
         Iterable<Property> properties = propertyRepository.findAll();
@@ -86,13 +84,29 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO) {
         Property property = propertyRepository.findById(propertyId).get();
-        property.setName(editRequestPropertyDTO.getName());
-        property.setDescription(editRequestPropertyDTO.getDescription());
-        property.setPrice(editRequestPropertyDTO.getPrice());
+
+        if (editRequestPropertyDTO.getName() != null &&
+                !editRequestPropertyDTO.getName().isEmpty()) {
+            property.setName(editRequestPropertyDTO.getName());
+        }
+
+        if (editRequestPropertyDTO.getDescription() != null &&
+                !editRequestPropertyDTO.getDescription().isEmpty()) {
+            property.setDescription(editRequestPropertyDTO.getDescription());
+        }
+
+        if (editRequestPropertyDTO.getPrice() != null && editRequestPropertyDTO.getPrice() > 0) {
+            property.setPrice(editRequestPropertyDTO.getPrice());
+        } else {
+            throw new BadRequestException("Price can't be negative!");
+        }
+
+        propertyRepository.save(property);
+
         return property;
     }
 
-    //TODO paging and filter
+    //TODO paging
     @Override
     public Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
         return propertyDAO.filter(filterRequestPropertyDTO);
