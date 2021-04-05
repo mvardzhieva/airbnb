@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -50,7 +51,7 @@ public class PropertyMapper implements RowMapper<Property> {
         property.setCountry(setCountry(rs.getLong("country_id")));
         property.setName(rs.getString("name"));
         property.setDescription(rs.getString("description"));
-        property.setPrice(rs.getDouble("price"));
+        property.setPrice(BigDecimal.valueOf(rs.getDouble("price")));
         property.setLatitude(rs.getDouble("latitude"));
         property.setLongitude(rs.getDouble("longitude"));
         property.setCreatedAt(rs.getTimestamp("created_at")

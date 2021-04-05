@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 @Getter
 @Setter
@@ -16,5 +18,5 @@ public class EditRequestPropertyDTO {
 
     private String name;
     private String description;
-    private Double price;
+    private BigDecimal price;
 }

@@ -15,6 +15,8 @@ import java.util.Set;
 @Repository
 public interface PropertyRepository extends JpaRepository<Property, Long> {
 
+    // Haversine formula -  the shortest distance over the earth’s surface
+
     @Query(value = "Select p.* FROM properties p " +
             "WHERE ( 6371 * acos(cos(radians(?1)) * cos(radians(p.latitude)) * " +
             "cos(radians(p.longitude) - " +

@@ -4,9 +4,9 @@ import airbnb.model.dto.property.AddRequestPropertyDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;;
 import java.util.Set;
@@ -44,7 +44,7 @@ public class Property {
 
     private String name;
     private String description;
-    private Double price;
+    private BigDecimal price;
     private Double latitude;
     private Double longitude;
     private LocalDate createdAt;

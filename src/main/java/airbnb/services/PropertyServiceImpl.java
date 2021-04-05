@@ -95,7 +95,8 @@ public class PropertyServiceImpl implements PropertyService {
             property.setDescription(editRequestPropertyDTO.getDescription());
         }
 
-        if (editRequestPropertyDTO.getPrice() != null && editRequestPropertyDTO.getPrice() > 0) {
+        if (editRequestPropertyDTO.getPrice() != null &&
+                editRequestPropertyDTO.getPrice().doubleValue() > 0) {
             property.setPrice(editRequestPropertyDTO.getPrice());
         } else {
             throw new BadRequestException("Price can't be negative!");
