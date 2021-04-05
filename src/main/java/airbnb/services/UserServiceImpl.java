@@ -29,18 +29,15 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
     private PasswordEncoder encoder;
     private Validator validator;
-    private MediaService mediaService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                        PropertyService propertyService,
-                       UserDAO userDAO,
-                       MediaService mediaService) {
+                       UserDAO userDAO) {
 
         this.userRepository = userRepository;
         this.propertyService = propertyService;
         this.userDAO = userDAO;
-        this.mediaService = mediaService;
         this.encoder = new BCryptPasswordEncoder();
         this.validator = new Validator();
     }
@@ -100,7 +97,6 @@ public class UserServiceImpl implements UserService {
     public User delete(User user) {
         for (Property property : user.getProperties()) {
             propertyService.deleteById(property.getId());
-            mediaService.deleteAllByPropertyId(property.getId());
         }
         userRepository.deleteById(user.getId());
         return user;

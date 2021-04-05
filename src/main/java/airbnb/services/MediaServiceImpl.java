@@ -31,9 +31,12 @@ public class MediaServiceImpl implements MediaService {
     private PropertyService propertyService;
 
     @Autowired
-    public MediaServiceImpl(MediaRepository mediaRepository,
-                            PropertyService propertyService) {
+    public MediaServiceImpl(MediaRepository mediaRepository) {
         this.mediaRepository = mediaRepository;
+    }
+
+    @Autowired
+    public void setPropertyService(PropertyService propertyService) {
         this.propertyService = propertyService;
     }
 

@@ -10,6 +10,7 @@ import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.PropertyRepository;
 import airbnb.services.interfaces.LocationService;
+import airbnb.services.interfaces.MediaService;
 import airbnb.services.interfaces.PropertyService;
 import airbnb.services.interfaces.UserService;
 import com.maxmind.geoip2.record.Location;
@@ -32,6 +33,7 @@ public class PropertyServiceImpl implements PropertyService {
     private PropertyDAO propertyDAO;
     private UserService userService;
     private LocationService locationService;
+    private MediaService mediaService;
 
 
     @Autowired
@@ -41,6 +43,11 @@ public class PropertyServiceImpl implements PropertyService {
         this.propertyRepository = propertyRepository;
         this.propertyDAO = propertyDAO;
         this.locationService = locationService;
+    }
+
+    @Autowired
+    public void setMediaService(MediaService mediaService) {
+        this.mediaService = mediaService;
     }
 
     @Autowired
@@ -118,6 +125,7 @@ public class PropertyServiceImpl implements PropertyService {
     @Override
     public void deleteById(Long id) {
         try {
+            mediaService.deleteAllByPropertyId(id);
             propertyRepository.deleteById(id);
         } catch (Exception e) {
             throw new BadRequestException("Problem deleting property!");
