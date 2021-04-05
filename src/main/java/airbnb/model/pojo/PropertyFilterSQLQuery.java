@@ -17,7 +17,7 @@ public class PropertyFilterSQLQuery {
 
 
     public PropertyFilterSQLQuery withTypeId(Long typeId) {
-        if (typeId == null) {
+        if (typeId == null || typeId <= 0) {
             this.typeId = 1L;
         } else {
             this.typeId = typeId;
@@ -27,7 +27,7 @@ public class PropertyFilterSQLQuery {
     }
 
     public PropertyFilterSQLQuery withCityId(Long cityId) {
-        if (cityId == null) {
+        if (cityId == null || cityId <= 0) {
             this.cityId = 1L;
         } else {
             this.cityId = cityId;
@@ -37,7 +37,7 @@ public class PropertyFilterSQLQuery {
     }
 
     public PropertyFilterSQLQuery withCountryId(Long countryId) {
-        if (countryId == null) {
+        if (countryId == null || countryId <= 0) {
             this.countryId = 1L;
         } else {
             this.countryId = countryId;
@@ -67,8 +67,8 @@ public class PropertyFilterSQLQuery {
     }
 
     public PropertyFilterSQLQuery withMinPrice(Double minPrice) {
-        if (minPrice == null) {
-            this.minPrice = Double.MIN_VALUE;
+        if (minPrice == null || maxPrice >= 0) {
+            this.minPrice = 0.0;
         } else {
             this.minPrice = minPrice;
         }
@@ -77,7 +77,7 @@ public class PropertyFilterSQLQuery {
     }
 
     public PropertyFilterSQLQuery withMaxPrice(Double maxPrice) {
-        if (maxPrice == null) {
+        if (maxPrice == null || maxPrice <= 0) {
             this.maxPrice = Double.MAX_VALUE;
         } else {
             this.maxPrice = maxPrice;
