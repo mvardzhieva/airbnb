@@ -3,7 +3,6 @@ package airbnb.controller;
 import airbnb.model.pojo.Media;
 import airbnb.services.interfaces.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -49,7 +48,8 @@ public class MediaController extends AbstractController {
         return mediaService.getAll();
     }
 
-    @PutMapping("users/{userId}/properties/{propertyId}/media")
+    @PostMapping("users/{userId}/properties/{propertyId}/media")
+    @ResponseStatus(HttpStatus.CREATED)
     public Media upload(@PathVariable Long userId,
                         @PathVariable Long propertyId,
                         HttpSession session,
@@ -59,6 +59,7 @@ public class MediaController extends AbstractController {
 
         return mediaService.upload(propertyId, file);
     }
+
 
     @DeleteMapping("users/{userId}/properties/{propertyId}/media")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)

@@ -62,7 +62,8 @@ public class PropertyController extends AbstractController {
         return propertyService.filter(filterRequestPropertyDTO);
     }
 
-    @PutMapping("users/{userId}/properties")
+    @PostMapping("users/{userId}/properties")
+    @ResponseStatus(HttpStatus.CREATED)
     public Property add(@RequestBody @Valid AddRequestPropertyDTO addRequestPropertyDTO,
                         HttpSession session, @PathVariable Long userId) {
 
@@ -70,7 +71,7 @@ public class PropertyController extends AbstractController {
         return propertyService.add(userId, addRequestPropertyDTO);
     }
 
-    @PostMapping("users/{userId}/properties/{propertyId}")
+    @PutMapping("users/{userId}/properties/{propertyId}")
     public Property edit(@PathVariable Long userId,
                          @PathVariable Long propertyId,
                          @RequestBody @Valid EditRequestPropertyDTO editRequestPropertyDTO,

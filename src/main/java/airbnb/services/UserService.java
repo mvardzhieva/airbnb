@@ -8,6 +8,7 @@ import airbnb.model.dto.user.*;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
+import airbnb.services.interfaces.MediaService;
 import airbnb.services.interfaces.PropertyService;
 import airbnb.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +28,17 @@ public class UserService {
     private UserDAO userDAO;
     private PasswordEncoder encoder;
     private Validator validator;
+    private MediaService mediaService;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        PropertyService propertyService,
-                       UserDAO userDAO) {
+                       UserDAO userDAO,
+                       MediaService mediaService) {
         this.userRepository = userRepository;
         this.propertyService = propertyService;
         this.userDAO = userDAO;
+        this.mediaService = mediaService;
         this.encoder = new BCryptPasswordEncoder();
         this.validator = new Validator();
     }
@@ -89,6 +93,7 @@ public class UserService {
     public User delete(User user) {
         for (Property property : user.getProperties()) {
             propertyService.deleteById(property.getId());
+            mediaService.deleteAllByPropertyId(property.getId());
         }
         userRepository.deleteById(user.getId());
         return user;

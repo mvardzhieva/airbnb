@@ -35,7 +35,8 @@ public class RatingController extends AbstractController {
         return ratingService.findAvgByPropertyId(id);
     }
 
-    @PutMapping("users/{userId}/properties/{propertyId}/ratings")
+    @PostMapping("users/{userId}/properties/{propertyId}/ratings")
+    @ResponseStatus(HttpStatus.CREATED)
     public RatingDTO add(@PathVariable Long userId,
                          @PathVariable Long propertyId,
                          @Valid @RequestBody RatingDTO ratingDTO,
@@ -49,7 +50,7 @@ public class RatingController extends AbstractController {
         return new RatingDTO(rating);
     }
 
-    @PostMapping("users/{userId}/properties/{propertyId}/ratings/{ratingId}")
+    @PutMapping("users/{userId}/properties/{propertyId}/ratings/{ratingId}")
     public RatingDTO edit(@PathVariable Long userId,
                           @PathVariable Long propertyId,
                           @PathVariable Long ratingId,
