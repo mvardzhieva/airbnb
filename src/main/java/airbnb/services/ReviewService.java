@@ -11,7 +11,6 @@ import airbnb.model.pojo.Review;
 import airbnb.model.repositories.BookingRepository;
 import airbnb.model.repositories.PropertyRepository;
 import airbnb.model.repositories.ReviewRepository;
-import airbnb.model.repositories.BookingStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +23,14 @@ import java.util.Optional;
 public class ReviewService {
     private BookingRepository bookingRepository;
     private ReviewRepository reviewRepository;
-    private BookingStatusRepository statusRepository;
     private PropertyRepository propertyRepository;
 
     @Autowired
-    public ReviewService(BookingRepository bookingRepository, ReviewRepository reviewRepository,
-                         BookingStatusRepository statusRepository, PropertyRepository propertyRepository) {
+    public ReviewService(BookingRepository bookingRepository,
+                         ReviewRepository reviewRepository,
+                         PropertyRepository propertyRepository) {
         this.bookingRepository = bookingRepository;
         this.reviewRepository = reviewRepository;
-        this.statusRepository = statusRepository;
         this.propertyRepository = propertyRepository;
     }
 
@@ -97,7 +95,6 @@ public class ReviewService {
                 reviews.add(review);
             }
         }
-
         return Collections.unmodifiableList(reviews);
     }
 }

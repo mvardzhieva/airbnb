@@ -3,6 +3,7 @@ package airbnb.services;
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.exceptions.property.PropertyNotAvailableException;
+import airbnb.exceptions.user.InvalidUserInputException;
 import airbnb.model.dao.BookingDAO;
 import airbnb.model.dto.booking.AddRequestBookingDTO;
 import airbnb.model.pojo.*;
@@ -25,7 +26,6 @@ public class BookingService {
     private PropertyRepository propertyRepository;
     private BookingStatusRepository bookingStatusRepository;
     private BookingDAO bookingDAO;
-    private Validator validator;
 
     @Autowired
     public BookingService(BookingRepository bookingRepository,
@@ -36,11 +36,12 @@ public class BookingService {
         this.propertyRepository = propertyRepository;
         this.bookingStatusRepository = bookingStatusRepository;
         this.bookingDAO = bookingDAO;
-        this.validator = new Validator();
     }
 
     public Booking add(User user, AddRequestBookingDTO addBookingDTO) throws SQLException {
-        validator.validateBookingDates(addBookingDTO.getStartDate(), addBookingDTO.getEndDate());
+        if (addBookingDTO.getEndDate().isBefore(addBookingDTO.getStartDate())) {
+            throw new InvalidUserInputException("You have entered invalid dates.");
+        }
         Optional<Property> optionalProperty = propertyRepository.findById(addBookingDTO.getPropertyId());
         if (optionalProperty.isEmpty()) {
             throw new NotFoundException("Property with this id does not exists.");

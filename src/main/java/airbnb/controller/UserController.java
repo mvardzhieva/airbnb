@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -23,7 +24,7 @@ public class UserController extends AbstractController {
     }
 
     @PutMapping("/users")
-    public RegisterResponseUserDTO register(@RequestBody RegisterRequestUserDTO requestUserDTO, HttpSession session)
+    public RegisterResponseUserDTO register(@Valid @RequestBody RegisterRequestUserDTO requestUserDTO, HttpSession session)
             throws IOException, InterruptedException {
         RegisterResponseUserDTO responseUserDTO = new RegisterResponseUserDTO(userService.register(requestUserDTO));
         sessionManager.loginUser(session, responseUserDTO.getId());
@@ -31,7 +32,7 @@ public class UserController extends AbstractController {
     }
 
     @PostMapping("/users")
-    public UserProfileDTO login(@RequestBody LoginUserDTO loginUserDTO, HttpSession session) {
+    public UserProfileDTO login(@Valid @RequestBody LoginUserDTO loginUserDTO, HttpSession session) {
         UserProfileDTO userProfileDTO = new UserProfileDTO(userService.login(loginUserDTO));
         sessionManager.loginUser(session, userProfileDTO.getId());
         return userProfileDTO;
@@ -49,7 +50,7 @@ public class UserController extends AbstractController {
 
     @PostMapping("/users/{id}")
     public UserProfileDTO edit(@PathVariable int id,
-                               @RequestBody EditUserDTO editUserDTO,
+                               @Valid @RequestBody EditUserDTO editUserDTO,
                                HttpSession session) throws IOException, InterruptedException {
         User user = sessionManager.getLoggedUser(session);
         if (user.getId() != id) {

@@ -65,7 +65,7 @@ public class UserService {
 
     public User edit(User user, EditUserDTO editUserDTO) throws IOException, InterruptedException {
         validator.validateUserInput(editUserDTO.getFirstName(), editUserDTO.getLastName(),
-                editUserDTO.getEmail(), editUserDTO.getPhoneNumber());
+                editUserDTO.getPhoneNumber());
         if (!user.getEmail().equals(editUserDTO.getEmail())) {
             checkIfEmailExists(editUserDTO.getEmail());
             user.setEmail(editUserDTO.getEmail());
@@ -96,7 +96,7 @@ public class UserService {
 
     private void validateRegisterUserData(RegisterRequestUserDTO requestUserDTO) throws IOException, InterruptedException {
         validator.validateUserInput(requestUserDTO.getFirstName(), requestUserDTO.getLastName(),
-                requestUserDTO.getEmail(), requestUserDTO.getPhoneNumber());
+                requestUserDTO.getPhoneNumber());
         checkIfEmailExists(requestUserDTO.getEmail());
         validator.validatePassword(requestUserDTO.getPassword());
         if (!requestUserDTO.getPassword().equals(requestUserDTO.getConfirmedPassword())) {

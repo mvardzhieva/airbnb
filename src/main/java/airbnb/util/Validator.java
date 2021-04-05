@@ -1,9 +1,7 @@
 package airbnb.util;
 
-import airbnb.AirbnbApplication;
 import airbnb.exceptions.user.CompromisedPasswordException;
 import airbnb.exceptions.user.InvalidUserInputException;
-import org.apache.logging.log4j.LogManager;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
@@ -13,7 +11,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
 
 public class Validator {
     private static final int STATUS_CODE_COMPROMISED = 200;
@@ -38,16 +35,9 @@ public class Validator {
         }
     }
 
-    public void validateBookingDates(LocalDate startDate, LocalDate endDate) {
-        if (startDate.isBefore(LocalDate.now()) || endDate.isBefore(startDate)) {
-            throw new InvalidUserInputException("You have entered invalid dates.");
-        }
-    }
-
-    public void validateUserInput(String firstName, String lastName, String email, String phone) {
+    public void validateUserInput(String firstName, String lastName, String phone) {
         validateName(firstName);
         validateName(lastName);
-        validateEmail(email);
         validatePhoneNumber(phone);
     }
 
@@ -55,13 +45,6 @@ public class Validator {
         String nameValidationRegex = "([A-Z][a-z]+([ -][A-Z][a-z]+)*){1,99}$";
         if (!name.matches(nameValidationRegex)) {
             throw new InvalidUserInputException("Invalid name syntax.");
-        }
-    }
-
-    private void validateEmail(String email) {
-        String emailValidationRegex = "^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-        if (!email.matches(emailValidationRegex)) {
-            throw new InvalidUserInputException("Invalid email.");
         }
     }
 

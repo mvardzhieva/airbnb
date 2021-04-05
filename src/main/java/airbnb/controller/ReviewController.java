@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class ReviewController extends AbstractController {
     }
 
     @PutMapping("/users/{id}/properties/reviews")
-    public Review add(@PathVariable int id, @RequestBody AddRequestReviewDTO requestReviewDTO, HttpSession session) {
+    public Review add(@PathVariable int id, @Valid @RequestBody AddRequestReviewDTO requestReviewDTO, HttpSession session) {
         User user = sessionManager.getLoggedUser(session);
         if (user.getId() != id) {
             throw new BadRequestException("You cannot add review on behalf of another user.");
@@ -35,7 +36,7 @@ public class ReviewController extends AbstractController {
 
     @PostMapping("/users/{user_id}/properties/reviews/{review_id}")
     public Review edit(@PathVariable(name = "user_id") int userId, @PathVariable(name = "review_id") int reviewId,
-                       @RequestBody EditReviewDTO editReviewDTO, HttpSession session) {
+                       @Valid @RequestBody EditReviewDTO editReviewDTO, HttpSession session) {
         User user = sessionManager.getLoggedUser(session);
         if (user.getId() != userId) {
             throw new BadRequestException("You cannot edit another user's review.");

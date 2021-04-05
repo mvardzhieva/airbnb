@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class BookingController extends AbstractController {
 
     @PutMapping("/users/{id}/bookings")
     public Booking add(@PathVariable int id,
-                       @RequestBody AddRequestBookingDTO addBookingDTO,
+                       @Valid @RequestBody AddRequestBookingDTO addBookingDTO,
                        HttpSession session) throws SQLException {
         User user = sessionManager.getLoggedUser(session);
         if (user.getId() != id) {
@@ -35,7 +36,9 @@ public class BookingController extends AbstractController {
     }
 
     @GetMapping("/users/{user_id}/bookings/{booking_id}")
-    public Booking getById(@PathVariable(name = "user_id") int userId, @PathVariable(name = "booking_id") Long bookingId, HttpSession session) {
+    public Booking getById(@PathVariable(name = "user_id") int userId,
+                           @PathVariable(name = "booking_id") Long bookingId,
+                           HttpSession session) {
         User user = sessionManager.getLoggedUser(session);
         if (user.getId() != userId) {
             throw new BadRequestException("You cannot access another user's booking.");
