@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
 
 @Component
 @Data
@@ -25,8 +26,8 @@ public class FilterRequestPropertyDTO {
     private String description;
 
     @Positive
-    private Double minPrice;
+    private BigDecimal minPrice;
 
     @Positive
-    private Double maxPrice;
+    private BigDecimal maxPrice;
 }

@@ -3,6 +3,8 @@ package airbnb.model.pojo;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 @Data
 public class PropertyFilterSQLQuery {
@@ -12,8 +14,8 @@ public class PropertyFilterSQLQuery {
     private Long countryId;
     private String name;
     private String description;
-    private Double minPrice;
-    private Double maxPrice;
+    private BigDecimal minPrice;
+    private BigDecimal maxPrice;
 
 
     public PropertyFilterSQLQuery withTypeId(Long typeId) {
@@ -66,9 +68,9 @@ public class PropertyFilterSQLQuery {
         return this;
     }
 
-    public PropertyFilterSQLQuery withMinPrice(Double minPrice) {
-        if (minPrice == null || maxPrice >= 0) {
-            this.minPrice = 0.0;
+    public PropertyFilterSQLQuery withMinPrice(BigDecimal minPrice) {
+        if (minPrice == null || maxPrice.doubleValue() >= 0) {
+            this.minPrice = BigDecimal.valueOf(0);
         } else {
             this.minPrice = minPrice;
         }
@@ -76,9 +78,9 @@ public class PropertyFilterSQLQuery {
         return this;
     }
 
-    public PropertyFilterSQLQuery withMaxPrice(Double maxPrice) {
-        if (maxPrice == null || maxPrice <= 0) {
-            this.maxPrice = Double.MAX_VALUE;
+    public PropertyFilterSQLQuery withMaxPrice(BigDecimal maxPrice) {
+        if (maxPrice == null || maxPrice.doubleValue() <= 0) {
+            this.maxPrice = BigDecimal.valueOf(Integer.MAX_VALUE);
         } else {
             this.maxPrice = maxPrice;
         }

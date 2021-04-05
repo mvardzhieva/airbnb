@@ -60,8 +60,8 @@ public class PropertyDAO {
             statement.setLong(3, sqlQuery.getCountryId());
             statement.setString(4, sqlQuery.getName());
             statement.setString(5, sqlQuery.getDescription());
-            statement.setDouble(6, sqlQuery.getMinPrice());
-            statement.setDouble(7, sqlQuery.getMaxPrice());
+            statement.setDouble(6, sqlQuery.getMinPrice().doubleValue());
+            statement.setDouble(7, sqlQuery.getMaxPrice().doubleValue());
 
             return statement;
         };
