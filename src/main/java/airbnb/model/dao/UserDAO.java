@@ -33,7 +33,6 @@ public class UserDAO {
                 "GROUP BY users.id\n" +
                 "ORDER BY SUM(DATEDIFF(bookings.end_date, bookings.start_date) * properties.price) DESC\n" +
                 "LIMIT 1;";
-
         try (Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet rows = statement.executeQuery();

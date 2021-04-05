@@ -3,7 +3,7 @@ package airbnb.controller;
 import airbnb.exceptions.BadRequestException;
 import airbnb.model.dto.user.*;
 import airbnb.model.pojo.User;
-import airbnb.services.UserService;
+import airbnb.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,12 +68,12 @@ public class UserController extends AbstractController {
         return new UserProfileDTO(userService.delete(user));
     }
 
-    @GetMapping("/users/earnedMostMoney")
+    @GetMapping("/users/earned-most-money")
     public UserProfileDTO getUserEarnedTheMostMoney() throws SQLException {
         return new UserProfileDTO(userService.getUserEarnedTheMostMoney());
     }
 
-    @GetMapping("/users/mostBookings")
+    @GetMapping("/users/most-bookings")
     public UserProfileDTO getUserWithMostBookings() throws SQLException {
         return new UserProfileDTO(userService.getUserWithMostBookings());
     }

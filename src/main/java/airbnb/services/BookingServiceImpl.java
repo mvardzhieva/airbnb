@@ -10,6 +10,7 @@ import airbnb.model.pojo.*;
 import airbnb.model.repositories.BookingRepository;
 import airbnb.model.repositories.PropertyRepository;
 import airbnb.model.repositories.BookingStatusRepository;
+import airbnb.services.interfaces.BookingService;
 import airbnb.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,23 +22,24 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BookingService {
+public class BookingServiceImpl implements BookingService {
     private BookingRepository bookingRepository;
     private PropertyRepository propertyRepository;
     private BookingStatusRepository bookingStatusRepository;
     private BookingDAO bookingDAO;
 
     @Autowired
-    public BookingService(BookingRepository bookingRepository,
-                          PropertyRepository propertyRepository,
-                          BookingStatusRepository bookingStatusRepository,
-                          BookingDAO bookingDAO) {
+    public BookingServiceImpl(BookingRepository bookingRepository,
+                              PropertyRepository propertyRepository,
+                              BookingStatusRepository bookingStatusRepository,
+                              BookingDAO bookingDAO) {
         this.bookingRepository = bookingRepository;
         this.propertyRepository = propertyRepository;
         this.bookingStatusRepository = bookingStatusRepository;
         this.bookingDAO = bookingDAO;
     }
 
+    @Override
     public Booking add(User user, AddRequestBookingDTO addBookingDTO) throws SQLException {
         if (addBookingDTO.getEndDate().isBefore(addBookingDTO.getStartDate())) {
             throw new InvalidUserInputException("You have entered invalid dates.");
@@ -47,6 +49,9 @@ public class BookingService {
             throw new NotFoundException("Property with this id does not exists.");
         }
         Property property = optionalProperty.get();
+        if (property.getHost().getId() == user.getId()) {
+            throw new BadRequestException("You cannot book property if you are the host.");
+        }
         if (bookingDAO.isPropertyAlreadyBooked(property.getId(), addBookingDTO.getStartDate(), addBookingDTO.getEndDate())) {
             throw new PropertyNotAvailableException("This property is not available on these dates.");
         }
@@ -58,6 +63,7 @@ public class BookingService {
         return booking;
     }
 
+    @Override
     public Booking getBookingById(int userId, Long bookingId) {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) {
@@ -71,6 +77,7 @@ public class BookingService {
         return booking.get();
     }
 
+    @Override
     public List<Booking> getUpcomingBookings(User user) {
         BookingStatus upcomingStatus = bookingStatusRepository
                 .findByName(BookingStatusType.UPCOMING);
@@ -79,6 +86,7 @@ public class BookingService {
         return Collections.unmodifiableList(bookings);
     }
 
+    @Override
     public List<Booking> getFinishedBookings(User user) {
         BookingStatus finishedStatus = bookingStatusRepository
                 .findByName(BookingStatusType.FINISHED);
@@ -87,6 +95,7 @@ public class BookingService {
         return Collections.unmodifiableList(bookings);
     }
 
+    @Override
     public List<Booking> getCurrentBookings(User user) {
         BookingStatus currentStatus = bookingStatusRepository
                 .findByName(BookingStatusType.CURRENT);
@@ -95,6 +104,7 @@ public class BookingService {
         return Collections.unmodifiableList(bookings);
     }
 
+    @Override
     public Booking cancel(int userId, Long bookingId) {
         Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
         if (optionalBooking.isEmpty()) {

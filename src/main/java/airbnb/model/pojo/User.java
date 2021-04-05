@@ -1,6 +1,5 @@
 package airbnb.model.pojo;
 
-import airbnb.util.GenderConverter;
 import airbnb.model.dto.user.RegisterRequestUserDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -30,7 +29,7 @@ public class User {
     private LocalDate dateOfBirth;
     private String address;
 
-    @Convert(converter = GenderConverter.class)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private String governmentId;
     private LocalDateTime createdAt;
