@@ -5,10 +5,11 @@ import airbnb.exceptions.user.NotMatchingPasswordsException;
 import airbnb.exceptions.user.UserNotFoundException;
 import airbnb.model.dao.UserDAO;
 import airbnb.model.dto.user.*;
+import airbnb.model.pojo.Booking;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
+import airbnb.model.repositories.BookingRepository;
 import airbnb.model.repositories.UserRepository;
-import airbnb.services.interfaces.MediaService;
 import airbnb.services.interfaces.PropertyService;
 import airbnb.services.interfaces.UserService;
 import airbnb.util.Validator;
@@ -26,17 +27,20 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private PropertyService propertyService;
+    private BookingRepository bookingRepository;
     private UserDAO userDAO;
     private PasswordEncoder encoder;
     private Validator validator;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                       PropertyService propertyService,
-                       UserDAO userDAO) {
+                           PropertyService propertyService,
+                           UserDAO userDAO,
+                           BookingRepository bookingRepository) {
 
         this.userRepository = userRepository;
         this.propertyService = propertyService;
+        this.bookingRepository = bookingRepository;
         this.userDAO = userDAO;
         this.encoder = new BCryptPasswordEncoder();
         this.validator = new Validator();
@@ -97,6 +101,9 @@ public class UserServiceImpl implements UserService {
     public User delete(User user) {
         for (Property property : user.getProperties()) {
             propertyService.deleteById(property.getId());
+        }
+        for (Booking booking : user.getBookings()) {
+            bookingRepository.deleteById(booking.getId());
         }
         userRepository.deleteById(user.getId());
         return user;

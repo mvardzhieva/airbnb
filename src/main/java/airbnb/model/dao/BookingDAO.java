@@ -1,7 +1,5 @@
 package airbnb.model.dao;
 
-import airbnb.AirbnbApplication;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -27,8 +25,8 @@ public class BookingDAO {
                 "JOIN bookings\n" +
                 "ON properties.id = bookings.property_id\n" +
                 "WHERE properties.id = ?\n" +
-                "AND ? BETWEEN bookings.start_date AND bookings.end_date\n" +
-                "OR ? BETWEEN bookings.start_date AND bookings.end_date;";
+                "AND ((? BETWEEN bookings.start_date AND bookings.end_date)\n" +
+                "OR (? BETWEEN bookings.start_date AND bookings.end_date));";
         try (Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, propertyId);

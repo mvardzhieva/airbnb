@@ -62,14 +62,14 @@ public class PropertyFilterSQLQuery {
         if (description == null || description.isEmpty()) {
             this.description = "%%";
         } else {
-            this.description = "%"+ description + "%";
+            this.description = "%" + description + "%";
         }
 
         return this;
     }
 
     public PropertyFilterSQLQuery withMinPrice(BigDecimal minPrice) {
-        if (minPrice == null || maxPrice.doubleValue() >= 0) {
+        if (minPrice == null || minPrice.doubleValue() >= 0) {
             this.minPrice = BigDecimal.valueOf(0);
         } else {
             this.minPrice = minPrice;
