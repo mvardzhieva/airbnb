@@ -9,6 +9,7 @@ import airbnb.model.pojo.Rating;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.RatingRepository;
 import airbnb.services.interfaces.RatingService;
+import airbnb.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,13 @@ import java.util.List;
 public class RatingServiceImpl implements RatingService {
 
     private RatingRepository ratingRepository;
-    private BookingService bookingService;
+    private BookingServiceImpl bookingService;
     private UserService userService;
     private PropertyServiceImpl propertyService;
 
     @Autowired
     public RatingServiceImpl(RatingRepository ratingRepository,
-                             BookingService bookingService,
+                             BookingServiceImpl bookingService,
                              UserService userService,
                              PropertyServiceImpl propertyService) {
         this.ratingRepository = ratingRepository;

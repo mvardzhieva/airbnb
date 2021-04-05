@@ -11,6 +11,7 @@ import airbnb.model.pojo.User;
 import airbnb.model.repositories.PropertyRepository;
 import airbnb.services.interfaces.LocationService;
 import airbnb.services.interfaces.PropertyService;
+import airbnb.services.interfaces.UserService;
 import com.maxmind.geoip2.record.Location;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;

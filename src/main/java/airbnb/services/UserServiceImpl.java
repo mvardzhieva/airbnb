@@ -9,6 +9,7 @@ import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
 import airbnb.model.repositories.UserRepository;
 import airbnb.services.interfaces.PropertyService;
+import airbnb.services.interfaces.UserService;
 import airbnb.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,7 +22,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private PropertyService propertyService;
     private UserDAO userDAO;
@@ -29,9 +30,9 @@ public class UserService {
     private Validator validator;
 
     @Autowired
-    public UserService(UserRepository userRepository,
-                       PropertyService propertyService,
-                       UserDAO userDAO) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PropertyService propertyService,
+                           UserDAO userDAO) {
         this.userRepository = userRepository;
         this.propertyService = propertyService;
         this.userDAO = userDAO;
@@ -39,6 +40,7 @@ public class UserService {
         this.validator = new Validator();
     }
 
+    @Override
     public User register(RegisterRequestUserDTO requestUserDTO) throws IOException, InterruptedException {
         validateRegisterUserData(requestUserDTO);
         requestUserDTO.setPassword(encoder.encode(requestUserDTO.getPassword()));
@@ -47,6 +49,7 @@ public class UserService {
         return user;
     }
 
+    @Override
     public User login(LoginUserDTO loginUserDTO) {
         User user = userRepository.findByEmail(loginUserDTO.getEmail());
         if (user == null || !encoder.matches(loginUserDTO.getPassword(), user.getPassword())) {
@@ -55,6 +58,7 @@ public class UserService {
         return user;
     }
 
+    @Override
     public User getUserById(int id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
@@ -63,6 +67,7 @@ public class UserService {
         throw new UserNotFoundException("User with this id is not registered.");
     }
 
+    @Override
     public User edit(User user, EditUserDTO editUserDTO) throws IOException, InterruptedException {
         validator.validateUserInput(editUserDTO.getFirstName(), editUserDTO.getLastName(),
                 editUserDTO.getPhoneNumber());
@@ -85,6 +90,7 @@ public class UserService {
         return user;
     }
 
+    @Override
     @Transactional
     public User delete(User user) {
         for (Property property : user.getProperties()) {
@@ -92,6 +98,16 @@ public class UserService {
         }
         userRepository.deleteById(user.getId());
         return user;
+    }
+
+    @Override
+    public User getUserEarnedTheMostMoney() throws SQLException {
+        return userDAO.getUserEarnedMostMoneyFromBookingForLastYear();
+    }
+
+    @Override
+    public User getUserWithMostBookings() throws SQLException {
+        return userDAO.getUserWithMostFinishedBookingForLastYear();
     }
 
     private void validateRegisterUserData(RegisterRequestUserDTO requestUserDTO) throws IOException, InterruptedException {
@@ -110,11 +126,4 @@ public class UserService {
         }
     }
 
-    public User getUserEarnedTheMostMoney() throws SQLException {
-        return userDAO.getUserEarnedMostMoneyFromBookingForLastYear();
-    }
-
-    public User getUserWithMostBookings() throws SQLException {
-        return userDAO.getUserEarnedMostMoneyFromBookingForLastYear();
-    }
 }

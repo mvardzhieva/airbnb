@@ -11,6 +11,7 @@ import airbnb.model.pojo.Review;
 import airbnb.model.repositories.BookingRepository;
 import airbnb.model.repositories.PropertyRepository;
 import airbnb.model.repositories.ReviewRepository;
+import airbnb.services.interfaces.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,20 +21,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ReviewService {
+public class ReviewServiceImpl implements ReviewService {
     private BookingRepository bookingRepository;
     private ReviewRepository reviewRepository;
     private PropertyRepository propertyRepository;
 
     @Autowired
-    public ReviewService(BookingRepository bookingRepository,
-                         ReviewRepository reviewRepository,
-                         PropertyRepository propertyRepository) {
+    public ReviewServiceImpl(BookingRepository bookingRepository,
+                             ReviewRepository reviewRepository,
+                             PropertyRepository propertyRepository) {
         this.bookingRepository = bookingRepository;
         this.reviewRepository = reviewRepository;
         this.propertyRepository = propertyRepository;
     }
 
+    @Override
     public Review add(int userId, AddRequestReviewDTO requestReviewDTO) {
         Optional<Booking> booking = bookingRepository.findById(requestReviewDTO.getBookingId());
         if (booking.isEmpty()) {
@@ -52,6 +54,7 @@ public class ReviewService {
         return review;
     }
 
+    @Override
     public Review edit(int userId, int reviewId, EditReviewDTO editReviewDTO) {
         Optional<Review> optionalReview = reviewRepository.findById(reviewId);
         if (optionalReview.isEmpty()) {
@@ -67,6 +70,7 @@ public class ReviewService {
         return review;
     }
 
+    @Override
     public Review delete(int userId, int reviewId) {
         Optional<Review> review = reviewRepository.findById(reviewId);
         if (review.isEmpty()) {
@@ -82,6 +86,7 @@ public class ReviewService {
         return deletedReview;
     }
 
+    @Override
     public List<Review> getAllReviewsForProperty(Long propertyId) {
         Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
         if (optionalProperty.isEmpty()) {

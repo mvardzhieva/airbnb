@@ -4,7 +4,7 @@ import airbnb.exceptions.BadRequestException;
 import airbnb.model.dto.booking.AddRequestBookingDTO;
 import airbnb.model.pojo.Booking;
 import airbnb.model.pojo.User;
-import airbnb.services.BookingService;
+import airbnb.services.interfaces.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
