@@ -18,7 +18,6 @@ public class LocationServiceImpl implements LocationService {
 
     private DatabaseReader dbReader;
 
-    //TODO REFACTOR
     public LocationServiceImpl() throws IOException {
         File database = new File("src/main/resources/GeoLite2-City.mmdb");
         dbReader = new DatabaseReader.Builder(database).build();
@@ -36,6 +35,4 @@ public class LocationServiceImpl implements LocationService {
 
         return response.getLocation();
     }
-
-
 }

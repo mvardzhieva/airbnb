@@ -29,9 +29,6 @@ public class MediaController extends AbstractController {
         this.sessionManager = sessionManager;
     }
 
-    //TODO MEDIA DTO - VALIDATE THAT USER HAS MEDIA !!!!!!!!!!!
-
-
     @GetMapping(value = "users/properties/media/{id}")
     public ResponseEntity<byte[]> downloadByMediaId(@PathVariable Long id) {
         HttpHeaders headers = new HttpHeaders();

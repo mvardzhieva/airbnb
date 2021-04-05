@@ -50,13 +50,11 @@ public class RatingServiceImpl implements RatingService {
     public Rating findAvgByPropertyId(Long propertyId) {
         List<Rating> ratings = ratingRepository.findAllByPropertyId(propertyId);
         Property property = propertyService.getByPropertyId(propertyId);
-        Rating rating = new Rating(0L, 0f, 0f, 0f, 0f, 0f, 0f, property);
+        Rating rating = new Rating(propertyId, 0f, 0f, 0f, 0f, 0f, 0f, property);
 
-        //TODO DTO
         if (ratings.isEmpty()) {
             return rating;
         }
-
 
         for (Rating r : ratings) {
             rating.setAccuracy(rating.getAccuracy() + r.getAccuracy());
@@ -89,8 +87,6 @@ public class RatingServiceImpl implements RatingService {
                 return ratingRepository.save(rating);
             }
         }
-
-        //TODO Validate 1 rating per booking or all in one place
 
         throw new BadRequestException("You need finished booking for that " +
                 "property to be able to add rating!");
@@ -130,7 +126,4 @@ public class RatingServiceImpl implements RatingService {
             throw new NotFoundException("Rating not found!");
         }
     }
-
-
-    //TODO REFACTOR FOR .isEmpty() and findallratingsbypropertyid
 }

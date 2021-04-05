@@ -18,8 +18,6 @@ public class RatingController extends AbstractController {
     private RatingService ratingService;
     private SessionManager sessionManager;
 
-    //TODO VALIDATE
-
     @Autowired
     public RatingController(RatingService ratingService,
                             SessionManager sessionManager) {
@@ -32,13 +30,11 @@ public class RatingController extends AbstractController {
         return ratingService.findAllByPropertyId(id);
     }
 
-    //TODO FIX
     @PostMapping("users/properties/{id}/ratings")
     public Rating findAvgByPropertyId(@PathVariable Long id) {
         return ratingService.findAvgByPropertyId(id);
     }
 
-    //TODO FIX
     @PutMapping("users/{userId}/properties/{propertyId}/ratings")
     public RatingDTO add(@PathVariable Long userId,
                          @PathVariable Long propertyId,

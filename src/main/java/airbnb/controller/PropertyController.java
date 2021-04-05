@@ -24,7 +24,6 @@ public class PropertyController extends AbstractController {
     private SessionManager sessionManager;
     private MediaService mediaService;
 
-
     @Autowired
     public PropertyController(PropertyService PropertyService,
                               SessionManager sessionManager,
@@ -33,9 +32,6 @@ public class PropertyController extends AbstractController {
         this.sessionManager = sessionManager;
         this.mediaService = mediaService;
     }
-
-
-    //TODO RESPONSE STATUSES, DTO AND URLS, REFACTOR
 
     //TODO paging
     @GetMapping("users/properties/all")
