@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -41,7 +42,7 @@ public class RatingController extends AbstractController {
     @PutMapping("users/{userId}/properties/{propertyId}/ratings")
     public RatingDTO add(@PathVariable Long userId,
                          @PathVariable Long propertyId,
-                         @RequestBody RatingDTO ratingDTO,
+                         @Valid @RequestBody RatingDTO ratingDTO,
                          HttpSession session) {
 
         sessionManager.validate(userId, session);

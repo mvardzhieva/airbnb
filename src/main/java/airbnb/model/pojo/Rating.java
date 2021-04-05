@@ -20,6 +20,7 @@ public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Float cleanliness;
     private Float communication;
     private Float checkIn;

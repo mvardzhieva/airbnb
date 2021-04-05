@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import javax.validation.Valid;
 import java.util.Set;
 
 @RestController
@@ -62,23 +62,22 @@ public class PropertyController extends AbstractController {
     }
 
     @PostMapping("users/properties/filter")
-    public Set<Property> filter(@RequestBody FilterRequestPropertyDTO filterRequestPropertyDTO) {
+    public Set<Property> filter(@RequestBody @Valid FilterRequestPropertyDTO filterRequestPropertyDTO) {
         return propertyService.filter(filterRequestPropertyDTO);
     }
 
-    @PutMapping("users/{id}/properties")
-    public Property add(@RequestBody AddRequestPropertyDTO addRequestPropertyDTO,
-                        HttpSession session, @PathVariable Long id) {
+    @PutMapping("users/{userId}/properties")
+    public Property add(@RequestBody @Valid AddRequestPropertyDTO addRequestPropertyDTO,
+                        HttpSession session, @PathVariable Long userId) {
 
-        sessionManager.validate(id, session);
-        addRequestPropertyDTO.setHostId(id);
-        return propertyService.add(addRequestPropertyDTO);
+        sessionManager.validate(userId, session);
+        return propertyService.add(userId, addRequestPropertyDTO);
     }
 
     @PostMapping("users/{userId}/properties/{propertyId}")
     public Property edit(@PathVariable Long userId,
                          @PathVariable Long propertyId,
-                         @RequestBody EditRequestPropertyDTO editRequestPropertyDTO,
+                         @RequestBody @Valid EditRequestPropertyDTO editRequestPropertyDTO,
                          HttpSession session) {
 
         sessionManager.validate(userId, session);

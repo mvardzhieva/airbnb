@@ -52,6 +52,7 @@ public class RatingServiceImpl implements RatingService {
         Property property = propertyService.getByPropertyId(propertyId);
         Rating rating = new Rating(0L, 0f, 0f, 0f, 0f, 0f, 0f, property);
 
+        //TODO DTO
         if (ratings.isEmpty()) {
             return rating;
         }
@@ -61,7 +62,7 @@ public class RatingServiceImpl implements RatingService {
             rating.setAccuracy(rating.getAccuracy() + r.getAccuracy());
             rating.setCleanliness(rating.getCleanliness() + r.getCleanliness());
             rating.setCommunication(rating.getCommunication() + r.getCommunication());
-            rating.setCheckIn(rating.getCommunication() + r.getCommunication());
+            rating.setCheckIn(rating.getCheckIn() + r.getCheckIn());
             rating.setLocation(rating.getLocation() + r.getLocation());
             rating.setValue(rating.getValue() + r.getValue());
         }
@@ -69,7 +70,7 @@ public class RatingServiceImpl implements RatingService {
         rating.setAccuracy(rating.getAccuracy() / ratings.size());
         rating.setCleanliness(rating.getCleanliness() / ratings.size());
         rating.setCommunication(rating.getCommunication() / ratings.size());
-        rating.setCheckIn(rating.getCommunication() / ratings.size());
+        rating.setCheckIn(rating.getCheckIn() / ratings.size());
         rating.setLocation(rating.getLocation() / ratings.size());
         rating.setValue(rating.getValue() / ratings.size());
 

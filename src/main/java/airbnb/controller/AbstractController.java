@@ -82,7 +82,7 @@ public abstract class AbstractController {
 
     @ExceptionHandler(PropertyNotAvailableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionDTO handleBookedProperty(PropertyNotAvailableException e) {
+    public ExceptionDTO handlePropertyNotAvailable(PropertyNotAvailableException e) {
         log(e);
         return new ExceptionDTO(e.getMessage());
     }
@@ -108,6 +108,19 @@ public abstract class AbstractController {
         return new ExceptionDTO(e.getMessage());
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException e) {
+        log(e);
+        Map<String, String> errors = new HashMap<>();
+        e.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionDTO handleInternalServerErrors(Exception e) {
@@ -122,18 +135,18 @@ public abstract class AbstractController {
         return new ExceptionDTO("Invalid user input.");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ExceptionDTO handleArgumentNotValid(MethodArgumentNotValidException e) {
+//        log(e);
+//        return new ExceptionDTO("Invalid input!");
+//    }
+
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ExceptionDTO handleHttpMsgNotReadable(HttpMessageNotReadableException e) {
+//        return new ExceptionDTO(e.getMessage());
+//    }
 
     private void log(Exception e) {
         LOGGER.error(e.getMessage());

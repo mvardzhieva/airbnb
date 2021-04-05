@@ -37,14 +37,14 @@ public class MediaServiceImpl implements MediaService {
         this.propertyService = propertyService;
     }
 
-    //TODO  REFACTOR AND VALIDATE
+    //TODO  REFACTOR
     @Override
     public Media upload(Long id, MultipartFile file) {
 
-//        if (!file.getContentType().contains("image/") &&
-//                !file.getContentType().contains("media/")) {
-//            throw new BadRequestException("Media not supported!");
-//        }
+        if (!file.getContentType().contains("image/") &&
+                !file.getContentType().contains("video/")) {
+            throw new BadRequestException("Media not supported!");
+        }
 
         String filename = UUID.randomUUID().toString();
         File dir = new File(filePath);
