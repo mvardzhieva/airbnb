@@ -79,7 +79,7 @@ public class MediaController extends AbstractController {
                                    HttpSession session) {
 
         sessionManager.validate(userId, session);
-        mediaService.deleteOneByMediaId(propertyId, mediaId);
+        mediaService.deleteOneByMediaId(userId, propertyId, mediaId);
     }
 }
 

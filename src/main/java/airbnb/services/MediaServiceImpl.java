@@ -96,8 +96,13 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void deleteOneByMediaId(Long propertyId, Long mediaId) {
+    public void deleteOneByMediaId(Long userId, Long propertyId, Long mediaId) {
         Media media = mediaRepository.getOne(mediaId);
+
+        if (media.getProperty().getHost().getId() != userId) {
+            throw new AuthenticationException("Action not allowed!");
+        }
+
         if (media == null || media.getProperty().getId() != propertyId) {
             throw new NotFoundException("Media not found!");
         }

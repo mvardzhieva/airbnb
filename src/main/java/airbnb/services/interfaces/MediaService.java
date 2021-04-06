@@ -16,7 +16,7 @@ public interface MediaService {
 
     List<Media> getAll();
 
-    void deleteOneByMediaId(Long propertyId, Long mediaId);
+    void deleteOneByMediaId(Long userId, Long propertyId, Long mediaId);
 
     void deleteAllByPropertyId(Long userId, Long propertyId);
 
