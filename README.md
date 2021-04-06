@@ -1,10 +1,11 @@
 # AIRBNB - FINAL PROJECT, IT TALENTS S12
-![Image20210405002318](https://user-images.githubusercontent.com/77007574/113521893-294d3400-95a5-11eb-8b53-0d8dfb435060.png)
-![Image20210405002309](https://user-images.githubusercontent.com/77007574/113521898-310cd880-95a5-11eb-8b56-3e46828791ce.png)
-![mediaController](https://user-images.githubusercontent.com/77007574/113521907-3e29c780-95a5-11eb-8984-ad8acfed5068.png)
-![Image20210405002313](https://user-images.githubusercontent.com/77007574/113521911-42ee7b80-95a5-11eb-81b7-7e90ea07cfcc.png)
+![userRating](https://user-images.githubusercontent.com/77007574/113673672-f5b3fc00-96c1-11eb-91f7-5020b416e48d.png)
+![propertyController](https://user-images.githubusercontent.com/77007574/113673445-ad94d980-96c1-11eb-9b1a-1576b204b65a.png)
+![mediaController](https://user-images.githubusercontent.com/77007574/113673553-d026f280-96c1-11eb-9533-dd6ce21b6369.png)
+![ratingController](https://user-images.githubusercontent.com/77007574/113673497-bbe2f580-96c1-11eb-8a96-6611df9ff656.png)
 ![bookingController](https://user-images.githubusercontent.com/77007574/113521913-47b32f80-95a5-11eb-8f80-3edd09905e59.png)
 ![Image20210405002316](https://user-images.githubusercontent.com/77007574/113521914-484bc600-95a5-11eb-879e-72a12112c082.png)
+
 
 
 
