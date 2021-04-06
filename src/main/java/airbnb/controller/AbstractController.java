@@ -135,19 +135,6 @@ public abstract class AbstractController {
         return new ExceptionDTO("Invalid user input.");
     }
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ExceptionDTO handleArgumentNotValid(MethodArgumentNotValidException e) {
-//        log(e);
-//        return new ExceptionDTO("Invalid input!");
-//    }
-
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ExceptionDTO handleHttpMsgNotReadable(HttpMessageNotReadableException e) {
-//        return new ExceptionDTO(e.getMessage());
-//    }
-
     private void log(Exception e) {
         LOGGER.error(e.getMessage());
         LOGGER.trace(e.getStackTrace());

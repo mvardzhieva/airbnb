@@ -33,7 +33,6 @@ public class PropertyController extends AbstractController {
         this.mediaService = mediaService;
     }
 
-    //TODO paging
     @GetMapping("users/properties/all")
     public Set<Property> getAll() {
         return propertyService.getAll();

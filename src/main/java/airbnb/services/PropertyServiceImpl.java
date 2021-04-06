@@ -78,7 +78,6 @@ public class PropertyServiceImpl implements PropertyService {
         return property.get();
     }
 
-    //TODO paging
     @Override
     public Set<Property> getAll() {
         Iterable<Property> properties = propertyRepository.findAll();
@@ -115,7 +114,6 @@ public class PropertyServiceImpl implements PropertyService {
         return property;
     }
 
-    //TODO paging
     @Override
     public Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
         return propertyDAO.filter(filterRequestPropertyDTO);

@@ -40,7 +40,6 @@ public class MediaServiceImpl implements MediaService {
         this.propertyService = propertyService;
     }
 
-    //TODO  REFACTOR
     @Override
     public Media upload(Long id, MultipartFile file) {
 
