@@ -76,6 +76,7 @@ public class RatingServiceImpl implements RatingService {
         return rating;
     }
 
+    //SQL query to lower time complexity
     @Override
     public Rating add(Long userId, Long propertyId, Rating rating) {
         User user = userService.getUserById(userId.intValue());

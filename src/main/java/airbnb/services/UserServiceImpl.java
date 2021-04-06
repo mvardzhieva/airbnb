@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User delete(User user) {
         for (Property property : user.getProperties()) {
-            propertyService.deleteById(property.getId());
+            propertyService.deleteById((long) user.getId(), property.getId());
         }
         for (Booking booking : user.getBookings()) {
             bookingRepository.deleteById(booking.getId());

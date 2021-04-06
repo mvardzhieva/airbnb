@@ -1,5 +1,6 @@
 package airbnb.services;
 
+import airbnb.exceptions.AuthenticationException;
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Media;
@@ -105,9 +106,14 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void deleteAllByPropertyId(Long id) {
-        List<Media> mediaList = mediaRepository.findAllByPropertyId(id);
+    public void deleteAllByPropertyId(Long userId, Long propertyId) {
+        List<Media> mediaList = mediaRepository.findAllByPropertyId(propertyId);
+
         if (!mediaList.isEmpty()) {
+            if (mediaList.get(0).getProperty().getHost().getId() != userId) {
+                throw new AuthenticationException("Action not allowed!");
+            }
+
             for (Media media : mediaList) {
                 deleteFromFileSystem(media);
             }

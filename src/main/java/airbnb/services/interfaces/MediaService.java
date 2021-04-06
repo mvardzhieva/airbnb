@@ -18,7 +18,7 @@ public interface MediaService {
 
     void deleteOneByMediaId(Long propertyId, Long mediaId);
 
-    void deleteAllByPropertyId(Long propertyId);
+    void deleteAllByPropertyId(Long userId, Long propertyId);
 
     Media findById(Long id);
 }

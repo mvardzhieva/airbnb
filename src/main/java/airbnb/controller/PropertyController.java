@@ -88,7 +88,7 @@ public class PropertyController extends AbstractController {
                                    HttpSession session) {
 
         sessionManager.validate(userId, session);
-        mediaService.deleteAllByPropertyId(propertyId);
-        propertyService.deleteById(propertyId);
+        mediaService.deleteAllByPropertyId(userId, propertyId);
+        propertyService.deleteById(userId, propertyId);
     }
 }

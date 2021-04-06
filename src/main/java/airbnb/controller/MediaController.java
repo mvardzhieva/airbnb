@@ -68,7 +68,7 @@ public class MediaController extends AbstractController {
                                       HttpSession session) {
 
         sessionManager.validate(userId, session);
-        mediaService.deleteAllByPropertyId(propertyId);
+        mediaService.deleteAllByPropertyId(userId, propertyId);
     }
 
     @DeleteMapping("users/{userId}/properties/{propertyId}/media/{mediaId}")

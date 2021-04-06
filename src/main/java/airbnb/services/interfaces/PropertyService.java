@@ -21,7 +21,7 @@ public interface PropertyService {
 
     Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO);
 
-    void deleteById(Long id);
+    void deleteById(Long userId, Long propertyId);
 
     Set<Property> nearby(Float proximity, HttpServletRequest request);
 

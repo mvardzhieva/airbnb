@@ -121,10 +121,10 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Transactional
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long userId, Long propertyId) {
         try {
-            mediaService.deleteAllByPropertyId(id);
-            propertyRepository.deleteById(id);
+            mediaService.deleteAllByPropertyId(userId, propertyId);
+            propertyRepository.deleteById(propertyId);
         } catch (Exception e) {
             throw new BadRequestException("Problem deleting property!");
         }
