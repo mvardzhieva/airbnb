@@ -90,7 +90,21 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO) {
-        Property property = propertyRepository.findById(propertyId).get();
+        Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
+
+        if (optionalProperty.isEmpty()) {
+            throw new NotFoundException("Property not found!");
+        }
+
+        Property property = optionalProperty.get();
+
+        if (editRequestPropertyDTO.getPrice() != null &&
+                editRequestPropertyDTO.getPrice().doubleValue() > 0) {
+            property.setPrice(editRequestPropertyDTO.getPrice());
+        } 
+        else {
+            throw new BadRequestException("Price can't be negative!");
+        }
 
         if (editRequestPropertyDTO.getName() != null &&
                 !editRequestPropertyDTO.getName().isEmpty()) {
@@ -100,13 +114,6 @@ public class PropertyServiceImpl implements PropertyService {
         if (editRequestPropertyDTO.getDescription() != null &&
                 !editRequestPropertyDTO.getDescription().isEmpty()) {
             property.setDescription(editRequestPropertyDTO.getDescription());
-        }
-
-        if (editRequestPropertyDTO.getPrice() != null &&
-                editRequestPropertyDTO.getPrice().doubleValue() > 0) {
-            property.setPrice(editRequestPropertyDTO.getPrice());
-        } else {
-            throw new BadRequestException("Price can't be negative!");
         }
 
         propertyRepository.save(property);
