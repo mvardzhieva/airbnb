@@ -122,8 +122,20 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
+    public List<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
         return propertyDAO.filter(filterRequestPropertyDTO);
+    }
+
+    @Override
+    @SneakyThrows
+    public List<Property> nearby(Float proximity, HttpServletRequest request) {
+        locationService.setLocation(request.getRemoteAddr());
+
+        return propertyRepository
+                .findNearby(locationService.getLatitude(),
+                        locationService.getLongitude(),
+                        proximity)
+                .stream().collect(Collectors.toList());
     }
 
     @Transactional
@@ -135,16 +147,6 @@ public class PropertyServiceImpl implements PropertyService {
         } catch (Exception e) {
             throw new BadRequestException("Problem deleting property!");
         }
-    }
-
-    @Override
-    @SneakyThrows
-    public Set<Property> nearby(Float proximity, HttpServletRequest request) {
-        Location location = locationService.getLocation(request.getRemoteAddr());
-
-        return propertyRepository
-                .findNearby(location.getLatitude(), location.getLongitude(), proximity)
-                .stream().collect(Collectors.toSet());
     }
 }
 

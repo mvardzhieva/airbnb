@@ -4,6 +4,7 @@ import airbnb.exceptions.AuthenticationException;
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Media;
+import airbnb.model.pojo.Property;
 import airbnb.model.repositories.MediaRepository;
 import airbnb.services.interfaces.MediaService;
 import airbnb.services.interfaces.PropertyService;
@@ -19,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -91,37 +93,38 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public List<Media> getAllByPropertyId(Long id) {
+    public Set<Media> getAllByPropertyId(Long id) {
         return mediaRepository.findAllByPropertyId(id);
     }
 
     @Override
     public void deleteOneByMediaId(Long userId, Long propertyId, Long mediaId) {
-        Media media = mediaRepository.getOne(mediaId);
+        Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
+
+        if (optionalMedia.isEmpty()) {
+            throw new NotFoundException("Media not found!");
+        }
+
+        Media media = optionalMedia.get();
 
         if (media.getProperty().getHost().getId() != userId) {
             throw new AuthenticationException("Action not allowed!");
         }
 
-        if (media == null || media.getProperty().getId() != propertyId) {
-            throw new NotFoundException("Media not found!");
-        }
-
-        deleteFromFileSystem(media);
+        deleteMedia(media);
     }
 
     @Override
     public void deleteAllByPropertyId(Long userId, Long propertyId) {
-        List<Media> mediaList = mediaRepository.findAllByPropertyId(propertyId);
 
-        if (!mediaList.isEmpty()) {
-            if (mediaList.get(0).getProperty().getHost().getId() != userId) {
-                throw new AuthenticationException("Action not allowed!");
-            }
+        Property property = propertyService.getByPropertyId(propertyId);
 
-            for (Media media : mediaList) {
-                deleteFromFileSystem(media);
-            }
+        if (property.getHost().getId() != userId) {
+            throw new AuthenticationException("Action not allowed!");
+        }
+
+        for (Media media : property.getMedia()) {
+            deleteMedia(media);
         }
     }
 
@@ -130,7 +133,7 @@ public class MediaServiceImpl implements MediaService {
         return mediaRepository.getOne(id);
     }
 
-    private void deleteFromFileSystem(Media media) {
+    private void deleteMedia(Media media) {
         try {
             Files.delete(Paths.get(media.getUrl()));
             mediaRepository.deleteById(media.getId());
