@@ -7,5 +7,4 @@ public interface LocationService {
     Double getLatitude();
 
     Double getLongitude();
-
 }

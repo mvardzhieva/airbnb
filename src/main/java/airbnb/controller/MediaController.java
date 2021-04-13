@@ -9,12 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpSession;
-
 import java.util.List;
-import java.util.Set;
-
 
 @RestController
 public class MediaController extends AbstractController {
@@ -40,7 +36,7 @@ public class MediaController extends AbstractController {
     }
 
     @GetMapping("users/properties/{id}/media")
-    public Set<Media> getAllByPropertyId(@PathVariable Long id) {
+    public List<Media> getAllByPropertyId(@PathVariable Long id) {
         return mediaService.getAllByPropertyId(id);
     }
 
@@ -72,15 +68,15 @@ public class MediaController extends AbstractController {
         mediaService.deleteAllByPropertyId(userId, propertyId);
     }
 
-    @DeleteMapping("users/{userId}/properties/{propertyId}/media/{mediaId}")
+    //TODO REFACTOR
+    @DeleteMapping("users/{userId}/properties/media/{mediaId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteOneByMediaId(@PathVariable Long userId,
-                                   @PathVariable Long propertyId,
                                    @PathVariable Long mediaId,
                                    HttpSession session) {
 
         sessionManager.validate(userId, session);
-        mediaService.deleteOneByMediaId(userId, propertyId, mediaId);
+        mediaService.deleteOneByMediaId(userId, mediaId);
     }
 }
 
