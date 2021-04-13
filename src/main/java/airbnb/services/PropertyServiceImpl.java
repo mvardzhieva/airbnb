@@ -13,7 +13,6 @@ import airbnb.services.interfaces.LocationService;
 import airbnb.services.interfaces.MediaService;
 import airbnb.services.interfaces.PropertyService;
 import airbnb.services.interfaces.UserService;
-import com.maxmind.geoip2.record.Location;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -69,37 +68,24 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Property getByPropertyId(Long id) {
-        Optional<Property> property = propertyRepository.findById(id);
-        if (property.isEmpty()) {
-            throw new BadRequestException("Property not found!");
-        }
-
-        return property.get();
+    public Property getByPropertyId(Long propertyId) {
+        return findProperty(propertyId);
     }
 
     @Override
     public Set<Property> getAll() {
         Iterable<Property> properties = propertyRepository.findAll();
-        if (!properties.iterator().hasNext()) {
-            throw new BadRequestException("No properties found!");
-        }
 
-        return StreamSupport.stream(properties.spliterator(), false).collect(Collectors.toSet());
+        return StreamSupport.stream(properties.spliterator(), false)
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO) {
-        Optional<Property> optionalProperty = propertyRepository.findById(propertyId);
-
-        if (optionalProperty.isEmpty()) {
-            throw new NotFoundException("Property not found!");
-        }
-
-        Property property = optionalProperty.get();
+        Property property = findProperty(propertyId);
 
         if (editRequestPropertyDTO.getPrice() != null &&
-                editRequestPropertyDTO.getPrice().doubleValue() > 0) {
+                editRequestPropertyDTO.getPrice().doubleValue() < 0) {
             property.setPrice(editRequestPropertyDTO.getPrice());
         } 
         else {
@@ -116,9 +102,7 @@ public class PropertyServiceImpl implements PropertyService {
             property.setDescription(editRequestPropertyDTO.getDescription());
         }
 
-        propertyRepository.save(property);
-
-        return property;
+        return propertyRepository.save(property);
     }
 
     @Override
@@ -147,6 +131,11 @@ public class PropertyServiceImpl implements PropertyService {
         } catch (Exception e) {
             throw new BadRequestException("Problem deleting property!");
         }
+    }
+
+    private Property findProperty(Long propertyId) {
+        return propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new NotFoundException("Property not found!"));
     }
 }
 
