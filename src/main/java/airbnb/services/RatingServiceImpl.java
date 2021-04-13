@@ -39,12 +39,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public List<Rating> findAllByPropertyId(Long propertyId) {
-        List<Rating> ratings = ratingRepository.findAllByPropertyId(propertyId);
-        if (ratings.isEmpty()) {
-            throw new NotFoundException("Rating not found!");
-        }
-
-        return ratings;
+        return ratingRepository.findAllByPropertyId(propertyId);
     }
 
     @Override

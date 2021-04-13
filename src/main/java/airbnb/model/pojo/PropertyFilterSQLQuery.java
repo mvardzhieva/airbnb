@@ -69,7 +69,7 @@ public class PropertyFilterSQLQuery {
     }
 
     public PropertyFilterSQLQuery withMinPrice(BigDecimal minPrice) {
-        if (minPrice == null || minPrice.doubleValue() >= 0) {
+        if (minPrice == null || minPrice.doubleValue() < 0) {
             this.minPrice = BigDecimal.valueOf(0);
         } else {
             this.minPrice = minPrice;
