@@ -73,5 +73,4 @@ public class Property {
         this.createdAt = LocalDate.now();
         this.ratings = null;
     }
-
 }

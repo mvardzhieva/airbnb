@@ -8,11 +8,7 @@ import javax.persistence.*;
 
 @Component
 @Entity
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@Data
 public class Media {
 
     @Id

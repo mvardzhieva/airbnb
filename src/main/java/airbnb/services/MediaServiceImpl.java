@@ -4,6 +4,7 @@ import airbnb.exceptions.AuthenticationException;
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Media;
+import airbnb.model.pojo.Property;
 import airbnb.model.repositories.MediaRepository;
 import airbnb.services.interfaces.MediaService;
 import airbnb.services.interfaces.PropertyService;
@@ -18,13 +19,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @Primary
 public class MediaServiceImpl implements MediaService {
-
 
     @Value("${file.path}")
     private String filePath;
@@ -42,12 +41,8 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media upload(Long id, MultipartFile file) {
-
-        if (!file.getContentType().contains("image/") &&
-                !file.getContentType().contains("video/")) {
-            throw new BadRequestException("Media not supported!");
-        }
+    public Media upload(Long propertyId, MultipartFile file) {
+        validateMultipartFile(file);
 
         String filename = UUID.randomUUID().toString();
         File dir = new File(filePath);
@@ -60,29 +55,49 @@ public class MediaServiceImpl implements MediaService {
 
         try {
             f.createNewFile();
+            file.transferTo(Paths.get(f.getAbsolutePath()));
+
             Media media = new Media();
             media.setUrl(f.getAbsolutePath());
             media.setMimeType(file.getContentType());
-            media.setProperty(propertyService.getByPropertyId(id));
+            media.setProperty(propertyService.getByPropertyId(propertyId));
             mediaRepository.save(media);
-            Optional<Media> mediaOptional = mediaRepository.findById(media.getId());
-            file.transferTo(Paths.get(f.getAbsolutePath()));
-            return mediaOptional.get();
 
+            return getMedia(media.getId());
         } catch (Exception e) {
             f.delete();
             throw new BadRequestException("Problem uploading file!");
         }
     }
 
+    private void validateMultipartFile(MultipartFile file) {
+        if (file == null) {
+            throw new BadRequestException("Problem uploading the file!");
+        }
+
+        String mimeType = file.getContentType();
+
+        if (mimeType == null ||
+                (!file.getContentType().contains("image/") &&
+                        !file.getContentType().contains("video/"))) {
+            throw new BadRequestException("Media not supported!");
+        }
+    }
+
     @Override
     public byte[] download(Long id) {
+        Media media = getMedia(id);
+
         try {
-            Optional<Media> optionalMedia = mediaRepository.findById(id);
-            return Files.readAllBytes(Path.of(optionalMedia.get().getUrl()));
+            return Files.readAllBytes(Path.of(media.getUrl()));
         } catch (Exception e) {
-            throw new NotFoundException("Media not found!");
+            throw new NotFoundException("Can't download media!");
         }
+    }
+
+    @Override
+    public Media findById(Long id) {
+        return getMedia(id);
     }
 
     @Override
@@ -96,46 +111,40 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void deleteOneByMediaId(Long userId, Long propertyId, Long mediaId) {
-        Media media = mediaRepository.getOne(mediaId);
+    public void deleteOneByMediaId(Long userId, Long mediaId) {
+        Media media = getMedia(mediaId);
 
         if (media.getProperty().getHost().getId() != userId) {
             throw new AuthenticationException("Action not allowed!");
         }
 
-        if (media == null || media.getProperty().getId() != propertyId) {
-            throw new NotFoundException("Media not found!");
-        }
-
-        deleteFromFileSystem(media);
+        deleteMedia(media);
     }
 
     @Override
     public void deleteAllByPropertyId(Long userId, Long propertyId) {
-        List<Media> mediaList = mediaRepository.findAllByPropertyId(propertyId);
+        Property property = propertyService.getByPropertyId(propertyId);
 
-        if (!mediaList.isEmpty()) {
-            if (mediaList.get(0).getProperty().getHost().getId() != userId) {
-                throw new AuthenticationException("Action not allowed!");
-            }
+        if (property.getHost().getId() != userId) {
+            throw new AuthenticationException("Action not allowed!");
+        }
 
-            for (Media media : mediaList) {
-                deleteFromFileSystem(media);
-            }
+        for (Media media : property.getMedia()) {
+            deleteMedia(media);
         }
     }
 
-    @Override
-    public Media findById(Long id) {
-        return mediaRepository.getOne(id);
-    }
-
-    private void deleteFromFileSystem(Media media) {
+    private void deleteMedia(Media media) {
         try {
             Files.delete(Paths.get(media.getUrl()));
             mediaRepository.deleteById(media.getId());
         } catch (Exception e) {
-            throw new BadRequestException("Can't delete media!");
+            throw new BadRequestException("Can't delete media with id " + media.getId());
         }
+    }
+
+    private Media getMedia(Long id) {
+        return mediaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Media not found!"));
     }
 }

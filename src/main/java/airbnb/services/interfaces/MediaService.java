@@ -1,10 +1,8 @@
 package airbnb.services.interfaces;
 
-
 import airbnb.model.pojo.Media;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
-
 
 public interface MediaService {
 
@@ -16,7 +14,7 @@ public interface MediaService {
 
     List<Media> getAll();
 
-    void deleteOneByMediaId(Long userId, Long propertyId, Long mediaId);
+    void deleteOneByMediaId(Long userId, Long mediaId);
 
     void deleteAllByPropertyId(Long userId, Long propertyId);
 

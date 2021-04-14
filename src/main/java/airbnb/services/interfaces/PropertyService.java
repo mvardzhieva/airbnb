@@ -11,20 +11,20 @@ import java.util.Set;
 
 public interface PropertyService {
 
-    Property add(Long userId, AddRequestPropertyDTO addRequestPropertyDTO);
-
     Set<Property> getAll();
 
     Property getByPropertyId(Long id);
 
+    Set<Property> findAllByUserId(Long userId);
+
+    Property add(Long userId, AddRequestPropertyDTO addRequestPropertyDTO);
+
     Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO);
 
-    Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO);
+    List<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO);
+
+    List<Property> nearby(Float proximity, HttpServletRequest request);
 
     void deleteById(Long userId, Long propertyId);
-
-    Set<Property> nearby(Float proximity, HttpServletRequest request);
-
-    Set<Property> findAllByUserId(Long userId);
 
 }

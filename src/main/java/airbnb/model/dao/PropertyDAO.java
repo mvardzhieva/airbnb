@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,7 +30,7 @@ public class PropertyDAO {
     }
 
     @SneakyThrows
-    public Set<Property> filter(FilterRequestPropertyDTO propertyDTO) {
+    public List<Property> filter(FilterRequestPropertyDTO propertyDTO) {
 
         PropertyFilterSQLQuery sqlQuery = new PropertyFilterSQLQuery();
         sqlQuery.withTypeId(propertyDTO.getTypeId())
@@ -67,6 +67,6 @@ public class PropertyDAO {
         };
 
         return db.query(preparedStatement, propertyMapper)
-                .stream().collect(Collectors.toSet());
+                .stream().collect(Collectors.toList());
     }
 }

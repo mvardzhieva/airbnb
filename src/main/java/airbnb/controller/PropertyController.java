@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -52,12 +53,12 @@ public class PropertyController extends AbstractController {
 
     @SneakyThrows
     @GetMapping("users/properties/nearby")
-    public Set<Property> nearby(@RequestParam Float proximity, HttpServletRequest request) {
+    public List<Property> nearby(@RequestParam Float proximity, HttpServletRequest request) {
         return propertyService.nearby(proximity, request);
     }
 
     @PostMapping("users/properties/filter")
-    public Set<Property> filter(@RequestBody @Valid FilterRequestPropertyDTO filterRequestPropertyDTO) {
+    public List<Property> filter(@RequestBody @Valid FilterRequestPropertyDTO filterRequestPropertyDTO) {
         return propertyService.filter(filterRequestPropertyDTO);
     }
 

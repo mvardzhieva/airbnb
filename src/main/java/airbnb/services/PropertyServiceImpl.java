@@ -13,7 +13,6 @@ import airbnb.services.interfaces.LocationService;
 import airbnb.services.interfaces.MediaService;
 import airbnb.services.interfaces.PropertyService;
 import airbnb.services.interfaces.UserService;
-import com.maxmind.geoip2.record.Location;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -69,28 +68,29 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Property getByPropertyId(Long id) {
-        Optional<Property> property = propertyRepository.findById(id);
-        if (property.isEmpty()) {
-            throw new BadRequestException("Property not found!");
-        }
-
-        return property.get();
+    public Property getByPropertyId(Long propertyId) {
+        return findProperty(propertyId);
     }
 
     @Override
     public Set<Property> getAll() {
         Iterable<Property> properties = propertyRepository.findAll();
-        if (!properties.iterator().hasNext()) {
-            throw new BadRequestException("No properties found!");
-        }
 
-        return StreamSupport.stream(properties.spliterator(), false).collect(Collectors.toSet());
+        return StreamSupport.stream(properties.spliterator(), false)
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO) {
-        Property property = propertyRepository.findById(propertyId).get();
+        Property property = findProperty(propertyId);
+
+        if (editRequestPropertyDTO.getPrice() != null &&
+                editRequestPropertyDTO.getPrice().doubleValue() < 0) {
+            property.setPrice(editRequestPropertyDTO.getPrice());
+        }
+        else {
+            throw new BadRequestException("Price can't be negative!");
+        }
 
         if (editRequestPropertyDTO.getName() != null &&
                 !editRequestPropertyDTO.getName().isEmpty()) {
@@ -102,21 +102,24 @@ public class PropertyServiceImpl implements PropertyService {
             property.setDescription(editRequestPropertyDTO.getDescription());
         }
 
-        if (editRequestPropertyDTO.getPrice() != null &&
-                editRequestPropertyDTO.getPrice().doubleValue() > 0) {
-            property.setPrice(editRequestPropertyDTO.getPrice());
-        } else {
-            throw new BadRequestException("Price can't be negative!");
-        }
-
-        propertyRepository.save(property);
-
-        return property;
+        return propertyRepository.save(property);
     }
 
     @Override
-    public Set<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
+    public List<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
         return propertyDAO.filter(filterRequestPropertyDTO);
+    }
+
+    @Override
+    @SneakyThrows
+    public List<Property> nearby(Float proximity, HttpServletRequest request) {
+        locationService.setLocation(request.getRemoteAddr());
+
+        return propertyRepository
+                .findNearby(locationService.getLatitude(),
+                        locationService.getLongitude(),
+                        proximity)
+                .stream().collect(Collectors.toList());
     }
 
     @Transactional
@@ -130,14 +133,8 @@ public class PropertyServiceImpl implements PropertyService {
         }
     }
 
-    @Override
-    @SneakyThrows
-    public Set<Property> nearby(Float proximity, HttpServletRequest request) {
-        Location location = locationService.getLocation(request.getRemoteAddr());
-
-        return propertyRepository
-                .findNearby(location.getLatitude(), location.getLongitude(), proximity)
-                .stream().collect(Collectors.toSet());
+    private Property findProperty(Long propertyId) {
+        return propertyRepository.findById(propertyId)
+                .orElseThrow(() -> new NotFoundException("Property not found!"));
     }
 }
-
