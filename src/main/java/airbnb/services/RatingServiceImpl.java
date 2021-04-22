@@ -1,6 +1,5 @@
 package airbnb.services;
 
-
 import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.pojo.Booking;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 @Service
 @Primary

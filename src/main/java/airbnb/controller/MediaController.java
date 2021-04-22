@@ -79,4 +79,3 @@ public class MediaController extends AbstractController {
         mediaService.deleteOneByMediaId(userId, mediaId);
     }
 }
-

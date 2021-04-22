@@ -82,7 +82,7 @@ public class PropertyServiceImpl implements PropertyService {
         if (editRequestPropertyDTO.getPrice() != null &&
                 editRequestPropertyDTO.getPrice().doubleValue() < 0) {
             property.setPrice(editRequestPropertyDTO.getPrice());
-        } 
+        }
         else {
             throw new BadRequestException("Price can't be negative!");
         }
@@ -133,4 +133,3 @@ public class PropertyServiceImpl implements PropertyService {
                 .orElseThrow(() -> new NotFoundException("Property not found!"));
     }
 }
-
