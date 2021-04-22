@@ -49,8 +49,9 @@ public class Property {
     private Double longitude;
     private LocalDate createdAt;
 
-    @JsonManagedReference
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")
+    @JsonManagedReference
     private Set<Media> media;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "property")

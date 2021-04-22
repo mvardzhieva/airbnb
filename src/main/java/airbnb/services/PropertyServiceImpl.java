@@ -18,11 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @Primary
@@ -63,7 +61,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Set<Property> findAllByUserId(Long userId) {
+    public List<Property> findAllByUserId(Long userId) {
         return propertyRepository.findAllByHostId(userId.intValue());
     }
 
@@ -73,11 +71,8 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public Set<Property> getAll() {
-        Iterable<Property> properties = propertyRepository.findAll();
-
-        return StreamSupport.stream(properties.spliterator(), false)
-                .collect(Collectors.toSet());
+    public List<Property> getAll() {
+        return propertyRepository.findAll();
     }
 
     @Override

@@ -8,7 +8,10 @@ import javax.persistence.*;
 
 @Component
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Media {
 
     @Id
@@ -17,9 +20,10 @@ public class Media {
     private String url;
     private String mimeType;
 
-    @JsonBackReference
+
     @ManyToOne
     @JoinColumn(name = "property_id", nullable = false)
+    @JsonBackReference
     private Property property;
 
 }

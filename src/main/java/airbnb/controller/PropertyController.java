@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 public class PropertyController extends AbstractController {
@@ -35,7 +34,7 @@ public class PropertyController extends AbstractController {
     }
 
     @GetMapping("users/properties/all")
-    public Set<Property> getAll() {
+    public List<Property> getAll() {
         return propertyService.getAll();
     }
 
@@ -44,8 +43,8 @@ public class PropertyController extends AbstractController {
         return propertyService.getByPropertyId(id);
     }
 
-    @GetMapping("users/{id}/properties/")
-    public Set<Property> getAllByUserId(@PathVariable Long id, HttpSession session) {
+    @GetMapping("users/{id}/properties")
+    public List<Property> getAllByUserId(@PathVariable Long id, HttpSession session) {
 
         sessionManager.validate(id, session);
         return propertyService.findAllByUserId(id);

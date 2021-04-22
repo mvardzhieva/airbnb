@@ -7,15 +7,15 @@ import airbnb.model.pojo.Property;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Set;
+
 
 public interface PropertyService {
 
-    Set<Property> getAll();
+    List<Property> getAll();
 
     Property getByPropertyId(Long id);
 
-    Set<Property> findAllByUserId(Long userId);
+    List<Property> findAllByUserId(Long userId);
 
     Property add(Long userId, AddRequestPropertyDTO addRequestPropertyDTO);
 
