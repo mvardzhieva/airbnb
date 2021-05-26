@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface PropertyService {
 
-    List<Property> getAll();
 
     Property getByPropertyId(Long id);
 
@@ -21,7 +20,10 @@ public interface PropertyService {
 
     Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO);
 
-    List<Property> filter(Long typeId, Long cityId, Long countryId, String name, String description, BigDecimal minPrice, BigDecimal maxPrice);
+    List<Property> get(Long typeId, Long cityId, Long countryId,
+                          String name, String description,
+                          BigDecimal minPrice, BigDecimal maxPrice,
+                          Long size, Long offset);
 
     List<Property> nearby(Float proximity, HttpServletRequest request);
 

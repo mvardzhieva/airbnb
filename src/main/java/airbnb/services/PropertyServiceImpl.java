@@ -71,11 +71,6 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<Property> getAll() {
-        return propertyRepository.findAll();
-    }
-
-    @Override
     public Property edit(Long propertyId, EditRequestPropertyDTO editRequestPropertyDTO) {
         Property property = findProperty(propertyId);
 
@@ -101,8 +96,12 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<Property> filter(Long typeId, Long cityId, Long countryId, String name, String description, BigDecimal minPrice, BigDecimal maxPrice) throws NotFoundException {
-        return propertyDAO.filter(typeId, cityId, countryId, name, description, minPrice, maxPrice);
+    public List<Property> get(Long typeId, Long cityId, Long countryId,
+                                 String name, String description,
+                                 BigDecimal minPrice, BigDecimal maxPrice,
+                                 Long size, Long offset) throws NotFoundException {
+
+        return propertyDAO.get(typeId, cityId, countryId, name, description, minPrice, maxPrice, size, offset);
     }
 
     @Override

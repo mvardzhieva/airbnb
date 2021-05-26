@@ -27,18 +27,26 @@ public class PropertyDAO {
     }
 
     @SneakyThrows
-    public List<Property> filter(Long typeId, Long cityId, Long countryId,
-                                 String name, String description, BigDecimal minPrice, BigDecimal maxPrice) {
+    public List<Property> get(Long typeId, Long cityId, Long countryId,
+                                 String name, String description, BigDecimal minPrice, BigDecimal maxPrice,
+                                 Long size, Long offset) {
+
 
 
         PreparedStatementCreator preparedStatement = connection -> {
+            boolean isPaging = false;
             String sql = "SELECT p.* FROM properties p " +
                     "WHERE  p.type_id = ? " +
                     "AND  p.city_id = ? " +
                     "AND p.country_id = ? " +
                     "AND p.name LIKE ? " +
                     "AND p.description LIKE ? " +
-                    "AND  p.price BETWEEN ? AND ?";
+                    "AND  p.price BETWEEN ? AND ? ";
+
+            if (size.intValue() > 0 && offset.intValue() >= 0) {
+                sql = sql + "LIMIT ?  OFFSET ? ";
+                isPaging = true;
+            }
 
             PreparedStatement statement = db.getDataSource()
                     .getConnection()
@@ -51,6 +59,11 @@ public class PropertyDAO {
             statement.setString(5,"%" + description + "%");
             statement.setDouble(6, minPrice.doubleValue());
             statement.setDouble(7, maxPrice.doubleValue());
+
+            if (isPaging) {
+                statement.setLong(8, size);
+                statement.setLong(9, (size * offset));
+            }
 
             return statement;
         };

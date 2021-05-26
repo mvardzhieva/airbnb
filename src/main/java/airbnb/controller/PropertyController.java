@@ -33,9 +33,17 @@ public class PropertyController extends AbstractController {
         this.mediaService = mediaService;
     }
 
-    @GetMapping("users/properties/all")
-    public List<Property> getAll() {
-        return propertyService.getAll();
+    @GetMapping("users/properties")
+    public List<Property> get(@RequestParam(required = false, defaultValue = "1") Long typeId,
+                                 @RequestParam(required = false, defaultValue = "1") Long cityId,
+                                 @RequestParam(required = false, defaultValue = "1") Long countryId,
+                                 @RequestParam(required = false, defaultValue = "") String name,
+                                 @RequestParam(required = false, defaultValue = "") String description,
+                                 @RequestParam(required = false, defaultValue = "0") BigDecimal minPrice,
+                                 @RequestParam(required = false, defaultValue = "2147483647") BigDecimal maxPrice,
+                                 @RequestHeader(required = false, defaultValue = "0", name = "Page-Size") Long size,
+                                 @RequestHeader(required = false, defaultValue = "0", name = "Page-Number") Long offset) {
+        return propertyService.get(typeId, cityId, countryId, name, description, minPrice, maxPrice, size, offset);
     }
 
     @GetMapping("users/properties/{id}")
@@ -54,18 +62,6 @@ public class PropertyController extends AbstractController {
     @GetMapping("users/properties/nearby")
     public List<Property> nearby(@RequestParam Float proximity, HttpServletRequest request) {
         return propertyService.nearby(proximity, request);
-    }
-
-    @GetMapping("users/properties/filter")
-    public List<Property> filter(@RequestParam(required = false, defaultValue = "1") Long typeId,
-                                 @RequestParam(required = false, defaultValue = "1") Long cityId,
-                                 @RequestParam(required = false, defaultValue = "1") Long countryId,
-                                 @RequestParam(required = false, defaultValue = "") String name,
-                                 @RequestParam(required = false, defaultValue = "") String description,
-                                 @RequestParam(required = false, defaultValue = "0") BigDecimal minPrice,
-                                 @RequestParam(required = false, defaultValue = "2147483647") BigDecimal maxPrice) {
-
-        return propertyService.filter(typeId, cityId, countryId, name, description, minPrice, maxPrice);
     }
 
     @PostMapping("users/{userId}/properties")
