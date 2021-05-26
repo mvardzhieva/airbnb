@@ -1,14 +1,13 @@
 package airbnb.model.dao;
 
-import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.pojo.Property;
-import airbnb.model.pojo.PropertyFilterSQLQuery;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,28 +17,19 @@ public class PropertyDAO {
 
     private JdbcTemplate db;
     private PropertyMapper propertyMapper;
-    private PropertyFilterSQLQuery query;
+
 
     @Autowired
     @SneakyThrows
-    public PropertyDAO(JdbcTemplate db, PropertyMapper propertyMapper,
-                       PropertyFilterSQLQuery query) {
+    public PropertyDAO(JdbcTemplate db, PropertyMapper propertyMapper) {
         this.db = db;
         this.propertyMapper = propertyMapper;
-        this.query = query;
     }
 
     @SneakyThrows
-    public List<Property> filter(FilterRequestPropertyDTO propertyDTO) {
+    public List<Property> filter(Long typeId, Long cityId, Long countryId,
+                                 String name, String description, BigDecimal minPrice, BigDecimal maxPrice) {
 
-        PropertyFilterSQLQuery sqlQuery = new PropertyFilterSQLQuery();
-        sqlQuery.withTypeId(propertyDTO.getTypeId())
-                .withCityId(propertyDTO.getCityId())
-                .withCountryId(propertyDTO.getCountryId())
-                .withName(propertyDTO.getName())
-                .withDescription(propertyDTO.getDescription())
-                .withMinPrice(propertyDTO.getMinPrice())
-                .withMaxPrice(propertyDTO.getMaxPrice());
 
         PreparedStatementCreator preparedStatement = connection -> {
             String sql = "SELECT p.* FROM properties p " +
@@ -48,20 +38,19 @@ public class PropertyDAO {
                     "AND p.country_id = ? " +
                     "AND p.name LIKE ? " +
                     "AND p.description LIKE ? " +
-                    "AND  p.price > ? " +
-                    "AND p.price < ? \n";
+                    "AND  p.price BETWEEN ? AND ?";
 
             PreparedStatement statement = db.getDataSource()
                     .getConnection()
                     .prepareStatement(sql);
 
-            statement.setLong(1, sqlQuery.getTypeId());
-            statement.setLong(2, sqlQuery.getCityId());
-            statement.setLong(3, sqlQuery.getCountryId());
-            statement.setString(4, sqlQuery.getName());
-            statement.setString(5, sqlQuery.getDescription());
-            statement.setDouble(6, sqlQuery.getMinPrice().doubleValue());
-            statement.setDouble(7, sqlQuery.getMaxPrice().doubleValue());
+            statement.setLong(1, typeId);
+            statement.setLong(2, cityId);
+            statement.setLong(3, countryId);
+            statement.setString(4,"%" + name + "%");
+            statement.setString(5,"%" + description + "%");
+            statement.setDouble(6, minPrice.doubleValue());
+            statement.setDouble(7, maxPrice.doubleValue());
 
             return statement;
         };

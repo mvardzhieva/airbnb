@@ -4,7 +4,6 @@ import airbnb.exceptions.BadRequestException;
 import airbnb.exceptions.NotFoundException;
 import airbnb.model.dao.PropertyDAO;
 import airbnb.model.dto.property.EditRequestPropertyDTO;
-import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
 import airbnb.model.pojo.User;
@@ -19,6 +18,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -101,8 +101,8 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<Property> filter(FilterRequestPropertyDTO filterRequestPropertyDTO) throws NotFoundException {
-        return propertyDAO.filter(filterRequestPropertyDTO);
+    public List<Property> filter(Long typeId, Long cityId, Long countryId, String name, String description, BigDecimal minPrice, BigDecimal maxPrice) throws NotFoundException {
+        return propertyDAO.filter(typeId, cityId, countryId, name, description, minPrice, maxPrice);
     }
 
     @Override

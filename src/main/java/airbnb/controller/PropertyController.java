@@ -1,7 +1,6 @@
 package airbnb.controller;
 
 import airbnb.model.dto.property.EditRequestPropertyDTO;
-import airbnb.model.dto.property.FilterRequestPropertyDTO;
 import airbnb.model.dto.property.AddRequestPropertyDTO;
 import airbnb.model.pojo.Property;
 import airbnb.services.interfaces.MediaService;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -56,9 +56,16 @@ public class PropertyController extends AbstractController {
         return propertyService.nearby(proximity, request);
     }
 
-    @PostMapping("users/properties/filter")
-    public List<Property> filter(@RequestBody @Valid FilterRequestPropertyDTO filterRequestPropertyDTO) {
-        return propertyService.filter(filterRequestPropertyDTO);
+    @GetMapping("users/properties/filter")
+    public List<Property> filter(@RequestParam(required = false, defaultValue = "1") Long typeId,
+                                 @RequestParam(required = false, defaultValue = "1") Long cityId,
+                                 @RequestParam(required = false, defaultValue = "1") Long countryId,
+                                 @RequestParam(required = false, defaultValue = "") String name,
+                                 @RequestParam(required = false, defaultValue = "") String description,
+                                 @RequestParam(required = false, defaultValue = "0") BigDecimal minPrice,
+                                 @RequestParam(required = false, defaultValue = "2147483647") BigDecimal maxPrice) {
+
+        return propertyService.filter(typeId, cityId, countryId, name, description, minPrice, maxPrice);
     }
 
     @PostMapping("users/{userId}/properties")
@@ -77,6 +84,7 @@ public class PropertyController extends AbstractController {
                          HttpSession session) {
 
         sessionManager.validate(userId, session);
+
         return propertyService.edit(propertyId, editRequestPropertyDTO);
     }
 
